@@ -835,7 +835,6 @@ gdb -q -batch \
 * Public 13.60 kernel dump: `terrafirma2021/ps5-13.60-kernel-dump`.
 * Tooling: QEMU, SeaBIOS, GDB, capstone, keystone, nasm/binutils.
 * Reference material used for cross-checking: FreeBSD 9.3 `kernel.h` (`SI_SUB` enum) and public PS5 research (TitaniaPy, Byepervisor-Reborn notes, the Orbital PS4 emulator as an LLE precedent).
-* The engineering log credits the analysis agent *Z.ai (main agent)*, working together with the human research group that ran the kits on their own machines and reported each new frontier.
 
 <div align="center">
 
