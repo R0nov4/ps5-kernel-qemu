@@ -1,0 +1,43 @@
+warning: No executable has been specified and target does not support
+determining executable automatically.  Try using the "file" command.
+0x000000000000fff0 in ?? ()
+Hardware assisted breakpoint 1 at 0xffffffff9e642a90
+
+Breakpoint 1, 0xffffffff9e642a90 in ?? ()
+Breakpoint 2 at 0xffffffff9e8b72b0
+
+Breakpoint 2, 0xffffffff9e8b72b0 in ?? ()
+
+=== AT SPIN LOOP HEAD ===
+rip            0xffffffff9e8b72b0  0xffffffff9e8b72b0
+rax            0x0                 0
+rbx            0xffff8e7701906c38  -124833198216136
+r12            0x4                 4
+r13            0xffffffff9f67b8a4  -1620592476
+r14            0xffff8e7701906c50  -124833198216112
+r15            0x1                 1
+rsi            0x0                 0
+rdi            0xffff8e7701906c38  -124833198216136
+
+=== LOCK WORD [r14-0x10] + OWNER [r14-0x18] ===
+0xffff8e7701906c38:	0x00000a1a00000613	0x000007750000043d
+0xffff8e7701906c48:	0x0000043300000a12	0x00000a0a000008c1
+
+=== MUTX STRUCT AREA [r14-0x30] ===
+0xffff8e7701906c20:	0x00000a250000025b	0x000004820000044c
+0xffff8e7701906c30:	0x0000044600000a20	0x00000a1a00000613
+0xffff8e7701906c40:	0x000007750000043d	0x0000043300000a12
+0xffff8e7701906c50:	0x00000a0a000008c1	0x000009ff00000428
+
+=== FMT (r13) ===
+0xffffffff9f67b8a4:	"(assertion) %p (tid %d) has waited too long to acquire spin lock %p (%s) (count: waiter %u current %u)\n"
+
+=== STACK ===
+0xffffffffa1130c70:	0xffffffff9fe4d718	0x0000000000000000
+0xffffffffa1130c80:	0xffffffffa1978860	0xffffffff9fe8c7b0
+0xffffffffa1130c90:	0xffffffff9fe8c7b0	0xffffffff9e651658
+0xffffffffa1130ca0:	0xffffffffa184f310	0xffffffffa0cc2a40
+0xffffffffa1130cb0:	0xffffffffa1130ce0	0xffffffff9e7398f0
+0xffffffffa1130cc0:	0x000000000000078f	0x0000000000000000
+Kill the program being debugged? (y or n) [answered Y; input not from terminal]
+[Inferior 1 (process 1) killed]

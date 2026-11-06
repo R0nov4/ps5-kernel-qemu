@@ -1,0 +1,28 @@
+warning: No executable has been specified and target does not support
+determining executable automatically.  Try using the "file" command.
+0x000000000000fff0 in ?? ()
+Hardware assisted breakpoint 1 at 0xffffffff9e642a90
+
+Breakpoint 1, 0xffffffff9e642a90 in ?? ()
+Breakpoint 2 at 0xffffffff9edfe6bf
+
+Breakpoint 2, 0xffffffff9edfe6bf in ?? ()
+
+=== AT PANIC: phys_avail dump ===
+count ptr [rbp-0x468]:
+0xffffffffa1130d84:	0x00000004
+avail array at [rbp-0x460]:
+0xffffffffa1130e80:	0x0000000000001000	0x0000000000097000
+0xffffffffa1130e90:	0x000000000009c000	0x00000000000f0000
+0xffffffffa1130ea0:	0x0000000000100000	0x0000000040000000
+0xffffffffa1130eb0:	0x0000000000000000	0x0000000000000000
+0xffffffffa1130ec0:	0x0000000000000000	0x0000000000000000
+0xffffffffa1130ed0:	0x0000000000000000	0x0000000000000000
+0xffffffffa1130ee0:	0x0000000000000000	0x0000000000000000
+0xffffffffa1130ef0:	0x0000000000000000	0x0000000000000000
+0xffffffffa1130f00:	0x0000000000000000	0x0000000000000000
+0xffffffffa1130f10:	0x0000000000000000	0x0000000000000000
+0xffffffffa1130f20:	0x0000000000000000	0x0000000000000000
+0xffffffffa1130f30:	0x0000000000000000	0x0000000000000000
+Kill the program being debugged? (y or n) [answered Y; input not from terminal]
+[Inferior 1 (process 1) killed]

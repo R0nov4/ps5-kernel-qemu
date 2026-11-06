@@ -1,0 +1,35 @@
+warning: No executable has been specified and target does not support
+determining executable automatically.  Try using the "file" command.
+0x000000000000fff0 in ?? ()
+Hardware assisted breakpoint 1 at 0xffffffff9e642a90
+
+Breakpoint 1, 0xffffffff9e642a90 in ?? ()
+
+=== BTEXT REACHED — arming IVT watches ===
+Hardware read watchpoint 2: *(unsigned long long *)0x0
+Hardware read watchpoint 3: *(unsigned long long *)0x40
+Hardware assisted breakpoint 4 at 0xc0007240f000ff53
+
+Breakpoint 4, 0xc0007240f000ff53 in ?? ()
+
+=== HIT A (first read of VA0/VA0x40 OR garbage jump) ===
+rip            0xc0007240f000ff53  0xc0007240f000ff53
+rsp            0xffffffffa1130c50  0xffffffffa1130c50
+rbp            0xffffffffa1130d20  0xffffffffa1130d20
+rax            0x1                 1
+rbx            0x8000000000000003  -9223372036854775805
+rcx            0xaa84d260b7126000  -6159567077505867776
+rdx            0x8000000000000103  -9223372036854775549
+rsi            0x8000000000000103  -9223372036854775549
+rdi            0x200000            2097152
+r8             0x0                 0
+r9             0x1e200000          505413632
+r10            0xf1e0000656        1038845216342
+r11            0x6                 6
+r12            0x1                 1
+r13            0xffffffff9e3f0000  -1640038400
+r14            0xffff8e7722253720  -124832651593952
+r15            0xffff8e7722253000  -124832651595776
+   0xc0007240f000ff43:	/tmp/ivt2.gdb:14: Error in sourced command file:
+Cannot access memory at address 0xc0007240f000ff43
+[Inferior 1 (process 1) detached]

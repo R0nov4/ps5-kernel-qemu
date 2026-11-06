@@ -1,0 +1,49 @@
+warning: No executable has been specified and target does not support
+determining executable automatically.  Try using the "file" command.
+0x000000000000fff0 in ?? ()
+Hardware assisted breakpoint 1 at 0xffffffff9eccc575
+
+Breakpoint 1, 0xffffffff9eccc575 in ?? ()
+
+=== AT 0x9eccc575 (translation complete, before store) ===
+rip            0xffffffff9eccc575  0xffffffff9eccc575
+rsp            0xffffffffa1130c50  0xffffffffa1130c50
+rbp            0xffffffffa1130d20  0xffffffffa1130d20
+rax            0x82                130
+rbx            0xffff8e77222536c0  -124832651594048
+rcx            0x1                 1
+rdx            0xffffffffa1f37e90  -1577877872
+rsi            0xaa84d260b7126000  -6159567077505867776
+rdi            0xffff8e7722253000  -124832651595776
+r8             0xffffffffa1f37e90  -1577877872
+r9             0x1e200000          505413632
+r10            0xf1e0000656        1038845216342
+r11            0x6                 6
+r12            0x1                 1
+r13            0xaaaaaaaaaaaab000  -6148914691236515840
+r14            0xffff8e7722253720  -124832651593952
+r15            0xffff8e7722253000  -124832651595776
+result rsi (to be stored): 0x$1 = 0xaa84d260b7126000
+rbx struct (region descriptor, DMAP): 0x$2 = 0xffff8e77222536c0
+[rbx+0x8d] (domain index byte): 0xffff8e772225374d:	0x00
+entry rdx (runtime fields):
+0xffffffffa1f37e90:	0xffffffff9f779ef8	0x0000000001030000
+0xffffffffa1f37ea0:	0x0000000000000000	0x0000000000000004
+0xffffffffa1f37eb0:	0xffff8e7724292170	0xffff8e7722253000
+0xffffffffa1f37ec0:	0x0000000000000000	0x0000000000000000
+0xffffffffa1f37ed0:	0x0000000022230000	0x0000000000000000
+0xffffffffa1f37ee0:	0x0000000000000023	0x0000000000000001
+0xffffffffa1f37ef0:	0x0000000000000001	0xffffffff9f779ef8
+r13 (multiplier): 0x$3 = 0xaaaaaaaaaaaab000
+r14 (target): 0x$4 = 0xffff8e7722253720
+rdi (region base): 0x$5 = 0xffff8e7722253000
+rbx+0x60 area (region desc):
+0xffff8e7722253700:	0x0000000000000000	0x0000000000000000
+0xffff8e7722253710:	0x0000000000000000	0x0000000000000000
+0xffff8e7722253720:	0x0000000000000000	0x0000000000000000
+0xffff8e7722253730:	0x0000000000000000	0x0000000000000000
+0xffff8e7722253740:	0x0000000000000000	0x0000000000000000
+0xffff8e7722253750:	0x0000000000000000	0x0000000000000000
+0xffff8e7722253760:	0x0000000000000000	0x0000000000000000
+0xffff8e7722253770:	0x0000000000000000	0x0000000000000000
+[Inferior 1 (process 1) killed]

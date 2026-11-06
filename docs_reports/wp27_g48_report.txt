@@ -1,0 +1,157 @@
+WP27 G48 interior-LEA sweep — 19 guards (G47 + 18), 21 skipped
+closure: 5499 fns; unique sites 40
+
+G47 (hand): site 0x9e7e0670 fn 0x9e7e0650 alloc@0x9e7e066b -> lea rsi,[rax+0x50]; ret=NULL; unwind pop rbx; pop r14; pop rbp
+
+site        fn          alloc@      displaced -> rejoin  unwind <- real epilogue        ret / vote
+0x09e6b6eea 0x09e6b6eb0 0x09e6b6ed1 488d9048020000  ->0x9e6b6ef1 add rsp, 8; pop rbx; pop r14; pop r15; p xor eax, eax / pointer(1/0) slot 0x9e413b80
+0x09e6c2b2f 0x09e6c2ae0 0x09e6c2b1b 498d7c2440      ->0x9e6c2b34 add rsp, 0x18; pop rbx; pop r12; pop r13 mov eax, 0xc / no-vote slot 0x9e413c00
+0x09e792228 0x09e792180 0x09e792223 488d7810ba210000->0x9e792231 add rsp, 8; pop rbx; pop r14; pop r15; p mov eax, 0xc / no-vote slot 0x9e413c80
+0x09e7e0670 0x09e7e0650 0x09e7e066b 488d70504889c7  ->0x9e7e0677 pop rbx; pop r14; pop rbp                xor eax, eax / pointer(2/0) slot 0x9e413b00
+0x09e7e4ada 0x09e7e49c0 0x09e7e4ac5 488d780dba200000->0x9e7e4ae3 add rsp, 0x38; pop rbx; pop r12; pop r13 mov eax, 0xc / no-vote slot 0x9e413d80
+0x09e856343 0x09e8561b0 0x09e85631d 488d4810488b93a8->0x9e85634e add rsp, 8; pop rbx; pop r12; pop r13; p mov eax, 0xc / error(2/0) slot 0x9e413e00
+0x09e9523ec 0x09e9523d0 0x09e9523e7 488db8c00c0000  ->0x9e9523f3 add rsp, 8; pop rbx; pop rbp             mov eax, 0xc / no-vote slot 0x9e413e80
+0x09e9843ae 0x09e984310 0x09e9843a5 488d482048895020->0x9e9843b6 add rsp, 0x28; pop rbx; pop r12; pop r13 mov eax, 0xc / no-vote slot 0x9e413f00
+0x09e9cec6d 0x09e9cec40 0x09e9cec68 488d7828beb00200->0x9e9cec76 add rsp, 8; pop rbx; pop r12; pop r13; p mov eax, 0xc / no-vote slot 0x9e413f80
+0x09eb1fb8b 0x09eb1fad0 0x09eb1fb86 488d78044c89fe  ->0x9eb1fb92 add rsp, 0x18; pop rbx; pop r12; pop r13 mov eax, 0xc / no-vote slot 0x9e414000
+0x09eb1fc18 0x09eb1fad0 0x09eb1fc0f 488d78044c89e6  ->0x9eb1fc1f add rsp, 0x18; pop rbx; pop r12; pop r13 mov eax, 0xc / no-vote slot 0x9e414080
+0x09eb6f6d8 0x09eb6f670 0x09eb6f6cf 488d781cba140000->0x9eb6f6e1 add rsp, 0x18; pop rbx; pop r12; pop r13 mov eax, 0xc / error(2/0) slot 0x9e414100
+0x09eb729f8 0x09eb729c0 0x09eb729e6 498d7730498907  ->0x9eb729ff add rsp, 8; pop rbx; pop r14; pop r15; p mov eax, 0xc / no-vote slot 0x9e414180
+0x09ebee1c1 0x09ebee120 0x09ebee1bc 4c8da890000000  ->0x9ebee1c8 add rsp, 0x58; pop rbx; pop r12; pop r13 mov eax, 0xc / no-vote slot 0x9e414200
+0x09ecf1c27 0x09ecf1be0 0x09ecf1c0f 488db3a8000000  ->0x9ecf1c2e pop rbx; pop r12; pop r14; pop r15; pop  mov eax, 0xc / no-vote slot 0x9e414280
+0x09ed20bf4 0x09ed20b70 0x09ed20be3 4c8d2c1848c74418->0x9ed20c01 add rsp, 0x48; pop rbx; pop r12; pop r13 mov eax, 0xc / error(3/0) slot 0x9e414300
+0x09ed25f88 0x09ed25eb0 0x09ed25f7b 488d78104c89e6  ->0x9ed25f8f add rsp, 0x58; pop rbx; pop r12; pop r13 mov eax, 0xc / no-vote slot 0x9e414380
+0x09ef1ab43 0x09ef1ab10 0x09ef1ab32 498d9630010000  ->0x9ef1ab4a add rsp, 8; pop rbx; pop r12; pop r13; p xor eax, eax / pointer(1/0) slot 0x9e414400
+0x09ef4d047 0x09ef4cfe0 0x09ef4d02b 4c8d63384c89e7  ->0x9ef4d04e add rsp, 0x18; pop rbx; pop r12; pop r13 mov eax, 0xc / no-vote slot 0x9e414480
+
+skipped:
+  0x9e6c0823 fn 0x9e6c07f0: no-epilogue
+  0x9e6eeb7e fn 0x9e6eea80: block-unrelocatable
+  0x9e8b2308 fn 0x9e8b2250: block-unrelocatable
+  0x9e8b2618 fn 0x9e8b2560: block-unrelocatable
+  0x9e8c7588 fn 0x9e8c74e0: block-unrelocatable
+  0x9e8c7868 fn 0x9e8c77c0: block-unrelocatable
+  0x9e8e2450 fn 0x9e8e2430: block-unrelocatable
+  0x9e996db6 fn 0x9e996c90: block-unrelocatable
+  0x9e996dd1 fn 0x9e996c90: block-unrelocatable
+  0x9ea294ac fn 0x9ea29460: block-unrelocatable
+  0x9ea908ba fn 0x9ea90850: block-unrelocatable
+  0x9eb2e04f fn 0x9eb2e000: no-epilogue
+  0x9eb319b0 fn 0x9eb31920: block-unrelocatable
+  0x9ed97d72 fn 0x9ed97d10: block-unrelocatable
+  0x9edf4461 fn 0x9edf4430: block-unrelocatable
+  0x9ef137e6 fn 0x9ef13600: no-epilogue
+  0x9ef6cef1 fn 0x9ef6ced0: block-unrelocatable
+  0x9f03ea67 fn 0x9f03e950: block-unrelocatable
+  0x9f03f0c0 fn 0x9f03f0a0: block-unrelocatable
+  0x9f0873bc fn 0x9f0873a0: block-unrelocatable
+  0x9f08b01d fn 0x9f08afc0: block-unrelocatable
+
+call-site fallback guards (lea-site failed; allocator call retargeted
+to slot: call ALLOC; test rax; ret | NULL: retcode; add rsp,8; epilogue; ret):
+  alloc-call 0x9e6eeb79 fn 0x9e6eea80 -> 0x9eff8b50 (lea 0x9e6eeb7e: block-unrelocatable) ret=xor eax, eax / pointer(2/0) unwind add rsp, 0x28; pop rbx; pop r12; pop r13 slot 0x9e414500
+  alloc-call 0x9e8b2300 fn 0x9e8b2250 -> 0x9eff8b50 (lea 0x9e8b2308: block-unrelocatable) ret=mov eax, 0xc / no-vote unwind add rsp, 0x28; pop rbx; pop r12; pop r13 slot 0x9e414580
+  alloc-call 0x9e8b2610 fn 0x9e8b2560 -> 0x9eff8b50 (lea 0x9e8b2618: block-unrelocatable) ret=mov eax, 0xc / no-vote unwind add rsp, 0x28; pop rbx; pop r12; pop r13 slot 0x9e414600
+  alloc-call 0x9e8c7575 fn 0x9e8c74e0 -> 0x9eff8b50 (lea 0x9e8c7588: block-unrelocatable) ret=mov eax, 0xc / error(1/0) unwind add rsp, 0x38; pop rbx; pop r12; pop r13 slot 0x9e414680
+  alloc-call 0x9e8c7855 fn 0x9e8c77c0 -> 0x9eff8b50 (lea 0x9e8c7868: block-unrelocatable) ret=mov eax, 0xc / error(1/0) unwind add rsp, 0x38; pop rbx; pop r12; pop r13 slot 0x9e414700
+  alloc-call 0x9e8e244b fn 0x9e8e2430 -> 0x9eff8b50 (lea 0x9e8e2450: block-unrelocatable) ret=mov eax, 0xc / no-vote unwind add rsp, 8; pop rbx; pop r14; pop r15; p slot 0x9e414780
+  alloc-call 0x9e996d9d fn 0x9e996c90 -> 0x9eff8b50 (lea 0x9e996db6: block-unrelocatable) ret=mov eax, 0xc / no-vote unwind add rsp, 0x38; pop rbx; pop r12; pop r13 slot 0x9e414800
+  alloc-call 0x9e996dba fn 0x9e996c90 -> 0x9eff8b50 (lea 0x9e996dd1: block-unrelocatable) ret=mov eax, 0xc / no-vote unwind add rsp, 0x38; pop rbx; pop r12; pop r13 slot 0x9e414880
+  alloc-call 0x9ea294a7 fn 0x9ea29460 -> 0x9eff8b50 (lea 0x9ea294ac: block-unrelocatable) ret=xor eax, eax / pointer(1/0) unwind add rsp, 8; pop rbx; pop r12; pop r13; p slot 0x9e414900
+  alloc-call 0x9ea908b5 fn 0x9ea90850 -> 0x9eff8b50 (lea 0x9ea908ba: block-unrelocatable) ret=mov eax, 0xc / no-vote unwind pop rbx; pop r12; pop r14; pop r15; pop  slot 0x9e414980
+  alloc-call 0x9eb319ab fn 0x9eb31920 -> 0x9eff8b50 (lea 0x9eb319b0: block-unrelocatable) ret=mov eax, 0xc / no-vote unwind add rsp, 0x18; pop rbx; pop r12; pop r13 slot 0x9e414a00
+  alloc-call 0x9ed97d6d fn 0x9ed97d10 -> 0x9eff8b50 (lea 0x9ed97d72: block-unrelocatable) ret=mov eax, 0xc / no-vote unwind add rsp, 0x18; pop rbx; pop r12; pop r13 slot 0x9e414a80
+  alloc-call 0x9edf445c fn 0x9edf4430 -> 0x9eff8b50 (lea 0x9edf4461: block-unrelocatable) ret=mov eax, 0xc / no-vote unwind add rsp, 0x18; pop rbx; pop r14; pop r15 slot 0x9e414b00
+  alloc-call 0x9ef6ceec fn 0x9ef6ced0 -> 0x9e82b880 (lea 0x9ef6cef1: block-unrelocatable) ret=mov eax, 0xc / no-vote unwind pop rbx; pop r12; pop r14; pop r15; pop  slot 0x9e414b80
+  alloc-call 0x9f03ea62 fn 0x9f03e950 -> 0x9eff8b50 (lea 0x9f03ea67: block-unrelocatable) ret=mov eax, 0xc / error(2/0) unwind add rsp, 0x78; pop rbx; pop r12; pop r13 slot 0x9e414c00
+  alloc-call 0x9f03f0bb fn 0x9f03f0a0 -> 0x9eff8b50 (lea 0x9f03f0c0: block-unrelocatable) ret=mov eax, 0xc / no-vote unwind pop rbx; pop r14; pop rbp slot 0x9e414c80
+  alloc-call 0x9f0873b7 fn 0x9f0873a0 -> 0x9eff8b50 (lea 0x9f0873bc: block-unrelocatable) ret=mov eax, 0xc / no-vote unwind add rsp, 8; pop rbx; pop rbp slot 0x9e414d00
+  alloc-call 0x9f08b018 fn 0x9f08afc0 -> 0x9eff8b50 (lea 0x9f08b01d: block-unrelocatable) ret=mov eax, 0xc / no-vote unwind add rsp, 8; pop rbx; pop r14; pop r15; p slot 0x9e414d80
+  STILL-SKIPPED alloc-call 0x9e6c081e fn 0x9e6c07f0: no-epilogue / no-epilogue
+  STILL-SKIPPED alloc-call 0x9eb2e03a fn 0x9eb2e000: no-epilogue / no-epilogue
+  STILL-SKIPPED alloc-call 0x9ef137e1 fn 0x9ef13600: no-epilogue / no-epilogue
+
+WP26-skipped panic sites whose fn is in this closure: 151 (none fired in user boot5 — the boot died on a page fault, not a panic;
+the frame-known ones were already B-diverted in WP26)
+  0x9e9ea9da fn 0x9e9ea8f0: rsp-unbalanced(cfg-unreachable)
+  0x9f024bf4 fn 0x9f024ba0: rsp-unbalanced(cfg-unreachable)
+  0x9eeb795c fn 0x9eeb78d0: rsp-unbalanced(cfg-unreachable)
+  0x9e704ec6 fn 0x9e704e20: rsp-unbalanced(cfg-unreachable)
+  0x9ef1cf2c fn 0x9ef1cd10: epilogue-ownership
+  0x9ef1cf52 fn 0x9ef1cd10: epilogue-ownership
+  0x9efe21ca fn 0x9efe1690: no-prologue
+  0x9efe2279 fn 0x9efe1690: no-prologue
+  0x9eaed6d3 fn 0x9eaed6b0: core-excluded
+  0x9eff8f25 fn 0x9eff8df0: rsp-unbalanced(cfg-unreachable)
+  0x9e8b7f27 fn 0x9e8b7e50: epilogue-ownership
+  0x9e8b768a fn 0x9e8b75e0: no-epilogue
+  0x9e92a8fc fn 0x9e92a7d0: no-epilogue
+  0x9ed15e95 fn 0x9ed15d80: epilogue-ownership
+  0x9ed15ed7 fn 0x9ed15d80: epilogue-ownership
+  0x9eb2e225 fn 0x9eb2e080: no-epilogue
+  0x9eb2e268 fn 0x9eb2e080: no-epilogue
+  0x9ed162bb fn 0x9ed161b0: no-epilogue
+  0x9ef186ad fn 0x9ef17ea0: no-prologue
+  0x9e6b9c88 fn 0x9e6b9370: no-prologue
+  0x9e6b72d0 fn 0x9e6b7210: rsp-unbalanced(cfg-unreachable)
+  0x9ebe16d8 fn 0x9ebe13f0: rsp-unbalanced(cfg-unreachable)
+  0x9ebe17f3 fn 0x9ebe13f0: rsp-unbalanced(cfg-unreachable)
+  0x9e82ce3f fn 0x9e82c0c0: no-prologue
+  0x9e81db26 fn 0x9e81d840: no-epilogue
+  0x9e81e1d8 fn 0x9e81deb0: rsp-unbalanced(cfg-unreachable)
+  0x9e81e21a fn 0x9e81deb0: rsp-unbalanced(cfg-unreachable)
+  0x9eb735e3 fn 0x9eb73280: epilogue-ownership
+  0x9eb727e6 fn 0x9eb72760: epilogue-ownership
+  0x9ea05c62 fn 0x9ea05bd0: rsp-unbalanced(cfg-unreachable)
+  0x9ea05ca5 fn 0x9ea05bd0: rsp-unbalanced(cfg-unreachable)
+  0x9e7047bf fn 0x9e704610: no-epilogue
+  0x9ecf8d4c fn 0x9ecf8c30: rsp-unbalanced(cfg-unreachable)
+  0x9ecf8d8f fn 0x9ecf8c30: rsp-unbalanced(cfg-unreachable)
+  0x9ed4a20c fn 0x9ed48f00: no-prologue
+  0x9ed4a291 fn 0x9ed48f00: no-prologue
+  0x9ef80fd1 fn 0x9ef80cf0: no-epilogue
+  0x9ef80ff7 fn 0x9ef80cf0: no-epilogue
+  0x9ee8ea08 fn 0x9ee8e830: prologue-mismatch(['r15', 'r14', 'rbx', 'rax']|0 vs ['rbx', 'r14', 'r15', 'rbp']|24)
+  0x9e6bf7cc fn 0x9e6bedc0: no-prologue
+  0x9eef3b5a fn 0x9eef3970: epilogue-ownership
+  0x9eaf88c9 fn 0x9eaf6b40: no-prologue
+  0x9eaf890a fn 0x9eaf6b40: no-prologue
+  0x9eaf893e fn 0x9eaf6b40: no-prologue
+  0x9ee00259 fn 0x9edffff0: epilogue-ownership
+  0x9ee002a4 fn 0x9edffff0: epilogue-ownership
+  0x9ee002e1 fn 0x9edffff0: epilogue-ownership
+  0x9ee00324 fn 0x9edffff0: epilogue-ownership
+  0x9e81d50f fn 0x9e81d3d0: no-epilogue
+  0x9eb6f928 fn 0x9eb6f670: rsp-unbalanced(cfg-unreachable)
+  0x9eb6fa5b fn 0x9eb6f930: rsp-unbalanced(cfg-unreachable)
+  0x9e950fdb fn 0x9e950540: no-prologue
+  0x9efd73b3 fn 0x9efd7350: no-epilogue
+  0x9efd7f0a fn 0x9efd7350: no-prologue
+  0x9efd7f58 fn 0x9efd7350: no-prologue
+  0x9eaceb4c fn 0x9eacea70: no-epilogue
+  0x9eaceb8e fn 0x9eacea70: no-epilogue
+  0x9e6c1498 fn 0x9e6c07f0: no-prologue
+  0x9e6715b7 fn 0x9e6714d0: epilogue-ownership
+  0x9f0a2c7d fn 0x9f0a1b80: no-prologue
+
+report-only BSS scan (load [rip+X] with zero image bytes -> store through it):
+  fn 0x9e7c4080: load 0x9e7c40f0 global 0xa18c1878 (never stored) -> store-through 0x9e7c4102 mov qword ptr [rbx], rax
+  fn 0x9e7c4080: load 0x9e7c40fb global 0xa18c1870 (never stored) -> store-through 0x9e7c4102 mov qword ptr [rbx], rax
+  fn 0x9ee08e80: load 0x9ee0903a global 0xa0956d18 (never stored) -> store-through 0x9ee09043 mov qword ptr [r13], r14
+  fn 0x9ef1dbc0: load 0x9ef1e368 global 0xa2110678 (never stored) -> store-through 0x9ef1e379 mov qword ptr [rsp], rax
+  fn 0x9ef1dbc0: load 0x9ef1e39f global 0xa21106a0 (never stored) -> store-through 0x9ef1e3b0 mov qword ptr [rsp], rax
+  fn 0x9ef1dbc0: load 0x9ef1e3a6 global 0xa21106a8 (never stored) -> store-through 0x9ef1e3b0 mov qword ptr [rsp], rax
+  fn 0x9ef1e150: load 0x9ef1e368 global 0xa2110678 (never stored) -> store-through 0x9ef1e379 mov qword ptr [rsp], rax
+  fn 0x9ef1e150: load 0x9ef1e39f global 0xa21106a0 (never stored) -> store-through 0x9ef1e3b0 mov qword ptr [rsp], rax
+  fn 0x9ef1e150: load 0x9ef1e3a6 global 0xa21106a8 (never stored) -> store-through 0x9ef1e3b0 mov qword ptr [rsp], rax
+  fn 0x9ef1e150: load 0x9ef1e3d6 global 0xa21106d0 (never stored) -> store-through 0x9ef1e3e7 mov qword ptr [rsp], rax
+  fn 0x9ef1e150: load 0x9ef1e3dd global 0xa21106d8 (never stored) -> store-through 0x9ef1e3e7 mov qword ptr [rsp], rax
+  fn 0x9ef1e150: load 0x9ef1e40d global 0xa2110700 (never stored) -> store-through 0x9ef1e41e mov qword ptr [rsp], rax
+  fn 0x9ef1e150: load 0x9ef1e414 global 0xa2110708 (never stored) -> store-through 0x9ef1e41e mov qword ptr [rsp], rax
+  fn 0x9ef1e150: load 0x9ef1e444 global 0xa2110730 (never stored) -> store-through 0x9ef1e455 mov qword ptr [rsp], rax
+  fn 0x9ef1e150: load 0x9ef1e44b global 0xa2110738 (never stored) -> store-through 0x9ef1e455 mov qword ptr [rsp], rax
+  fn 0x9ef1e150: load 0x9ef1e47b global 0xa2110760 (never stored) -> store-through 0x9ef1e48c mov qword ptr [rsp], rax
+  fn 0x9ef1e150: load 0x9ef1e482 global 0xa2110768 (never stored) -> store-through 0x9ef1e48c mov qword ptr [rsp], rax
+  fn 0x9ef6b710: load 0x9ef6b98e global 0xa0fdec70 (never stored) -> store-through 0x9ef6b99b mov qword ptr [rsp], rbx
+  fn 0x9ef6b710: load 0x9ef6b9cb global 0xa0fdecc0 (never stored) -> store-through 0x9ef6b9d5 mov qword ptr [rsp], rax
+  total: 19 (false positives possible — runtime-initialized globals; review before guarding)

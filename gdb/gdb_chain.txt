@@ -1,0 +1,129 @@
+warning: No executable has been specified and target does not support
+determining executable automatically.  Try using the "file" command.
+0x000000000000fff0 in ?? ()
+Breakpoint 1 at 0xffffffff9e64d410
+Breakpoint 2 at 0xffffffff9e89d890
+Breakpoint 3 at 0xffffffff9e739bc0
+Breakpoint 4 at 0xffffffff9e7df4a0
+Breakpoint 5 at 0xffffffff9e7df4b0
+Breakpoint 6 at 0xffffffff9e7df230
+Breakpoint 7 at 0xffffffff9ee30cb6
+Breakpoint 8 at 0xffffffff9ebe0dca
+Breakpoint 9 at 0xffffffff9e85e2f0
+
+Breakpoint 9, 0xffffffff9e85e2f0 in ?? ()
+
+=== STOP 1 ===
+rip            0xffffffff9e85e2f0  0xffffffff9e85e2f0
+rdi            0xffffffffa0fec680  -1593915776
+rsi            0x0                 0
+rbx            0xffffffff9e659c08  -1637508088
+0xffffffffa0fec680:	"P\235e\236\377\377\377\377"
+
+Breakpoint 9, 0xffffffff9e85e2f0 in ?? ()
+
+=== STOP 2 ===
+rip            0xffffffff9e85e2f0  0xffffffff9e85e2f0
+rdi            0xffffffffa0fec680  -1593915776
+rsi            0x0                 0
+rbx            0xffffffff9e659c08  -1637508088
+0xffffffffa0fec680:	"P\235e\236\377\377\377\377"
+
+Breakpoint 9, 0xffffffff9e85e2f0 in ?? ()
+
+=== STOP 3 ===
+rip            0xffffffff9e85e2f0  0xffffffff9e85e2f0
+rdi            0xffffffffa0fec680  -1593915776
+rsi            0x0                 0
+rbx            0xffffffff9e659c08  -1637508088
+0xffffffffa0fec680:	"P\235e\236\377\377\377\377"
+
+Breakpoint 9, 0xffffffff9e85e2f0 in ?? ()
+
+=== STOP 4 ===
+rip            0xffffffff9e85e2f0  0xffffffff9e85e2f0
+rdi            0xffffffffa0fec680  -1593915776
+rsi            0x0                 0
+rbx            0xffffffff9e659c08  -1637508088
+0xffffffffa0fec680:	"P\235e\236\377\377\377\377"
+
+Breakpoint 9, 0xffffffff9e85e2f0 in ?? ()
+
+=== STOP 5 ===
+rip            0xffffffff9e85e2f0  0xffffffff9e85e2f0
+rdi            0xffffffffa0fec680  -1593915776
+rsi            0x0                 0
+rbx            0xffffffff9e659c08  -1637508088
+0xffffffffa0fec680:	"P\235e\236\377\377\377\377"
+
+Breakpoint 9, 0xffffffff9e85e2f0 in ?? ()
+
+=== STOP 6 ===
+rip            0xffffffff9e85e2f0  0xffffffff9e85e2f0
+rdi            0xffffffffa0fec680  -1593915776
+rsi            0x0                 0
+rbx            0xffffffff9e659c08  -1637508088
+0xffffffffa0fec680:	"P\235e\236\377\377\377\377"
+
+Breakpoint 9, 0xffffffff9e85e2f0 in ?? ()
+
+=== STOP 7 ===
+rip            0xffffffff9e85e2f0  0xffffffff9e85e2f0
+rdi            0xffffffffa0fec680  -1593915776
+rsi            0x0                 0
+rbx            0xffffffff9e659c08  -1637508088
+0xffffffffa0fec680:	"P\235e\236\377\377\377\377"
+
+Breakpoint 9, 0xffffffff9e85e2f0 in ?? ()
+
+=== STOP 8 ===
+rip            0xffffffff9e85e2f0  0xffffffff9e85e2f0
+rdi            0xffffffffa0fec680  -1593915776
+rsi            0x0                 0
+rbx            0xffffffff9e659c08  -1637508088
+0xffffffffa0fec680:	"P\235e\236\377\377\377\377"
+
+Breakpoint 9, 0xffffffff9e85e2f0 in ?? ()
+
+=== STOP 9 ===
+rip            0xffffffff9e85e2f0  0xffffffff9e85e2f0
+rdi            0xffffffffa0fec680  -1593915776
+rsi            0x0                 0
+rbx            0xffffffff9e659c08  -1637508088
+0xffffffffa0fec680:	"P\235e\236\377\377\377\377"
+
+Breakpoint 9, 0xffffffff9e85e2f0 in ?? ()
+
+=== STOP 10 ===
+rip            0xffffffff9e85e2f0  0xffffffff9e85e2f0
+rdi            0xffffffffa0fec680  -1593915776
+rsi            0x0                 0
+rbx            0xffffffff9e659c08  -1637508088
+0xffffffffa0fec680:	"P\235e\236\377\377\377\377"
+
+Breakpoint 9, 0xffffffff9e85e2f0 in ?? ()
+
+=== STOP 11 ===
+rip            0xffffffff9e85e2f0  0xffffffff9e85e2f0
+rdi            0xffffffffa0fec680  -1593915776
+rsi            0x0                 0
+rbx            0xffffffff9e659c08  -1637508088
+
+Breakpoint 9, 0xffffffff9e85e2f0 in ?? ()
+
+=== STOP 12 ===
+rip            0xffffffff9e85e2f0  0xffffffff9e85e2f0
+rdi            0xffffffffa0fec680  -1593915776
+rsi            0x0                 0
+rbx            0xffffffff9e659c08  -1637508088
+0xffffffffa0fec680:	"P\235e\236\377\377\377\377"
+
+=== LOCALS ===
+0xffffffffa1130c18:	0x000000000000002e	0x000000000000063c
+0xffffffffa1130c28:	0x00000000ffffffff	0xa1978801000008c1
+r15            0x0                 0
+r12            0xc2f959c6          3271121350
+rax            0xffffffff          4294967295
+rcx            0x1                 1
+Kill the program being debugged? (y or n) [answered Y; input not from terminal]
+[Inferior 1 (process 1) killed]

@@ -1,0 +1,314 @@
+#!/usr/bin/env python3
+"""WP2 STEP 1 — final deliverable: machine_init anatomy + byte-exact Loader Contract.
+All facts byte-verified against the live dump (13.60) in this session.
+Writes: download/ps5_wp2/wp2_1_machine_init_loader_contract.txt
+        download/ps5_wp2/wp2_loader_contract.json
+"""
+import json
+
+OUT = "./download/ps5_wp2"
+
+REP = r"""
+====================================================================================================
+WP2-STEP1 — MACHINE_INIT (0xffffffff9edf8790) COMPLETE ANATOMY + BYTE-EXACT LOADER CONTRACT
+PS5 kernel 13.60 live dump — every claim below verified against live .data values
+====================================================================================================
+
+FUNCTION PROFILE
+  bounds      : [0xffffffff9edf8790, 0xffffffff9edf92f0)   2912 bytes, 540 instructions
+  prologue    : push rbp/r15/r14/r13/r12/rbx; sub rsp,0x18   (frame 0x48)
+  epilogue    : single ret @0x9edf92d4; error path @0x9edf92d5 (hook-mismatch -> report+continue)
+  args        : EDI = dword[loader_rsp+4], ESI = dword[loader_rsp+8]   (from btext @0x9e642aa7)
+  returns     : RAX = [0xa1978c58] = thread0 boot-stack/PCB pointer (btext does  mov rsp,rax)
+
+*** CRITICAL CORRECTION to WP1's loader contract ***
+  The "phys 0x780..0x878" and "phys 0x20" reads from the previous session were a MISREAD:
+  those instructions are GS-SEGMENT-RELATIVE per-CPU accesses (gs:[0x780] etc.), NOT absolute
+  physical addresses. The TRUE physical loader contract is ONLY:
+      phys 0x9bf4c, phys 0x9bf54, phys 0x9b6f4  (+ phys 0x472 written, + preload metadata area)
+
+================================================================================
+1. EXECUTION FLOW (byte-verified)
+================================================================================
+btext 0xffffffff9e642a90:
+    mov word ptr [0x472], 0x1234      ; warm-boot flag (classic FreeBSD), phys write via
+                                       ; identity low map -> LOADER MUST IDENTITY-MAP LOW RAM
+    push 2; popfq                      ; RFLAGS = 2 (all flags clear, IF=0)
+    mov rbp, rsp                       ; loader stack snapshot
+    lea rsp, [rip+...]  -> 0xffffffffa1131000   ; TEMP bootstack (in .data! loader must map
+                                       ; the whole kernel .data writable; content irrelevant)
+    mov edi, [rbp+4]                   ; ARG1 = modulep>>12      (live: 0x22224)
+    mov esi, [rbp+8]                   ; ARG2 = physfree>>12     (live: 0x22225)
+    xor rbp, rbp
+    call 0xffffffff9edf8790            ; machine_init(ARG1, ARG2)
+    mov rsp, rax                       ; RAX = new kernel stack (thread0 kstack top area)
+    call 0xffffffff9e9261f0            ; mi_startup() — never returns
+    hlt; jmp $
+
+machine_init(EDI=modulep>>12, ESI=physfree>>12):
+  A. [0xa1fa55a0]=0; [0xa1fa55a8]=0; [0xa1fa55b0]=0; [0xa1fa55b8]=1   ; VM accumulators reset
+  B. rbx = ARG2<<12 (physfree bytes); r14 = ARG1<<12
+     [0xa1fa55c0] = physfree                       (live 0x22225000)
+  C. *** PHYS READS (then ZEROED — read-and-wipe) ***
+     rax = [phys 0x9bf4c]  -> [0xa1fa55c8] (live 0)         ; KERNBASE GB-selector
+     [0xa1fdef00] = (rax>>30) + 0x1fe               (live 0x1fe)
+     rax = [phys 0x9bf54]  -> [0xa1fa55d0] (live 0x1e1e0000) ; low-mem/DMAP window base
+     [phys 0x9bf4c] = 0 ; [phys 0x9bf54] = 0 ; [phys 0x9b6f4] = 0
+     rax = [phys 0x9b6f4]  -> [0xa1fa55d8] (live 0)          ; kernel-phys delta
+  D. call 0x9ef80000(rdi=0xa1978ef8, rsi=0xa1978860(&thread0))
+        = proc0/thread0/vmspace0 list-head bootstrap on STATIC .data structs (self-reinit)
+  E. ANTI-TAMPER: r15=[0xa0955a28] must == 0x9e65f630 (boot-svc table slot 0)
+        else error path 0x9e83f8c0(0xa0955bc0, r15) then retry
+     call r15 = thunk 0x9e65f630 -> CPU-INIT HOOK 0x9edf6a50(r14 = ARG1<<12):
+        [0xa21e1070] = KERNBASE + ARG1<<12 - [0x9b6f4]     (live 0xffffffffa2224000)
+                     = PRELOAD METADATA CHAIN HEAD (FreeBSD modulep -> VA)
+        call 0x9f0326b0(KERNBASE): walks the metadata chain, converts every
+            MODINFO 0x8003/0x8004/0x8005 qword from PHYS to VA (via 0x9edf92f0:
+            VA = KERNBASE + phys - [0x9b6f4])
+        mod = preload_search_by_name('elf kernel')   (fallback 'elf64 kernel')
+        [0xa1978190] = 0x20001000   <<< boothowto HARDCODED here (not from loader!)
+        MODINFO 0x8006 -> phys ptr -> VA -> 0x9e86d980(VA, 0)   (early link/env init)
+        if bootflag: print name/type via MODINFO 0x8003/0x8004
+        returns mod (the 'elf kernel' preloaded_file handle)
+        -> [rbp-0x38]
+  F. call 0x9eafdbe0 = init_param2 (TUNABLE 'kern.kstack_pages' -> [0x9fec3918],
+        'kern.hz', 'kern.maxswzone', ... )  [0x9fec3918] live = 1
+  G. virtual_avail computation:
+     rdi = (([0xa1fdef00] | 0xFFFFFFFFFFFFFE00) << 30) + (physfree - [0x9b6f4])
+     [0xa1978cd0] = virtual_avail                       (live 0xffffffffa2225000)
+     [0xa1978cd8] = [0x9fec3918] (kstack_pages)
+     r14 = kstack_pages << 14  (=0x4000; PAGE SIZE = 0x4000 = 16KB — PS5 uses 16K pages!)
+     call bzero(virtual_avail, kstack_bytes)            ; 0x9e648ff0 = plain bzero
+  H. RAM>32GB flag: [0xa1fa54e8] = (physfree > 0x7ff2fffff)   (live 0)
+     GDT BUILD: 13 descriptors converted from a STATIC 18-byte-per-entry source table
+        at [0xa0955ad0, 0xa0955bd6) into the live GDT at 0xa1fa55e0..0xa1fa5648
+        (GDT REBUILT EVERY BOOT from .data — no loader dependency)
+     TSS: TSS @ 0xa1fa6fe0; TSS descriptor (GDT entry 9, selector 0x48) rebuilt;
+        GDTR pseudo-desc {u16 limit=0x67, u64 base=0xa1fa55e0} written @ 0xa1fa89e0
+     call 0x9e649a50(&GDTR): lgdt; DS=ES=FS=GS=SS=0x28; push 0x20; retfq  (CS:=0x20)
+  I. per-CPU: wrmsr FSBASE/GSBASE/KGSBASE (0xC0000100/0101/0102) = 0xffffffffa1fb8f00
+     call 0x9e8b8150(0xa1fb8f00, 0, 0x980) = dpcpu_init: bzero(pcpu,0x980), table
+        registration at [0xa1928920+cpuid*8], pcpu+0x6a0 self-lock init, [pcpu+0x7b4]=-1
+     call 0x9e8b81d0(virtual_avail, 0): [pcpu+0x6b0] = virtual_avail - 0x9fe5a080 (reloc);
+        memcpy(virtual_avail, [0x9fe5a080, 0x9fe5add0), 0xd50)  <<< DPCPU TEMPLATE
+        (template is INITIALIZED .data — must be intact in the reconstructed ELF;
+         [0x9fe4d0b0] holds template start symbol 0x9fe5a080, [0x9fe4d4b8] text base)
+     [0xa1fa54e0] = round16k(0xd50) = 0x4000; physfree += 0x4000 (dpcpu page reserved)
+  J. gs:[0x780]=pcpu, gs:[0]=&thread0, gs:[0x790/0x798]=TSS, gs:[0x7d0]=&GDTdesc,
+     gs:[0x7c8]=&LDTdesc, gs:[0x7b8/0x7c0]=&fs32/gs32 desc, gs:[0x878]=0   (per-CPU fields)
+  K. call 0x9e8b7f30 = Giant + 'blocked lock' + witness-ish re-init (ALL RESET AT BOOT)
+     mtx_init quartet (0x9e8b7dd0): 'icu'(spin,opts=9)@0xa1fa8a08,
+        'descriptor tables'(opts=0)@0xa1fa42f0, 'wbinvd'@0xa1fa8a28, 'l2idsm'(spin)@0xa1fa8a48
+        (ALL FOUR RE-INITIALIZED EVERY BOOT — live lock state irrelevant)
+  L. IDT BUILD: fill ALL 256 gates @0xa1fa4300 with default handler 0x9e65a1a0
+        (sel 0x20, attrs 0x8E00) via loop 0x9edf8c10..c24, then install specific
+        exception gates (vec 0..0x1F + syscall-class gates: vec3 DPL3 0xEE00,
+        vec0x43/0x44/0x45/0x92 DPL3, IST1/2/4/5 on 8/2/1/0x1E...) —
+        *** THE ENTIRE IDT IS REBUILT EVERY BOOT — zeroing it is SAFE ***
+     IDTR pseudo-desc {u16 limit=0xFFF, u64 base=0xa1fa4300} @0xa1fa8a50; lidt [rcx]
+  M. call 0x9f032550(mod, 0x8006)-ish checks; call 0x9ed5b1d0, 0x9ec3aa70, 0x9ec3ac60
+     pcpu-table (4 slots @0xa1fa7000+; all -> CPU0 pcpu); TSS.rsp0 = RSP&~0xF;
+     gs:[0x7a0]=TSS.rsp0; ltr 0x48; EFER |= 1 (SCE); SYSCALL MSR setup:
+     LSTAR=0x9e65a060, CSTAR? =0x9e65a078 (0xC0000083), SFMASK=0x330020, STAR=0x44701
+  N. call 0x9edf9310(mod_handle, physfree+0x4000)  <<<< THE MEMORY-LAYOUT BUILDER (see §2)
+  O. call 0x9eafddd0(rdi=[0xa1e251c0]) = init_param1 ('kern.maxusers' default 0x63=99
+        pre-set; maxproc=1604=99*16+20 verified live)
+  P. call 0x9e88a890, 0x9eebcfb0, 0x9f00f450, 0x9ec3ac40, 0x9eef7920 (boot-flag dbg msg
+        'bootflags'/'Boot flags requested debugger'), 0x9e8a0790(rdi=[0xa1fb8a60]
+        (VM area computed in N), esi=[0xa1d103e0]=0x18000), 0x9eb210c0,
+     call 0x9edfa0b0 = TSC_AUX=cpuid + AMD IBS enable (MSR 0xC0010064..6B |= bit31)
+        if CPU family == Zen2 (0x740F00 check @0xa1f7e530)
+  Q. *** THE RAX CHAIN (returned kernel stack) ***
+     rbx = &thread0 (0xffffffffa1978860, STATIC .data)
+     call 0x9ee40ac0(&thread0):
+         RAX = thread0.[+0x470] + (thread0.[+0x478] << 14) - 0x400 - 0x1C0
+             = td_kstack + kstack_bytes - 0x400 - 0x1C0
+     [0xa1978c58] = RAX      (live 0xffffffffa2228a40 = 0xa2225000+0x4000-0x400-0x1c0)
+     call 0x9ee40a80(&thread0) -> B = td_kstack + kstack_bytes - 0x400
+     bzero(B, [0xa1f7e4f8]=0x400)                       ; PCB area zeroed
+     TSS.rsp0 = RAX&~0xF; gs:[0x20] = RAX (pcpu curpcb-ish)
+     [RAX+0x100]=0 (dword), [RAX+0x110]=0 (qword)       ; pcb_flags / pcb_savefpu
+  R. call 0x9e86d400 -> if nonzero: 0x9ed47b70('/kernel', rax, 0x400)  (env/kernelname)
+     call 0x9ebb09c0
+     return RAX = [0xa1978c58]
+
+================================================================================
+2. THE MEMORY-LAYOUT BUILDER 0x9edf9310 (RAM size & phys_avail)
+================================================================================
+  - bzero 2 stack buffers (0xf0 bytes each)
+  - ANTI-TAMPER: boot-svc slot [0xa0955a40] (memmap getter) must be inside the
+      9-entry thunk table [0x9e6583f8..0x9e658440]; slot [0xa0955a48] in
+      [0x9e65f718..0x9e65f720]
+  - call memmap_getter(mod, &buf[0xf0], &count)  (thunk 0x9e6583f8 -> 0x9edf6b80):
+        * preload_search_info(mod, 0x9004) = UEFI memory map (descs @+0x20,
+          {u64 map_size, u64 desc_size} header; converts via 0x9edfd350; 'UEFI')
+        * else preload_search_info(mod, 0x9001) = BIOS SMAP:
+          {u32 type=0x9001, u32 len=byte_size, data[len] of 20-byte entries
+           {u64 base, u64 length, u32 type}}; 'BIOS'
+        * => loader supplies the RAM MAP INSIDE THE PRELOAD METADATA (SMAP or UEFI)
+  - basemem sanity (>=0xa0001 check; 'Memory map doesn't contain a basemem segment,
+    faking it' — classic FreeBSD string)
+  - physmem: [0xa1fdef08] = last map entry >> 14  (16K pages; live 0x11fcc0
+      = 0x47F300000 bytes ~= top of RAM); TUNABLE 'hw.physmem' (bytes>>14) override;
+      'hw.memtest.tests' (memory pattern test 0xAAAAAAAA/0x55555555/0xFFFFFFFF with
+      cr3 reload + 'Testing system memory' print)
+  - registers static region table @0xa1fa5300..0xa1fa54c0 (12 regions; live values
+      are the real console's: [0x40000..], [0x449600000,0x44b600000),
+      [0x44b600000,0x454200000), [0x454200000,0x47f200000), ... = PS5 phys map)
+  - kernel region: call 0x9edf8260(phys_avail, &count, kern_phys, 0xCC0000)
+      kern_phys = [0x9fe4d4b8](=text VA 0xffffffff9e3f0000) - KERNBASE + [0x9b6f4]
+                = 0x1E3F0000 + [0x9b6f4]        (live 0x1E3F0000 = 507.9MB)
+      => text region [0x1E3F0000, 0x1F0B0000) marked USED
+  - [0xa1fa54c0] = physfree - (kern_phys & ~0x1FFFFF)   (live 0x4025000)
+  - dump_avail[] @0xa1fb8d80 / phys_avail[] @0xa1fb8b80 (15 slots each; rebuilt;
+      panics 'Too many dump_avail' / 'Too many ...')
+  - early page stealing (with 0xAA/0x55/0xFF memory test) builds the bootstrap pools;
+      [0xa1e251c0] = stolen-16K-pages counter (live 0x22270)
+  - [0xa1fb8a60] = computed VM bootstrap area (live 0xffff8e7b7f2fffb8 — NOT loader input)
+  - *** HYPERCALL #0x1F (vmmcall, no args) via wrapper 0x9f006a20 — MUST RETURN 0 ***
+      (nonzero -> panic 'Failed ...' @0x9f695880; machine_init runs BEFORE mi_startup,
+       so the QEMU/KVM shim must already answer hypercall 0x1F by kernel-entry time)
+  - anti-tamper epilogue: canary @0xa1d0c310 compared against entry snapshot
+
+================================================================================
+3. BYTE-EXACT LOADER CONTRACT (what QEMU must place in RAM before jumping to btext)
+================================================================================
+CPU STATE AT ENTRY (0xffffffff9e642a90):
+  - long mode active; any valid flat long-mode CS/SS/DS (kernel reloads all of them:
+    machine_init does lgdt + retfq to CS=0x20, DS/ES/SS=0x28, then DS/ES=0x3B, FS=0x13)
+  - RFLAGS: will be forced to 2
+  - RSP: loader stack, at least 0x10 usable bytes:
+        dword[RSP+4] = modulep>>12   = 0x22224   (preload metadata phys page number)
+        dword[RSP+8] = physfree>>12  = 0x22225   (first free 4K page after image+metadata)
+    (previous session's "boothowto@+4 bootdev@+8" labels were WRONG — both dwords are
+     page numbers; boothowto is hardcoded 0x20001000 by the cpu-init hook itself)
+
+PAGE TABLES the loader must build (it is the Sony loader's job; kernel assumes them):
+  1. LOW PHYS IDENTITY MAP: VA==phys for at least [0, 0x100000)  (kernel writes 0x472,
+     reads 0x9bf4c/0x9bf54/0x9b6f4 through it)
+  2. KERNEL MAP: VA = 0xFFFFFFFF80000000 + phys  (KERNBASE-relative) for at least
+     [0x1E3F0000, 0x22250000 + 0x10000) — covering image + metadata + dpcpu/kstack area,
+     RW supervisor. NOTE KERNBASE = 0xFFFFFFFF80000000 + (([0x9bf4c]>>30)<<30).
+
+PHYSICAL MEMORY LAYOUT (console-accurate values — reproduce these in QEMU):
+  0x00000000..0x00100000   low contract area (identity mapped):
+      phys 0x472   : word, written 0x1234 by btext (any value ok before)
+      phys 0x9bf4c : qword = 0            (KERNBASE GB selector; console value 0)
+      phys 0x9bf54 : qword = 0x1e1e0000   (low-mem/DMAP window base; crash printer +
+                     0x9edfc070/0x9edfc090 consumers: base=[0x9bf4c]+[0x9bf54])
+      phys 0x9b6f4 : qword = 0            (kernel-phys delta: kern_phys=0x1E3F0000+val)
+  0x1E3F0000 .. 0x1F0B0000   kernel .text        (13,369,344 B)  VA 0xffffffff9e3f0000
+  0x1F0B0000 .. 0x22224000   kernel .data+.bss  (0x3174000 B)    VA 0xffffffff9f0b0000
+  0x22224000 .. 0x22225000   PRELOAD METADATA   (4KB)            VA 0xffffffffa2224000
+  0x22225000 .. 0x22229000   boot dpcpu page + thread0 kstack (16KB, bzero'd at boot)
+  0x22229000 ..              free (memmap builder gets physfree+0x4000)
+
+PRELOAD METADATA CHAIN at phys 0x22224000 (FreeBSD preloaded_file format, 8-byte
+aligned entries {u32 type, u32 len, data}; (len+0xF)&~7 stride; {0,0} terminator):
+  - MODINFO_NAME   (1)  : "kernel"            (any name)
+  - MODINFO_TYPE   (2)  : "elf kernel"        (search key of the cpu-init hook!)
+  - MODINFO 0x9001      : BIOS SMAP memory map:
+        {u32 0x9001, u32 total_byte_size, then N x 20-byte entries
+         {u64 base, u64 length, u32 type}}   (type 1 = usable, per FreeBSD E820)
+        Suggested QEMU layout (16KB-page-friendly):
+          [0x40000, 0x6c000)      usable   (classic basemem — must exist!)
+          [0x22229000, RAMTOP)     usable   (above kernel allocations)
+        last entry's end >> 14 becomes physmem ([0xa1fdef08])
+  - MODINFO 0x8003/0x8004/0x8006 : optional elf phdr/hdr/env pointers (phys values;
+        the hook converts phys->VA; omit if unused — hook tolerates NULL)
+  - terminator {0, 0}
+
+HYPERVISOR CONTRACT (already needed DURING machine_init, before any sysinit):
+  - hypercall 0x1F (vmmcall, eax=0x1f, no args) MUST return 0
+  - MSR whitelist (from WP1): 0x1DD/0x1DE + 0xC0000110..0xC0000117 — rdmsr->0,
+    wrmsr->ignore, NEVER #GP (all 256 IDT vectors execute the rdmsr stubs)
+
+MUST-BE-INTACT .data (machine_init READS these before writing — cold-boot inputs):
+  [0xa0955a28]=0x9e65f630  [0xa0955a40]=0x9e6583f8  [0xa0955a48]=0x9e65f718  (boot-svc table)
+  [0xa0955ad0..0xa0955bd6)  13x18B GDT source table
+  [0x9fe5a080..0x9fe5add0)  dpcpu template (0xd50)
+  [0x9fe4d0b0]=0x9fe5a080   [0x9fe4d4b8]=0xffffffff9e3f0000  (linker symbols)
+  [0x9fec3918]=1 (kstack_pages)  [0xa1f7e4f8]=0x400  [0xa1d71f90]=1  [0xa1d71f98]=7
+  [0xa1d103e0]=0x18000  [0xa1f7e530]=CPUID-family value  [0xa1d0c310]=stack-guard canary
+  bootstack @0xa1131000 (btext temp stack — writable, content irrelevant)
+
+SELF-SANITIZING (machine_init rewrites them every boot — live values DO NOT MATTER):
+  GDT @0xa1fa55e0, GDTR @0xa1fa89e0, IDT @0xa1fa4300 (all 256 gates), IDTR @0xa1fa8a50,
+  TSS @0xa1fa6fe0 + descriptor, pcpu @0xa1fb8f00 (bzero+template), Giant/'blocked lock'/
+  'icu'/'descriptor tables'/'wbinvd'/'l2idsm' mutexes, boothowto @0xa1978190 (hardcoded),
+  virtual_avail/phys_avail/dump_avail/[0xa1fdef08] physmem/[0xa1e251c0]/[0xa1fb8a60],
+  proc0/thread0/vmspace0 lists @0xa19788xx..0xa1978ef8, [0xa21e1070], [0xa1978c58],
+  [0xa1fa55c0/55c8/55d0/55d8], [0xa1fdef00], [0xa1fa54c0/54d0/54e0/54e8], [0xa1fa55a0..55b8]
+================================================================================
+"""
+
+with open(f"{OUT}/wp2_1_machine_init_loader_contract.txt", "w") as f:
+    f.write(REP.lstrip("\n"))
+
+contract = {
+  "entry": {
+    "btext": "0xffffffff9e642a90",
+    "machine_init": "0xffffffff9edf8790",
+    "mi_startup": "0xffffffff9e9261f0",
+    "bootstack_temp": "0xffffffffa1131000",
+    "ap_entry": "0xffffffff9e642a40 (rsp = base + cpu*0x80 - 8; CR0=0x80000031, CR4=0x20)"
+  },
+  "loader_stack_args": {
+    "rsp_plus_4": "modulep>>12 = 0x22224 (dword)",
+    "rsp_plus_8": "physfree>>12 = 0x22225 (dword)",
+    "note": "WP1's boothowto/bootdev labels corrected: both are page numbers; boothowto hardcoded 0x2000100 by hook 0x9edf6ab1"  # 0x20001000
+  },
+  "phys_contract": {
+    "0x472":  "word WRITTEN 0x1234 by btext (warm flag)",
+    "0x9bf4c": "qword, KERNBASE GB selector (>>30); console value 0; read-then-zeroed",
+    "0x9bf54": "qword, low-mem/DMAP window base; console value 0x1e1e0000; read-then-zeroed",
+    "0x9b6f4": "qword, kernel phys delta (kern_phys = 0x1E3F0000 + val); console value 0; read-then-zeroed"
+  },
+  "memory_layout": {
+    "kernbase": "0xFFFFFFFF80000000 + ([0x9bf4c]>>30)<<30",
+    "page_size": "0x4000 (16KB!)",
+    "kernel_text_phys": "[0x1E3F0000, 0x1F0B0000) 13,369,344 B -> VA 0xffffffff9e3f0000",
+    "kernel_data_phys": "[0x1F0B0000, 0x22224000) 0x3174000 B -> VA 0xffffffff9f0b0000 (image end!)",
+    "preload_metadata_phys": "[0x22224000, 0x22225000) 4KB -> VA 0xffffffffa2224000",
+    "physfree": "0x22225000",
+    "dpcpu_kstack": "[0x22225000, 0x22229000) 16KB (bzero+template at boot)",
+    "virtual_avail": "0xffffffffa2225000 (live-verified)",
+    "returned_rsp": "td_kstack + (kstack_pages<<14) - 0x400 - 0x1C0 = 0xffffffffa2228a40",
+    "physmem": "last SMAP entry end >> 14 (16K pages) -> [0xa1fdef08]; live 0x11fcc0 (top 0x47F300000); tunable hw.physmem"
+  },
+  "preload_metadata": {
+    "format": "FreeBSD preloaded_file chain @ modulep (0x22224000): {u32 type,u32 len,data}xN, 8-aligned, {0,0} terminator",
+    "required_entries": {
+      "1_name": "kernel",
+      "2_type": "elf kernel",
+      "0x9001_smap": "{u32 0x9001, u32 byte_size, N x {u64 base, u64 length, u32 type=1 usable}}",
+      "0x9004_uefi": "optional alternative: {u64 map_size, u64 desc_size, descs @+0x20}"
+    },
+    "consumers": "0x9edf6b80 memmap getter; 0x9f032480 search_by_name; 0x9f032550 search_info"
+  },
+  "hypercall_during_machine_init": {
+    "number": "0x1F", "wrapper": "0x9f006a20", "args": "none",
+    "must_return": 0, "on_failure": "panic 'Failed ...' (string @0x9f695880)"
+  },
+  "self_sanitizing": [
+    "GDT@0xa1fa55e0(from static table@0xa0955ad0)", "IDT@0xa1fa4300(all 256 gates rebuilt)",
+    "TSS@0xa1fa6fe0", "pcpu@0xa1fb8f00(bzero 0x980 + dpcpu template@0x9fe5a080)",
+    "Giant+'blocked lock'+icu+dt+wbinvd+l2idsm mutexes", "boothowto@0xa1978190=0x20001000",
+    "phys_avail@0xa1fb8b80/dump_avail@0xa1fb8d80", "proc0/thread0/vmspace0@0xa19788xx"
+  ],
+  "must_be_intact_data": {
+    "0xa0955a28": "0x9e65f630 (cpu-init hook ptr, anti-tamper)",
+    "0xa0955a40": "0x9e6583f8 (memmap getter ptr)",
+    "0xa0955a48": "0x9e65f718",
+    "0xa0955ad0..0xa0955bd6": "GDT source table 13x18B",
+    "0x9fe5a080..0x9fe5add0": "dpcpu template 0xd50",
+    "0x9fe4d0b0": "0x9fe5a080", "0x9fe4d4b8": "0xffffffff9e3f0000",
+    "0x9fec3918": "1 (kstack_pages)", "0xa1f7e4f8": "0x400",
+    "0xa1d71f90": "1", "0xa1d71f98": "7", "0xa1d103e0": "0x18000"
+  }
+}
+with open(f"{OUT}/wp2_loader_contract.json", "w") as f:
+    json.dump(contract, f, indent=1)
+
+print(f"wrote {OUT}/wp2_1_machine_init_loader_contract.txt")
+print(f"wrote {OUT}/wp2_loader_contract.json")

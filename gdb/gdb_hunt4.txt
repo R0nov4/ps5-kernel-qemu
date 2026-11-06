@@ -1,0 +1,131 @@
+warning: No executable has been specified and target does not support
+determining executable automatically.  Try using the "file" command.
+0x000000000000fff0 in ?? ()
+Hardware assisted breakpoint 1 at 0xffffffff9e642a90
+
+Breakpoint 1, 0xffffffff9e642a90 in ?? ()
+Breakpoint 2 at 0xffffffff9e85e1e0
+Breakpoint 3 at 0xffffffff9ebe0dba
+Breakpoint 4 at 0xffffffff9e64d410
+Breakpoint 5 at 0xffffffff9e89f4f1
+Breakpoint 6 at 0xffffffff9e89d890
+Breakpoint 7 at 0xffffffff9e739bc0
+
+Breakpoint 2, 0xffffffff9e85e1e0 in ?? ()
+
+=== STOP 1 ===
+rip            0xffffffff9e85e1e0  0xffffffff9e85e1e0
+rdi            0x1                 1
+rsi            0x0                 0
+rax            0x989680            10000000
+rcx            0xf92d142b70485cb4  -491714607513576268
+0xffffffffa1130c68:	0xffffffff9e8b734a	0xffffffff9fe4d718
+0xffffffffa1130c78:	0x0000000000000000	0xffffffffa1978860
+0xffffffffa1130c88:	0xffffffff9fe8c7b0	0xffffffff9fe8c7b0
+0xffffffffa1130c98:	0xffffffff9e651658	0xffffffffa184f310
+
+Breakpoint 2, 0xffffffff9e85e1e0 in ?? ()
+
+=== STOP 2 ===
+rip            0xffffffff9e85e1e0  0xffffffff9e85e1e0
+rdi            0x1                 1
+rsi            0x0                 0
+rax            0x989681            10000001
+rcx            0x1                 1
+0xffffffffa1130c68:	0xffffffff9e8b734a	0xffffffff9fe4d718
+0xffffffffa1130c78:	0x0000000000000000	0xffffffffa1978860
+0xffffffffa1130c88:	0xffffffff9fe8c7b0	0xffffffff9fe8c7b0
+0xffffffffa1130c98:	0xffffffff9e651658	0xffffffffa184f310
+
+Breakpoint 2, 0xffffffff9e85e1e0 in ?? ()
+
+=== STOP 3 ===
+rip            0xffffffff9e85e1e0  0xffffffff9e85e1e0
+rdi            0x1                 1
+rsi            0x0                 0
+rax            0x989682            10000002
+rcx            0x1                 1
+0xffffffffa1130c68:	0xffffffff9e8b734a	0xffffffff9fe4d718
+0xffffffffa1130c78:	0x0000000000000000	0xffffffffa1978860
+0xffffffffa1130c88:	0xffffffff9fe8c7b0	0xffffffff9fe8c7b0
+0xffffffffa1130c98:	0xffffffff9e651658	0xffffffffa184f310
+
+Breakpoint 2, 0xffffffff9e85e1e0 in ?? ()
+
+=== STOP 4 ===
+rip            0xffffffff9e85e1e0  0xffffffff9e85e1e0
+rdi            0x1                 1
+rsi            0x0                 0
+rax            0x989683            10000003
+rcx            0x1                 1
+0xffffffffa1130c68:	0xffffffff9e8b734a	0xffffffff9fe4d718
+0xffffffffa1130c78:	0x0000000000000000	0xffffffffa1978860
+0xffffffffa1130c88:	0xffffffff9fe8c7b0	0xffffffff9fe8c7b0
+0xffffffffa1130c98:	0xffffffff9e651658	0xffffffffa184f310
+
+Breakpoint 2, 0xffffffff9e85e1e0 in ?? ()
+
+=== STOP 5 ===
+rip            0xffffffff9e85e1e0  0xffffffff9e85e1e0
+rdi            0x1                 1
+rsi            0x0                 0
+rax            0x989684            10000004
+rcx            0x1                 1
+0xffffffffa1130c68:	0xffffffff9e8b734a	0xffffffff9fe4d718
+0xffffffffa1130c78:	0x0000000000000000	0xffffffffa1978860
+0xffffffffa1130c88:	0xffffffff9fe8c7b0	0xffffffff9fe8c7b0
+0xffffffffa1130c98:	0xffffffff9e651658	0xffffffffa184f310
+
+Breakpoint 2, 0xffffffff9e85e1e0 in ?? ()
+
+=== STOP 6 ===
+rip            0xffffffff9e85e1e0  0xffffffff9e85e1e0
+rdi            0x1                 1
+rsi            0x0                 0
+rax            0x989685            10000005
+rcx            0x1                 1
+0xffffffffa1130c68:	0xffffffff9e8b734a	0xffffffff9fe4d718
+0xffffffffa1130c78:	0x0000000000000000	0xffffffffa1978860
+0xffffffffa1130c88:	0xffffffff9fe8c7b0	0xffffffff9fe8c7b0
+0xffffffffa1130c98:	0xffffffff9e651658	0xffffffffa184f310
+
+Breakpoint 2, 0xffffffff9e85e1e0 in ?? ()
+
+=== STOP 7 ===
+rip            0xffffffff9e85e1e0  0xffffffff9e85e1e0
+rdi            0x1                 1
+rsi            0x0                 0
+rax            0x989686            10000006
+rcx            0x1                 1
+0xffffffffa1130c68:	0xffffffff9e8b734a	0xffffffff9fe4d718
+0xffffffffa1130c78:	0x0000000000000000	0xffffffffa1978860
+0xffffffffa1130c88:	0xffffffff9fe8c7b0	0xffffffff9fe8c7b0
+0xffffffffa1130c98:	0xffffffff9e651658	0xffffffffa184f310
+
+Breakpoint 2, 0xffffffff9e85e1e0 in ?? ()
+
+=== STOP 8 ===
+rip            0xffffffff9e85e1e0  0xffffffff9e85e1e0
+rdi            0x1                 1
+rsi            0x0                 0
+rax            0x989687            10000007
+rcx            0x1                 1
+0xffffffffa1130c68:	0xffffffff9e8b734a	0xffffffff9fe4d718
+0xffffffffa1130c78:	0x0000000000000000	0xffffffffa1978860
+0xffffffffa1130c88:	0xffffffff9fe8c7b0	0xffffffff9fe8c7b0
+0xffffffffa1130c98:	0xffffffff9e651658	0xffffffffa184f310
+
+Breakpoint 2, 0xffffffff9e85e1e0 in ?? ()
+
+=== STOP 9 ===
+rip            0xffffffff9e85e1e0  0xffffffff9e85e1e0
+rdi            0x1                 1
+rsi            0x0                 0
+rax            0x989688            10000008
+rcx            0x1                 1
+0xffffffffa1130c68:	0xffffffff9e8b734a	0xffffffff9fe4d718
+0xffffffffa1130c78:	0x0000000000000000	0xffffffffa1978860
+0xffffffffa1130c88:	0xffffffff9fe8c7b0	0xffffffff9fe8c7b0
+0xffffffffa1130c98:	0xffffffff9e651658	0xffffffffa184f310
+Kill the program being debugged? (y or n) [answered Y; input not from terminal]
+[Inferior 1 (process 1) killed]

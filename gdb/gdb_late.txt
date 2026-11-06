@@ -1,0 +1,39 @@
+warning: No executable has been specified and target does not support
+determining executable automatically.  Try using the "file" command.
+0xffffffff9e739bc8 in ?? ()
+rip            0xffffffff9e739bc8  0xffffffff9e739bc8
+rsp            0xffffffffa11305e8  0xffffffffa11305e8
+rbp            0xffffffffa1130620  0xffffffffa1130620
+rax            0x6e                110
+rbx            0xffffffff9fe8c7b0  -1612134480
+rcx            0x0                 0
+rdx            0x402               1026
+rsi            0x6e                110
+rdi            0xffffffff9fe8c7b0  -1612134480
+r14            0x6e                110
+r15            0xffffffff9e65a7a8  -1637505112
+
+=== STACK ===
+0xffffffffa11305e8:	0xffffffff9ef0d5ed	0x000000000000006e
+0xffffffffa11305f8:	0xffffffffa1130855	0xffffffffa1d0c310
+0xffffffffa1130608:	0x0000000000000026	0x000000000000000a
+0xffffffffa1130618:	0xffffffffa113076f	0xffffffffa1130640
+0xffffffffa1130628:	0xffffffff9ef0d918	0x000000000000006b
+0xffffffffa1130638:	0xffffffffa1130810	0xffffffffa11306e0
+0xffffffffa1130648:	0xffffffff9e8a0ffe	0x0000000000000000
+0xffffffffa1130658:	0x0000000000000000	0x0000000000000000
+0xffffffffa1130668:	0x0000000000000000	0x0000000000000000
+0xffffffffa1130678:	0x0000000000000000	0x0000000000000000
+0xffffffffa1130688:	0x0000000000000000	0x0000000000000000
+0xffffffffa1130698:	0x0000000000000000	0x0000000000000000
+
+=== CODE AT RIP ===
+=> 0xffffffff9e739bc8:	ret
+   0xffffffff9e739bc9:	nop
+   0xffffffff9e739bca:	nop
+   0xffffffff9e739bcb:	nop
+   0xffffffff9e739bcc:	nop
+   0xffffffff9e739bcd:	nop
+   0xffffffff9e739bce:	nop
+   0xffffffff9e739bcf:	nop
+[Inferior 1 (process 1) detached]

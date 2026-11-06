@@ -1,0 +1,43 @@
+WP28 — G49 M_WAITOK livelock guards + G50 park stub 0x402
+base: 175a002cf7665ff88bb43a04241a6d95 (user-verified G47-only) | root cause: stage #1296 canvasmap malloc(M_WAITOK) livelock
+
+site        fn         stage flags  recipe slot       unwind / note
+0x09e8e244b 0x09e8e2430 #1303 0x8102 R2    0x9e413b80 add rsp, 8; pop rbx; pop r14; pop r15; pop rbp ret=mov eax, 0xc/no-vote
+0x09e8e2578 0x09e8e2430 #1303 0x102  R2    0x9e413c00 add rsp, 8; pop rbx; pop r14; pop r15; pop rbp ret=mov eax, 0xc/no-vote
+0x09e8e29cf 0x09e8e2630 #1303 0x8102 R2    0x9e413c80 add rsp, 0x58; pop rbx; pop r12; pop r13; pop r14; pop r15; pop rbp ret=mov eax, 0xc/no-vote
+0x09ecc4bf5 0x09ecc4b20 #1337 0x102  R2    0x9e413d80 add rsp, 0x1b8; pop rbx; pop r12; pop r13; pop r14; pop r15; pop rbp ret=mov eax, 0xc/no-vote
+0x09ecc4c0e 0x09ecc4b20 #1337 0x102  R2    0x9e413e00 add rsp, 0x1b8; pop rbx; pop r12; pop r13; pop r14; pop r15; pop rbp ret=mov eax, 0xc/no-vote
+0x09ecc5410 0x09ecc4b20 #1337 0x2    R2    0x9e413e80 add rsp, 0x1b8; pop rbx; pop r12; pop r13; pop r14; pop r15; pop rbp ret=mov eax, 0xc/no-vote
+0x09ecc5425 0x09ecc4b20 #1337 0x2    R2    0x9e413f00 add rsp, 0x1b8; pop rbx; pop r12; pop r13; pop r14; pop r15; pop rbp ret=mov eax, 0xc/no-vote
+0x09ecc543a 0x09ecc4b20 #1337 0x2    R2    0x9e413f80 add rsp, 0x1b8; pop rbx; pop r12; pop r13; pop r14; pop r15; pop rbp ret=mov eax, 0xc/no-vote
+0x09ecc5627 0x09ecc4b20 #1337 0x102  R2    0x9e414000 add rsp, 0x1b8; pop rbx; pop r12; pop r13; pop r14; pop r15; pop rbp ret=mov eax, 0xc/no-vote
+0x09ecc5941 0x09ecc4b20 #1337 0x102  R2    0x9e414080 add rsp, 0x1b8; pop rbx; pop r12; pop r13; pop r14; pop r15; pop rbp ret=mov eax, 0xc/no-vote
+0x09ed9ccba 0x09ed9cc60 #1314 0x8002 R2    0x9e414100 pop rbp ret=mov eax, 0xc/no-vote
+0x09edf41d9 0x09edf4130 #1296 0x102  R1    0x9e414180 (transparent: no-op unless WAITOK)
+0x09edf445c 0x09edf4430 #1296 0x102  R2    0x9e414200 add rsp, 0x18; pop rbx; pop r14; pop r15; pop rbp ret=mov eax, 0xc/no-vote
+0x09ed5bd40 0x09ed5bca0 #1303 reg?   R2    0x9e414280 add rsp, 8; pop rbx; pop r12; pop r13; pop r14; pop r15; pop rbp ret=mov eax, 0xc/no-vote
+0x09ef149a6 0x09ef148b0 #1321 0x8002 R1    0x9e414300 (transparent: no-op unless WAITOK)
+0x09ef14bdb 0x09ef148b0 #1321 0x8002 R1    0x9e414380 (transparent: no-op unless WAITOK)
+0x09ef14cda 0x09ef148b0 #1321 0x8002 R1    0x9e414400 (transparent: no-op unless WAITOK)
+0x09ef16396 0x09ef1632f #1321 0x8002 R2    0x9e414480 pop rbx; pop r12; pop r14; pop r15; pop rbp ret=mov eax, 0xc/no-vote
+0x09ef1644c 0x09ef1632f #1321 0x8002 R2    0x9e414500 pop rbx; pop r12; pop r14; pop r15; pop rbp ret=mov eax, 0xc/no-vote
+0x09ef1ab32 0x09ef1ab10 #1321 0x8102 R2    0x9e414580 add rsp, 8; pop rbx; pop r12; pop r13; pop r14; pop r15; pop rbp ret=xor eax, eax/pointer(1/0)
+0x09ef1aba6 0x09ef1ab10 #1321 0x8002 R2    0x9e414600 add rsp, 8; pop rbx; pop r12; pop r13; pop r14; pop r15; pop rbp ret=xor eax, eax/pointer(1/0)
+0x09ef1ac7c 0x09ef1ac60 #1321 0x8002 R2    0x9e414680 add rsp, 8; pop rbx; pop r14; pop r15; pop rbp ret=xor eax, eax/pointer(1/0)
+0x09ef1db02 0x09ef1dad0 #1321 0x8002 R2    0x9e414700 add rsp, 8; pop rbx; pop r12; pop r13; pop r14; pop r15; pop rbp ret=mov eax, 0xc/no-vote
+0x09effde05 0x09effdd40 #1328 0x2    R2    0x9e414780 add rsp, 8; pop rbx; pop r12; pop r13; pop r14; pop r15; pop rbp ret=mov eax, 0xc/no-vote
+0x09f0873b7 0x09f0873a0 #1319 0x102  R2    0x9e414800 add rsp, 8; pop rbx; pop rbp ret=mov eax, 0xc/no-vote
+
+skipped (1):
+  0x9e9478ad fn 0x9e947870: AUDIT: real owner 0x9e947870 early-reachable
+
+G50: park stub 0x9E404700 — lodsb/out 0x402 direct emission of
+  'WP23: sysinit walk complete; parking.\n' BEFORE the printf call,
+  then movabs rdi; call 0x9e64d410; cli; hlt loop. String @0x9E404740.
+
+KNOWN NEXT-ITERATION RISKS (accepted — G48 family reverted by user):
+  - M_WAITOK sites in SHARED fns (early-reachable): kproc_create paths
+    of stages #1300/#1305/#1306/#1307 etc may still block -> GDB rip
+    will point into malloc's witness-check; report back for WP29.
+  - R1 sites flow NULL into ENOMEM-era callers: interior-LEA derefs
+    (e.g. 0x9edf445c guarded R2 here) may crash visibly -> rip report.

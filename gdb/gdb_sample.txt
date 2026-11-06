@@ -1,0 +1,108 @@
+########## SAMPLE 1 (t+45s) ##########
+0xffffffff9e85e2f2 in ?? ()
+rip            0xffffffff9e85e2f2  0xffffffff9e85e2f2
+rsp            0xffffffffa112d860  0xffffffffa112d860
+rbp            0xffffffffa112d8b0  0xffffffffa112d8b0
+rbx            0xffffffff9e659c08  -1637508088
+r12            0xbc52831e          3159524126
+r13            0x0                 0
+r14            0xffffffffa0fec680  -1593915776
+r15            0x2d0e4d4c          755912012
+rax            0xbc52831e          3159524126
+rcx            0x77e               1918
+rdx            0x0                 0
+rsi            0xffffffffa1dc1cc0  -1579410240
+rdi            0xffffffffa0fec680  -1593915776
+r8             0xffffffff9e65c4b8  -1637497672
+r9             0x0                 0
+
+=== CODE AT RIP ===
+=> 0xffffffff9e85e2f2:	cmpq   $0x37,-0x48(%rbp)
+   0xffffffff9e85e2f7:	ja     0xffffffff9e85e31f
+   0xffffffff9e85e2f9:	mov    %r14,%rdi
+   0xffffffff9e85e2fc:	call   *%rbx
+   0xffffffff9e85e2fe:	and    -0x38(%rbp),%eax
+   0xffffffff9e85e301:	mov    $0x0,%edx
+   0xffffffff9e85e306:	mov    %eax,%ecx
+   0xffffffff9e85e308:	sub    %r12d,%ecx
+   0xffffffff9e85e30b:	mov    %eax,%r12d
+   0xffffffff9e85e30e:	cmovb  %r13d,%edx
+   0xffffffff9e85e312:	add    %edx,%ecx
+   0xffffffff9e85e314:	add    %rcx,%r15
+   0xffffffff9e85e317:	cmp    -0x40(%rbp),%r15
+   0xffffffff9e85e31b:	jb     0xffffffff9e85e2f0
+   0xffffffff9e85e31d:	jmp    0xffffffff9e85e330
+   0xffffffff9e85e31f:	lea    0x16560aa(%rip),%rdi        # 0xffffffff9feb43d0
+   0xffffffff9e85e326:	mov    %rbx,%rsi
+   0xffffffff9e85e329:	call   0xffffffff9e83f8c0
+   0xffffffff9e85e32e:	jmp    0xffffffff9e85e2f9
+   0xffffffff9e85e330:	cmpb   $0x0,-0x2c(%rbp)
+
+=== STACK ===
+0xffffffffa112d860:	0xffffffffa112d790	0x000000000000002e
+0xffffffffa112d870:	0x000000005f259bb9	0x00000000ffffffff
+0xffffffffa112d880:	0xa197880100000008	0x0000000000000000
+0xffffffffa112d890:	0x0000000000000000	0xffffffff9f6cda95
+0xffffffffa112d8a0:	0xffffffffa112db80	0x0000000000000108
+0xffffffffa112d8b0:	0xffffffffa112d8e0	0xffffffff9ebe0de7
+0xffffffffa112d8c0:	0x0000000000000031	0x000000000000000c
+0xffffffffa112d8d0:	0xffffffffa112db80	0x0000000000000108
+0xffffffffa112d8e0:	0xffffffffa112d950	0xffffffff9e7debbc
+0xffffffffa112d8f0:	0x0000000000000001	0x0000000000000108
+0xffffffffa112d900:	0x000000000000000c	0x0000000000000000
+0xffffffffa112d910:	0x00000000000fffff	0xffffffff9f6cdd9b
+[Inferior 1 (process 1) detached]
+########## SAMPLE 2 (t+65s) ##########
+0xffffffff9e85e2f2 in ?? ()
+rip            0xffffffff9e85e2f2  0xffffffff9e85e2f2
+rsp            0xffffffffa1107de0  0xffffffffa1107de0
+rbp            0xffffffffa1107e30  0xffffffffa1107e30
+rbx            0xffffffff9e659c08  -1637508088
+r12            0xaff518e8          2952075496
+r13            0x0                 0
+r14            0xffffffffa0fec680  -1593915776
+r15            0x41c717b6          1103566774
+rax            0xaff518e8          2952075496
+rcx            0x2a2               674
+rdx            0x0                 0
+rsi            0xffffffffa1dc1cc0  -1579410240
+rdi            0xffffffffa0fec680  -1593915776
+r8             0xffffffff9e65c4b8  -1637497672
+r9             0x0                 0
+
+=== CODE AT RIP ===
+=> 0xffffffff9e85e2f2:	cmpq   $0x37,-0x48(%rbp)
+   0xffffffff9e85e2f7:	ja     0xffffffff9e85e31f
+   0xffffffff9e85e2f9:	mov    %r14,%rdi
+   0xffffffff9e85e2fc:	call   *%rbx
+   0xffffffff9e85e2fe:	and    -0x38(%rbp),%eax
+   0xffffffff9e85e301:	mov    $0x0,%edx
+   0xffffffff9e85e306:	mov    %eax,%ecx
+   0xffffffff9e85e308:	sub    %r12d,%ecx
+   0xffffffff9e85e30b:	mov    %eax,%r12d
+   0xffffffff9e85e30e:	cmovb  %r13d,%edx
+   0xffffffff9e85e312:	add    %edx,%ecx
+   0xffffffff9e85e314:	add    %rcx,%r15
+   0xffffffff9e85e317:	cmp    -0x40(%rbp),%r15
+   0xffffffff9e85e31b:	jb     0xffffffff9e85e2f0
+   0xffffffff9e85e31d:	jmp    0xffffffff9e85e330
+   0xffffffff9e85e31f:	lea    0x16560aa(%rip),%rdi        # 0xffffffff9feb43d0
+   0xffffffff9e85e326:	mov    %rbx,%rsi
+   0xffffffff9e85e329:	call   0xffffffff9e83f8c0
+   0xffffffff9e85e32e:	jmp    0xffffffff9e85e2f9
+   0xffffffff9e85e330:	cmpb   $0x0,-0x2c(%rbp)
+
+=== STACK ===
+0xffffffffa1107de0:	0xffffffffa1107d10	0x000000000000002e
+0xffffffffa1107df0:	0x000000005f259bb9	0x00000000ffffffff
+0xffffffffa1107e00:	0xa197880100000008	0x0000000000000000
+0xffffffffa1107e10:	0x0000000000000000	0xffffffff9f6cda95
+0xffffffffa1107e20:	0xffffffffa1108100	0x0000000000000108
+0xffffffffa1107e30:	0xffffffffa1107e60	0xffffffff9ebe0de7
+0xffffffffa1107e40:	0x0000000000000031	0x000000000000000c
+0xffffffffa1107e50:	0xffffffffa1108100	0x0000000000000108
+0xffffffffa1107e60:	0xffffffffa1107ed0	0xffffffff9e7debbc
+0xffffffffa1107e70:	0x0000000000001901	0x0000000000000108
+0xffffffffa1107e80:	0x000000000000000c	0x0000000000000000
+0xffffffffa1107e90:	0x00000000000fffff	0xffffffff9f6cdd9b
+[Inferior 1 (process 1) detached]

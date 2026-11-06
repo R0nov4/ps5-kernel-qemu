@@ -1,0 +1,39 @@
+{
+ "image_geometry": {
+  "text": "[0xffffffff9e3f0000, 0xffffffff9f0b0000) 0xCC0000",
+  "data_bss_image": "[0xffffffff9f0b0000, 0xffffffffa2224000) 0x3174000",
+  "image_end": "0xffffffffa2224000 (= preload metadata start)",
+  "runtime_heap_excluded": "[0xffffffffa2224000, 0xffffffffa46b0000) ~38.5MB"
+ },
+ "bss_separable": "not byte-exact; single-PROGBITS .data + surgical patches strategy",
+ "zeroing_bss_safe_for": [
+  "page tables (not in image)",
+  "GDT (rebuilt from source@0xa0955ad0)",
+  "IDT (256 gates rebuilt)",
+  "TSS",
+  "pcpu (bzero+template)",
+  "early mutexes"
+ ],
+ "sanitization_patches": {
+  "mi_globals": {
+   "0xffffffffa1978198": 0,
+   "0xffffffffa19781a0": 0,
+   "0xffffffffa19781a8": 0,
+   "0xffffffffa19781b0": 0
+  },
+  "held_mutexes_reset_to_4": [
+   "0xffffffff9fe6a568 pfs",
+   "0xffffffff9fe6a598 savedata",
+   "0xffffffff9febef08 devfs dirlist lock",
+   "0xffffffffa05f89a0 event timer periodic",
+   "0xffffffffa095a370 Sysctl internal magic",
+   "0xffffffffa095a3d0 File system",
+   "0xffffffffa095a4f0 Sizeof various things",
+   "0xffffffffa095a550 hardware",
+   "0xffffffffa095a5b0 user-level",
+   "0xffffffffa095c4a0 machine dependent",
+   "0xffffffffa0fe86c8 ACPI root bus"
+  ],
+  "mtx_layout": "+0x00 name, +0x08 lo_flags, +0x0C recurse, +0x18 mtx_lock (4=free)"
+ }
+}

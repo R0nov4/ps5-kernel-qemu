@@ -1,0 +1,414 @@
+====================================================================================================
+A) KERNEL ENTRY ANALYSIS
+====================================================================================================
+
+first 16 bytes of image @0xffffffff9e3f0000: e8 6b 5d 4f 00 00 00 00 00 00 00 00 00 00 00 00
+  -> 16-byte data blob (call-displacement + zeros) preceding the boot function
+
+-- A1. boot stub (0xffffffff9e3f0010, GDT loader) full disasm --
+   0xffffffff9e3f0010  55                     push rbp
+   0xffffffff9e3f0011  4889e5                 mov rbp, rsp
+   0xffffffff9e3f0014  53                     push rbx
+   0xffffffff9e3f0015  4883ec18               sub rsp, 0x18
+   0xffffffff9e3f0019  488d1df0c29103         lea rbx, [rip + 0x391c2f0]
+   0xffffffff9e3f0020  488b03                 mov rax, qword ptr [rbx]
+   0xffffffff9e3f0023  488945f0               mov qword ptr [rbp - 0x10], rax
+   0xffffffff9e3f0027  488d05b2dca901         lea rax, [rip + 0x1a9dcb2]
+   0xffffffff9e3f002e  66c745e64000           mov word ptr [rbp - 0x1a], 0x40
+   0xffffffff9e3f0034  488945e8               mov qword ptr [rbp - 0x18], rax
+   0xffffffff9e3f0038  0f0155e6               lgdt [rbp - 0x1a]
+   0xffffffff9e3f003c  b828000000             mov eax, 0x28
+   0xffffffff9e3f0041  8ed8                   mov ds, eax
+   0xffffffff9e3f0043  8ed0                   mov ss, eax
+   0xffffffff9e3f0045  6a20                   push 0x20
+   0xffffffff9e3f0047  488d0503000000         lea rax, [rip + 3]
+   0xffffffff9e3f004e  50                     push rax
+   0xffffffff9e3f004f  48cb                   retfq 
+   0xffffffff9e3f0051  0fb70548f14903         movzx eax, word ptr [rip + 0x349f148]
+   0xffffffff9e3f0058  488b0d43f14903         mov rcx, qword ptr [rip + 0x349f143]
+   0xffffffff9e3f005f  488b3dbaf04903         mov rdi, qword ptr [rip + 0x349f0ba]
+   0xffffffff9e3f0066  668945e6               mov word ptr [rbp - 0x1a], ax
+   0xffffffff9e3f006a  48894de8               mov qword ptr [rbp - 0x18], rcx
+   0xffffffff9e3f006e  0f0155e6               lgdt [rbp - 0x1a]
+   0xffffffff9e3f0072  e879282500             call 0xffffffff9e6428f0
+   0xffffffff9e3f0077  488b03                 mov rax, qword ptr [rbx]
+   0xffffffff9e3f007a  483b45f0               cmp rax, qword ptr [rbp - 0x10]
+   0xffffffff9e3f007e  7507                   jne 0xffffffff9e3f0087
+   0xffffffff9e3f0080  4883c418               add rsp, 0x18
+   0xffffffff9e3f0084  5b                     pop rbx
+   0xffffffff9e3f0085  5d                     pop rbp
+   0xffffffff9e3f0086  c3                     ret 
+   0xffffffff9e3f0087  e824d66f00             call 0xffffffff9eaed6b0
+   0xffffffff9e3f008c  0f0b                   ud2 
+   0xffffffff9e3f008e  0000                   add byte ptr [rax], al
+
+-- A2. hammer_time candidate 0xffffffff9e6428f0 (context restore) --
+containing-function bounds: 0xffffffff9e6428f0..0xffffffff9e645010 (10016 B)
+   0xffffffff9e6428f0  488b0569558f03         mov rax, qword ptr [rip + 0x38f5569]
+   0xffffffff9e6428f7  0f22d8                 mov cr3, rax
+   0xffffffff9e6428fa  b828000000             mov eax, 0x28
+   0xffffffff9e6428ff  8ed8                   mov ds, eax
+   0xffffffff9e642901  8ec0                   mov es, eax
+   0xffffffff9e642903  8ed0                   mov ss, eax
+   0xffffffff9e642905  b813000000             mov eax, 0x13
+   0xffffffff9e64290a  8ee0                   mov fs, eax
+   0xffffffff9e64290c  b81b000000             mov eax, 0x1b
+   0xffffffff9e642911  8ee8                   mov gs, eax
+   0xffffffff9e642913  b9000100c0             mov ecx, 0xc0000100
+   0xffffffff9e642918  8b4740                 mov eax, dword ptr [rdi + 0x40]
+   0xffffffff9e64291b  8b5744                 mov edx, dword ptr [rdi + 0x44]
+   0xffffffff9e64291e  0f30                   wrmsr 
+   0xffffffff9e642920  b9010100c0             mov ecx, 0xc0000101
+   0xffffffff9e642925  8b4748                 mov eax, dword ptr [rdi + 0x48]
+   0xffffffff9e642928  8b574c                 mov edx, dword ptr [rdi + 0x4c]
+   0xffffffff9e64292b  0f30                   wrmsr 
+   0xffffffff9e64292d  b9020100c0             mov ecx, 0xc0000102
+   0xffffffff9e642932  8b4750                 mov eax, dword ptr [rdi + 0x50]
+   0xffffffff9e642935  8b5754                 mov edx, dword ptr [rdi + 0x54]
+   0xffffffff9e642938  0f30                   wrmsr 
+   0xffffffff9e64293a  b9800000c0             mov ecx, 0xc0000080
+   0xffffffff9e64293f  8b8720010000           mov eax, dword ptr [rdi + 0x120]
+   0xffffffff9e642945  8b9724010000           mov edx, dword ptr [rdi + 0x124]
+   0xffffffff9e64294b  0f30                   wrmsr 
+   0xffffffff9e64294d  b9810000c0             mov ecx, 0xc0000081
+   0xffffffff9e642952  8b8728010000           mov eax, dword ptr [rdi + 0x128]
+   0xffffffff9e642958  8b972c010000           mov edx, dword ptr [rdi + 0x12c]
+   0xffffffff9e64295e  0f30                   wrmsr 
+   0xffffffff9e642960  b9820000c0             mov ecx, 0xc0000082
+   0xffffffff9e642965  8b8730010000           mov eax, dword ptr [rdi + 0x130]
+   0xffffffff9e64296b  8b9734010000           mov edx, dword ptr [rdi + 0x134]
+   0xffffffff9e642971  0f30                   wrmsr 
+   0xffffffff9e642973  b9830000c0             mov ecx, 0xc0000083
+   0xffffffff9e642978  8b8738010000           mov eax, dword ptr [rdi + 0x138]
+   0xffffffff9e64297e  8b973c010000           mov edx, dword ptr [rdi + 0x13c]
+   0xffffffff9e642984  0f30                   wrmsr 
+   0xffffffff9e642986  b9840000c0             mov ecx, 0xc0000084
+   0xffffffff9e64298b  8b8740010000           mov eax, dword ptr [rdi + 0x140]
+   0xffffffff9e642991  0f30                   wrmsr 
+   0xffffffff9e642993  488b4758               mov rax, qword ptr [rdi + 0x58]
+   0xffffffff9e642997  0f22c0                 mov cr0, rax
+   0xffffffff9e64299a  488b4760               mov rax, qword ptr [rdi + 0x60]
+   0xffffffff9e64299e  0f22d0                 mov cr2, rax
+   0xffffffff9e6429a1  488b4770               mov rax, qword ptr [rdi + 0x70]
+   0xffffffff9e6429a5  0f22e0                 mov cr4, rax
+   0xffffffff9e6429a8  488b4768               mov rax, qword ptr [rdi + 0x68]
+
+hammer_time tail check (search for mi_startup-style loop markers):
+   0xffffffff9e647920  f68424f000000003       test byte ptr [rsp + 0xf0], 3
+   0xffffffff9e647928  7421                   je 0xffffffff9e64794b
+   0xffffffff9e64792a  fa                     cli 
+   0xffffffff9e64792b  65488b042500000000     mov rax, qword ptr gs:[0]
+   0xffffffff9e647934  f780e400000000080100   test dword ptr [rax + 0xe4], 0x10800
+   0xffffffff9e64793e  740b                   je 0xffffffff9e64794b
+   0xffffffff9e647940  fb                     sti 
+   0xffffffff9e647941  4889e7                 mov rdi, rsp
+   0xffffffff9e647944  e8b7292900             call 0xffffffff9e8da300
+   0xffffffff9e647949  ebdf                   jmp 0xffffffff9e64792a
+   0xffffffff9e64794b  654c8b042520000000     mov r8, qword ptr gs:[0x20]
+   0xffffffff9e647954  f68424f000000003       test byte ptr [rsp + 0xf0], 3
+   0xffffffff9e64795c  0f8493000000           je 0xffffffff9e6479f5
+   0xffffffff9e647962  41f7800001000001000000 test dword ptr [r8 + 0x100], 1
+   0xffffffff9e64796d  0f8482000000           je 0xffffffff9e6479f5
+   0xffffffff9e647973  f784248800000001000000 test dword ptr [rsp + 0x88], 1
+
+-- A3. who references the boot stub / blob? --
+  0xffffffff9e3f0000: data-ptrs=[], direct-calls=[]
+  0xffffffff9e3f0010: data-ptrs=[], direct-calls=[]
+  0xffffffff9e3f0051: data-ptrs=[], direct-calls=[]
+  0xffffffff9e8e5d70 (called by the first 5 bytes if entry=0x9e3f0000):
+   0xffffffff9e8e5d70  803de1dc040300         cmp byte ptr [rip + 0x304dce1], 0
+   0xffffffff9e8e5d77  7518                   jne 0xffffffff9e8e5d91
+   0xffffffff9e8e5d79  55                     push rbp
+   0xffffffff9e8e5d7a  4889e5                 mov rbp, rsp
+   0xffffffff9e8e5d7d  c605d4dc040301         mov byte ptr [rip + 0x304dcd4], 1
+   0xffffffff9e8e5d84  e8e7b8d5ff             call 0xffffffff9e641670
+   0xffffffff9e8e5d89  488905c0dc0403         mov qword ptr [rip + 0x304dcc0], rax
+   0xffffffff9e8e5d90  5d                     pop rbp
+   0xffffffff9e8e5d91  c3                     ret 
+   0xffffffff9e8e5d92  90                     nop 
+   0xffffffff9e8e5d93  90                     nop 
+   0xffffffff9e8e5d94  90                     nop 
+   0xffffffff9e8e5d95  90                     nop 
+   0xffffffff9e8e5d96  90                     nop 
+
+-- A4. descriptor-table instruction sites (lgdt/lidt/sgdt/sidt) --
+  lgdt @0xffffffff9e3f0038   <<< BOOT STUB
+  lgdt @0xffffffff9e3f006e   <<< BOOT STUB
+  lgdt @0xffffffff9e640433   (func 0xffffffff9e640000)
+  sgdt @0xffffffff9e6428ce   (func 0xffffffff9e6427d0)
+  sidt @0xffffffff9e6428d5   (func 0xffffffff9e6427d0)
+  lidt @0xffffffff9e6429af   <<< hammer_time
+  lgdt @0xffffffff9e649a50   (func 0xffffffff9e649a50)
+  sidt @0xffffffff9e662c8d   (func 0xffffffff9e662a90)
+  sidt @0xffffffff9e66414a   (func 0xffffffff9e664110)
+  sidt @0xffffffff9e664418   (func 0xffffffff9e664390)
+  sgdt @0xffffffff9e671763   (func 0xffffffff9e6714d0)
+  sidt @0xffffffff9e673434   (func 0xffffffff9e673200)
+  sidt @0xffffffff9e67384a   (func 0xffffffff9e6737d0)
+  sidt @0xffffffff9e673a09   (func 0xffffffff9e673930)
+  sgdt @0xffffffff9e6745a1   (func 0xffffffff9e674500)
+  sidt @0xffffffff9e683641   (func 0xffffffff9e683560)
+  sgdt @0xffffffff9e68c03d   (func 0xffffffff9e68bae0)
+  sidt @0xffffffff9e696e39   (func 0xffffffff9e696d70)
+  sidt @0xffffffff9e6a46eb   (func 0xffffffff9e6a44a0)
+  sgdt @0xffffffff9e6aa23c   (func 0xffffffff9e6a9930)
+  sidt @0xffffffff9e6ac278   (func 0xffffffff9e6ac220)
+  sidt @0xffffffff9e6ac336   (func 0xffffffff9e6ac300)
+  sidt @0xffffffff9e6b667a   (func 0xffffffff9e6b65a0)
+  sgdt @0xffffffff9e6cd222   (func 0xffffffff9e6cd040)
+  sgdt @0xffffffff9e6d9163   (func 0xffffffff9e6d9020)
+  sgdt @0xffffffff9e73b162   (func 0xffffffff9e73a3c0)
+  sgdt @0xffffffff9e743c40   (func 0xffffffff9e743500)
+  sgdt @0xffffffff9e77b071   (func 0xffffffff9e77aa10)
+  lgdt @0xffffffff9e780e9f   (func 0xffffffff9e780e20)
+  lgdt @0xffffffff9e780edb   (func 0xffffffff9e780e20)
+  sgdt @0xffffffff9e7d5d65   (func 0xffffffff9e7d5ce0)
+  sgdt @0xffffffff9e7db323   (func 0xffffffff9e7d9d30)
+  sidt @0xffffffff9e7e22af   (func 0xffffffff9e7e21e0)
+  sidt @0xffffffff9e80c4e0   (func 0xffffffff9e80c480)
+  sidt @0xffffffff9e80dace   (func 0xffffffff9e80d860)
+  sgdt @0xffffffff9e80e182   (func 0xffffffff9e80e160)
+  sidt @0xffffffff9e80ed46   (func 0xffffffff9e80e820)
+  sgdt @0xffffffff9e813103   (func 0xffffffff9e813010)
+  sidt @0xffffffff9e813853   (func 0xffffffff9e8137f0)
+  sgdt @0xffffffff9e814aac   (func 0xffffffff9e814470)
+  sidt @0xffffffff9e883105   (func 0xffffffff9e8830e0)
+  sidt @0xffffffff9e884d0f   (func 0xffffffff9e884d00)
+  sidt @0xffffffff9e8886df   (func 0xffffffff9e8885a0)
+  sidt @0xffffffff9e888a2c   (func 0xffffffff9e8885a0)
+  sidt @0xffffffff9e890e43   (func 0xffffffff9e890ce0)
+  sgdt @0xffffffff9e8d31a8   (func 0xffffffff9e8d3180)
+  sgdt @0xffffffff9e8d31e1   (func 0xffffffff9e8d3180)
+  sgdt @0xffffffff9e8e01be   (func 0xffffffff9e8e01b0)
+  sgdt @0xffffffff9e8e7980   (func 0xffffffff9e8e7720)
+  sgdt @0xffffffff9e8f675c   (func 0xffffffff9e8f6076)
+  sgdt @0xffffffff9e90c338   (func 0xffffffff9e90c1e0)
+  sgdt @0xffffffff9e92770b   (func 0xffffffff9e926460)
+  sgdt @0xffffffff9e96453b   (func 0xffffffff9e964310)
+  sgdt @0xffffffff9e964c56   (func 0xffffffff9e964310)
+  sidt @0xffffffff9e98bf2f   (func 0xffffffff9e98b2a0)
+  sidt @0xffffffff9ea1cc3b   (func 0xffffffff9ea1c810)
+  sgdt @0xffffffff9ea1d7c8   (func 0xffffffff9ea1d6e0)
+  sidt @0xffffffff9ea1e979   (func 0xffffffff9ea1e8e0)
+  sidt @0xffffffff9ea1eb7d   (func 0xffffffff9ea1e8e0)
+  sidt @0xffffffff9ea1ebc2   (func 0xffffffff9ea1e8e0)
+  sgdt @0xffffffff9ea2caed   (func 0xffffffff9ea2c090)
+  sgdt @0xffffffff9ea3c252   (func 0xffffffff9ea3bbd0)
+  sgdt @0xffffffff9ea3e31e   (func 0xffffffff9ea3e250)
+  sgdt @0xffffffff9ea62522   (func 0xffffffff9ea62170)
+  sgdt @0xffffffff9ea7b597   (func 0xffffffff9ea7b550)
+  sgdt @0xffffffff9ea7eda1   (func 0xffffffff9ea7e9d0)
+  sgdt @0xffffffff9ea9a360   (func 0xffffffff9ea9a1d0)
+  sgdt @0xffffffff9eabdb32   (func 0xffffffff9eabd780)
+  sgdt @0xffffffff9ead7aea   (func 0xffffffff9ead79c0)
+  sgdt @0xffffffff9ead8b6c   (func 0xffffffff9ead85f0)
+  sgdt @0xffffffff9eae3bf7   (func 0xffffffff9eae3b00)
+  sgdt @0xffffffff9eaf27a9   (func 0xffffffff9eaf22e6)
+  sgdt @0xffffffff9eafa448   (func 0xffffffff9eaf9b60)
+  sgdt @0xffffffff9eb14e16   (func 0xffffffff9eb14c90)
+  sgdt @0xffffffff9eb3719b   (func 0xffffffff9eb33797)
+  sgdt @0xffffffff9eb6a236   (func 0xffffffff9eb6a110)
+  sgdt @0xffffffff9ebbe160   (func 0xffffffff9ebbdf60)
+  sgdt @0xffffffff9ebe34f1   (func 0xffffffff9ebe3230)
+  sgdt @0xffffffff9ebecfb2   (func 0xffffffff9ebec7b0)
+  sgdt @0xffffffff9ec02b8c   (func 0xffffffff9ec02560)
+  sgdt @0xffffffff9ec14ea9   (func 0xffffffff9ec14199)
+  sgdt @0xffffffff9ec27275   (func 0xffffffff9ec26f80)
+  sgdt @0xffffffff9ec4016d   (func 0xffffffff9ec3fad0)
+  lidt @0xffffffff9ec76f91   (func 0xffffffff9ec76ad0)
+  sgdt @0xffffffff9ecb98db   (func 0xffffffff9ecb9230)
+  sgdt @0xffffffff9ecc1f41   (func 0xffffffff9ecc1cd0)
+  sgdt @0xffffffff9ed181f1   (func 0xffffffff9ed17e20)
+  sgdt @0xffffffff9ed22f4e   (func 0xffffffff9ed22d40)
+  sgdt @0xffffffff9ed34655   (func 0xffffffff9ed345e0)
+  sgdt @0xffffffff9ed4aec8   (func 0xffffffff9ed4ad70)
+  sidt @0xffffffff9ed4d48c   (func 0xffffffff9ed4c6a0)
+  sidt @0xffffffff9ed4d4d5   (func 0xffffffff9ed4c6a0)
+  sidt @0xffffffff9ed4d615   (func 0xffffffff9ed4c6a0)
+  sgdt @0xffffffff9eda65c8   (func 0xffffffff9eda6040)
+  sgdt @0xffffffff9edb4e73   (func 0xffffffff9edb4dd0)
+  sidt @0xffffffff9edb6136   (func 0xffffffff9edb5ab3)
+  sgdt @0xffffffff9edc7bb3   (func 0xffffffff9edc7760)
+  sgdt @0xffffffff9edcd614   (func 0xffffffff9edcb330)
+  sgdt @0xffffffff9edcef97   (func 0xffffffff9edcebf0)
+  sgdt @0xffffffff9edd00aa   (func 0xffffffff9edcfdf0)
+  sgdt @0xffffffff9eddbbbf   (func 0xffffffff9eddba00)
+  sidt @0xffffffff9eddbfcb   (func 0xffffffff9eddbe80)
+  sidt @0xffffffff9eddecbf   (func 0xffffffff9eddec50)
+  sidt @0xffffffff9eddf180   (func 0xffffffff9eddee70)
+  lidt @0xffffffff9edf904d   (func 0xffffffff9edf8790)
+  sgdt @0xffffffff9ee231b9   (func 0xffffffff9ee224e0)
+  lidt @0xffffffff9ee4152b   (func 0xffffffff9ee414b0)
+  sgdt @0xffffffff9ee45907   (func 0xffffffff9ee45890)
+  sgdt @0xffffffff9ee5372a   (func 0xffffffff9ee53600)
+  sgdt @0xffffffff9ee74eb0   (func 0xffffffff9ee74690)
+  sgdt @0xffffffff9ee83d30   (func 0xffffffff9ee83ce0)
+  sgdt @0xffffffff9ee85ed0   (func 0xffffffff9ee85950)
+  sgdt @0xffffffff9eec71d3   (func 0xffffffff9eec5160)
+  sgdt @0xffffffff9eec7ab1   (func 0xffffffff9eec5160)
+  sgdt @0xffffffff9eed55a4   (func 0xffffffff9eed54c0)
+  sgdt @0xffffffff9eeec898   (func 0xffffffff9eeec520)
+  sgdt @0xffffffff9eefe8ad   (func 0xffffffff9eefe0f0)
+  sgdt @0xffffffff9ef0bfa0   (func 0xffffffff9ef0bf80)
+  sgdt @0xffffffff9ef15e35   (func 0xffffffff9ef14eb8)
+  sgdt @0xffffffff9ef199fc   (func 0xffffffff9ef192b0)
+  sgdt @0xffffffff9ef36396   (func 0xffffffff9ef3534d)
+  sgdt @0xffffffff9ef5842d   (func 0xffffffff9ef583a0)
+  sgdt @0xffffffff9ef8d781   (func 0xffffffff9ef8d1b0)
+  sgdt @0xffffffff9efbdb2b   (func 0xffffffff9efbd650)
+  sgdt @0xffffffff9efc0d91   (func 0xffffffff9efc0d20)
+  sidt @0xffffffff9efe91fc   (func 0xffffffff9efe90f0)
+  sgdt @0xffffffff9f0098de   (func 0xffffffff9f009330)
+  sgdt @0xffffffff9f0353d9   (func 0xffffffff9f035030)
+  sgdt @0xffffffff9f059b7c   (func 0xffffffff9f059720)
+  sgdt @0xffffffff9f0733bf   (func 0xffffffff9f072f90)
+  sgdt @0xffffffff9f073956   (func 0xffffffff9f073834)
+total descriptor-table sites: 131 (Counter({'sgdt': 85, 'sidt': 36, 'lgdt': 6, 'lidt': 4}))
+
+-- A5. 0xCC padding zone map --
+boot stub ends at file 0x90 (VA 0xffffffff9e3f0090); 0xCC run starts there
+first non-0xCC byte at/after CODE_BASE: VA 0xffffffff9e64025f (file 0x25025f)
+padding zone = [0xffffffff9e3f0090, 0xffffffff9e64025f) = 2,425,295 bytes (2.43 MB decimal)
+
+islands (non-CC runs >= 8B) inside the padding:
+  island 0xffffffff9e48f838..0xffffffff9e48f840 (8 B): 00 00 00 00 00 00 00 00
+total islands: 1
+
+====================================================================================================
+B) SYSINIT — boot-sequence table (order = array order) + sysuninit
+====================================================================================================
+
+sysinit_set  [0xffffffff9fe51fb0, 0xffffffff9fe55068): 1559 entries (done-stamp: 1 x1469, 0 x90)
+sysuninit_set[0xffffffff9fe55070, 0xffffffff9fe57508): 1171 entries (sub uses FreeBSD 9.3 enum)
+
+=== BOOT SEQUENCE (sysinit execution order = array order) — first 90 ===
+  #   0 PEND ord=0x0FFFFFFF func=0x0
+  #   1 DONE ord=0x00000000 func=0xffffffff9ef918c0
+  #   2 DONE ord=0x00000001 func=0xffffffff9e96b140
+  #   3 DONE ord=0x00000000 func=0xffffffff9eba0b10
+  #   4 DONE ord=0x00000000 func=0xffffffff9eef4430
+  #   5 DONE ord=0x00000000 func=0xffffffff9e94b7f0
+  #   6 DONE ord=0x01000000 func=0xffffffff9e86dfd0
+  #   7 DONE ord=0x01000000 func=0xffffffff9e86df30
+  #   8 DONE ord=0x01000000 func=0xffffffff9e86df30
+  #   9 DONE ord=0x01000000 func=0xffffffff9e86dfd0
+  #  10 DONE ord=0x01000000 func=0xffffffff9e86df30
+  #  11 DONE ord=0x01000000 func=0xffffffff9e86df30
+  #  12 DONE ord=0x01000000 func=0xffffffff9e86df30
+  #  13 DONE ord=0x01000000 func=0xffffffff9e86df30
+  #  14 DONE ord=0x01000000 func=0xffffffff9e86df30
+  #  15 DONE ord=0x01000000 func=0xffffffff9e86dfd0
+  #  16 DONE ord=0x01000000 func=0xffffffff9e86df30
+  #  17 DONE ord=0x01000000 func=0xffffffff9e86df30
+  #  18 DONE ord=0x01000000 func=0xffffffff9e86df30
+  #  19 DONE ord=0x01000000 func=0xffffffff9e86df30
+  #  20 DONE ord=0x01000000 func=0xffffffff9e86df30
+  #  21 DONE ord=0x01000000 func=0xffffffff9e86df30
+  #  22 DONE ord=0x01000000 func=0xffffffff9e86df30
+  #  23 DONE ord=0x01000000 func=0xffffffff9e86df30
+  #  24 DONE ord=0x01000000 func=0xffffffff9e86df80
+  #  25 DONE ord=0x01000000 func=0xffffffff9e86dfd0
+  #  26 DONE ord=0x01000000 func=0xffffffff9e86df30
+  #  27 DONE ord=0x01000000 func=0xffffffff9e86df30
+  #  28 DONE ord=0x01000000 func=0xffffffff9e86df30
+  #  29 DONE ord=0x01000000 func=0xffffffff9e86df30
+  #  30 DONE ord=0x01000000 func=0xffffffff9e86df30
+  #  31 DONE ord=0x01000000 func=0xffffffff9e86dfd0
+  #  32 DONE ord=0x01000000 func=0xffffffff9e86dfd0
+  #  33 DONE ord=0x01000000 func=0xffffffff9e86df30
+  #  34 DONE ord=0x01000000 func=0xffffffff9e86df30
+  #  35 DONE ord=0x01000000 func=0xffffffff9e86df30
+  #  36 DONE ord=0x01000000 func=0xffffffff9e86df30
+  #  37 DONE ord=0x01000000 func=0xffffffff9e86df30
+  #  38 DONE ord=0x01000000 func=0xffffffff9e86df30
+  #  39 DONE ord=0x01000000 func=0xffffffff9e86df30
+  #  40 DONE ord=0x01000000 func=0xffffffff9e86df30
+  #  41 DONE ord=0x0FFFFFFF func=0xffffffff9efe90f0
+  #  42 DONE ord=0x0FFFFFFF func=0xffffffff9e8fd9c0
+  #  43 DONE ord=0x0FFFFFFF func=0xffffffff9f09af20
+  #  44 DONE ord=0x00000000 func=0xffffffff9e9264d0  files=['kern/init_main.c']
+  #  45 DONE ord=0x00000001 func=0xffffffff9e9264d0 [FreeBSD is a registered trademark of The]  files=['kern/init_main.c']
+  #  46 DONE ord=0x00000002 func=0xffffffff9e9264f0  files=['kern/init_main.c']
+  #  47 DONE ord=0x00000005 func=0xffffffff9e926560  files=['kern/init_main.c']
+  #  48 DONE ord=0x00000000 func=0xffffffff9ebd7b40
+  #  49 DONE ord=0x00000001 func=0xffffffff9ef7e510
+  #  50 DONE ord=0x00000002 func=0xffffffff9e7e4df0
+  #  51 DONE ord=0x0FFFFFFF func=0xffffffff9edfea80
+  #  52 DONE ord=0x00000000 func=0xffffffff9e948880
+  #  53 DONE ord=0x00000001 func=0xffffffff9eff9940
+  #  54 DONE ord=0x00000002 func=0xffffffff9eff90b0
+  #  55 DONE ord=0x00000002 func=0xffffffff9eff90b0
+  #  56 DONE ord=0x00000002 func=0xffffffff9eff90b0
+  #  57 DONE ord=0x00000002 func=0xffffffff9eff90b0
+  #  58 DONE ord=0x00000002 func=0xffffffff9eff90b0
+  #  59 DONE ord=0x00000002 func=0xffffffff9eff90b0
+  #  60 DONE ord=0x00000002 func=0xffffffff9eff90b0
+  #  61 DONE ord=0x00000002 func=0xffffffff9eff90b0
+  #  62 DONE ord=0x00000002 func=0xffffffff9eff90b0
+  #  63 DONE ord=0x00000002 func=0xffffffff9eff90b0
+  #  64 DONE ord=0x00000002 func=0xffffffff9eff90b0
+  #  65 DONE ord=0x00000002 func=0xffffffff9eff90b0
+  #  66 DONE ord=0x00000002 func=0xffffffff9eff90b0
+  #  67 DONE ord=0x00000002 func=0xffffffff9eff90b0
+  #  68 DONE ord=0x00000002 func=0xffffffff9eff90b0
+  #  69 DONE ord=0x00000002 func=0xffffffff9eff90b0
+  #  70 DONE ord=0x00000002 func=0xffffffff9eff90b0
+  #  71 DONE ord=0x00000002 func=0xffffffff9eff90b0
+  #  72 DONE ord=0x00000002 func=0xffffffff9eff90b0
+  #  73 DONE ord=0x00000002 func=0xffffffff9eff90b0
+  #  74 DONE ord=0x00000002 func=0xffffffff9eff90b0
+  #  75 DONE ord=0x00000002 func=0xffffffff9eff90b0
+  #  76 DONE ord=0x00000002 func=0xffffffff9eff90b0
+  #  77 DONE ord=0x00000002 func=0xffffffff9eff90b0
+  #  78 DONE ord=0x00000002 func=0xffffffff9eff90b0
+  #  79 DONE ord=0x00000002 func=0xffffffff9eff90b0
+  #  80 DONE ord=0x00000002 func=0xffffffff9eff90b0
+  #  81 DONE ord=0x00000002 func=0xffffffff9eff90b0
+  #  82 DONE ord=0x00000002 func=0xffffffff9eff90b0
+  #  83 DONE ord=0x00000002 func=0xffffffff9eff90b0
+  #  84 DONE ord=0x00000002 func=0xffffffff9eff90b0
+  #  85 DONE ord=0x00000002 func=0xffffffff9eff90b0
+  #  86 DONE ord=0x00000002 func=0xffffffff9eff90b0
+  #  87 DONE ord=0x00000002 func=0xffffffff9eff90b0
+  #  88 DONE ord=0x00000002 func=0xffffffff9eff90b0
+  #  89 DONE ord=0x00000002 func=0xffffffff9eff90b0
+
+=== SUBSYSTEM BRING-UP MAP (grouped by file evidence, in first-appearance order) ===
+  stage @#  44: kern/init_main.c
+  stage @# 518: kern/kern_synch.c
+  stage @# 522: kern/kern_descrip.c
+  stage @# 592: fs/mlfs/mlfs_vfsops.c
+  stage @# 684: kern/orbis_cpumode.c
+  stage @# 705: kern/kern_idle.c
+  stage @# 706: kern/sce_cpurv.c
+  stage @# 713: kern/kern_intr.c
+  stage @#1039: x86/x86/mca.c
+  stage @#1087: kern/vfs_subr.c
+  stage @#1091: kern/vfs_lookup.c
+  stage @#1114: kern/kern_clock.c
+  stage @#1184: kern/subr_autoconf.c
+  stage @#1188: kern/orbis_pmc.c
+  stage @#1197: vm/vm_pageout.c
+  stage @#1222: kern/sce_svmd.c
+  stage @#1235: W:/Build/J03950001/sys/mp4/x86/kernel/modules/a53mm/a53mm_event.c:180
+
+=== SYSUNINIT subsystem histogram (FreeBSD 9.3 SI_SUB enum, from dump) ===
+  0x00000000 SI_SUB_DUMMY                 x438
+  0x00000001 SI_SUB_DONE                  x117
+  0x01800000 SI_SUB_KMEM                  x460
+  0x01B00000 SI_SUB_LOCK                  x132
+  0x02000000 SI_SUB_KLD                   x1
+  0x02160000 SONY-CUSTOM                  x2
+  0x03000000 SI_SUB_INIT_IF               x1
+  0x03100000 SI_SUB_DRIVERS               x4
+  0x03800000 SI_SUB_CONFIGURE             x4
+  0x07000000 SI_SUB_PSEUDO                x1
+  0x08100000 SONY-CUSTOM                  x1
+  0x08600000 SI_SUB_PROTO_DOMAININIT      x1
+  0x08700000 SONY-CUSTOM                  x2
+  0x08800000 SI_SUB_PROTO_DOMAIN          x1
+  0x08806000 SONY-CUSTOM                  x4
+  0x0A000000 SI_SUB_KICK_SCHEDULER        x1
+  0x0F000000 SI_SUB_SMP                   x1
+
+saved -> ./download/ps5_wp1/wp1_3_sysinit.json

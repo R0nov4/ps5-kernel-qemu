@@ -1,0 +1,93 @@
+[
+ {
+  "va": "0xffffffff9fe6a568",
+  "name": "pfs",
+  "mtx_lock": "0xffffffffa1f70030",
+  "flags": "0x0",
+  "recurse": 0
+ },
+ {
+  "va": "0xffffffff9fe6a598",
+  "name": "savedata",
+  "mtx_lock": "0xffffffffa1f70038",
+  "flags": "0x0",
+  "recurse": 0
+ },
+ {
+  "va": "0xffffffff9febef08",
+  "name": "devfs dirlist lock",
+  "mtx_lock": "0xffffffffa1964000",
+  "flags": "0x0",
+  "recurse": 0
+ },
+ {
+  "va": "0xffffffffa05f89a0",
+  "name": "Enable event timer periodic mode",
+  "mtx_lock": "0xffffffffa1d8da90",
+  "flags": "0x0",
+  "recurse": 0
+ },
+ {
+  "va": "0xffffffffa095a370",
+  "name": "Sysctl internal magic",
+  "mtx_lock": "0xffffffffa197a5a0",
+  "flags": "0x0",
+  "recurse": 0
+ },
+ {
+  "va": "0xffffffffa095a3d0",
+  "name": "File system",
+  "mtx_lock": "0xffffffffa197a5a0",
+  "flags": "0x0",
+  "recurse": 0
+ },
+ {
+  "va": "0xffffffffa095a4f0",
+  "name": "Sizeof various things",
+  "mtx_lock": "0xffffffffa197a5a0",
+  "flags": "0x0",
+  "recurse": 0
+ },
+ {
+  "va": "0xffffffffa095a550",
+  "name": "hardware",
+  "mtx_lock": "0xffffffffa197a5a0",
+  "flags": "0x0",
+  "recurse": 0
+ },
+ {
+  "va": "0xffffffffa095a5b0",
+  "name": "user-level",
+  "mtx_lock": "0xffffffffa197a5a0",
+  "flags": "0x0",
+  "recurse": 0
+ },
+ {
+  "va": "0xffffffffa095c4a0",
+  "name": "machine dependent",
+  "mtx_lock": "0xffffffffa197a5a0",
+  "flags": "0x0",
+  "recurse": 0
+ },
+ {
+  "va": "0xffffffffa0fe86c8",
+  "name": "ACPI root bus",
+  "mtx_lock": "0xffffffffa2187830",
+  "flags": "0x0",
+  "recurse": 0
+ },
+ {
+  "va": "0xffffffffa18c18f8",
+  "name": "audit_watermark_cv",
+  "mtx_lock": "0xffffffffa18c1908",
+  "flags": "0x0",
+  "recurse": 0
+ },
+ {
+  "va": "0xffffffffa1d0c488",
+  "name": "mbus_cv",
+  "mtx_lock": "0xffffffffa1d0cc88",
+  "flags": "0x0",
+  "recurse": 0
+ }
+]

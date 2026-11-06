@@ -1,0 +1,73 @@
+{
+ "entry": {
+  "btext": "0xffffffff9e642a90",
+  "machine_init": "0xffffffff9edf8790",
+  "mi_startup": "0xffffffff9e9261f0",
+  "bootstack_temp": "0xffffffffa1131000",
+  "ap_entry": "0xffffffff9e642a40 (rsp = base + cpu*0x80 - 8; CR0=0x80000031, CR4=0x20)"
+ },
+ "loader_stack_args": {
+  "rsp_plus_4": "modulep>>12 = 0x22224 (dword)",
+  "rsp_plus_8": "physfree>>12 = 0x22225 (dword)",
+  "note": "WP1's boothowto/bootdev labels corrected: both are page numbers; boothowto hardcoded 0x2000100 by hook 0x9edf6ab1"
+ },
+ "phys_contract": {
+  "0x472": "word WRITTEN 0x1234 by btext (warm flag)",
+  "0x9bf4c": "qword, KERNBASE GB selector (>>30); console value 0; read-then-zeroed",
+  "0x9bf54": "qword, low-mem/DMAP window base; console value 0x1e1e0000; read-then-zeroed",
+  "0x9b6f4": "qword, kernel phys delta (kern_phys = 0x1E3F0000 + val); console value 0; read-then-zeroed"
+ },
+ "memory_layout": {
+  "kernbase": "0xFFFFFFFF80000000 + ([0x9bf4c]>>30)<<30",
+  "page_size": "0x4000 (16KB!)",
+  "kernel_text_phys": "[0x1E3F0000, 0x1F0B0000) 13,369,344 B -> VA 0xffffffff9e3f0000",
+  "kernel_data_phys": "[0x1F0B0000, 0x22224000) 0x3174000 B -> VA 0xffffffff9f0b0000 (image end!)",
+  "preload_metadata_phys": "[0x22224000, 0x22225000) 4KB -> VA 0xffffffffa2224000",
+  "physfree": "0x22225000",
+  "dpcpu_kstack": "[0x22225000, 0x22229000) 16KB (bzero+template at boot)",
+  "virtual_avail": "0xffffffffa2225000 (live-verified)",
+  "returned_rsp": "td_kstack + (kstack_pages<<14) - 0x400 - 0x1C0 = 0xffffffffa2228a40",
+  "physmem": "last SMAP entry end >> 14 (16K pages) -> [0xa1fdef08]; live 0x11fcc0 (top 0x47F300000); tunable hw.physmem"
+ },
+ "preload_metadata": {
+  "format": "FreeBSD preloaded_file chain @ modulep (0x22224000): {u32 type,u32 len,data}xN, 8-aligned, {0,0} terminator",
+  "required_entries": {
+   "1_name": "kernel",
+   "2_type": "elf kernel",
+   "0x9001_smap": "{u32 0x9001, u32 byte_size, N x {u64 base, u64 length, u32 type=1 usable}}",
+   "0x9004_uefi": "optional alternative: {u64 map_size, u64 desc_size, descs @+0x20}"
+  },
+  "consumers": "0x9edf6b80 memmap getter; 0x9f032480 search_by_name; 0x9f032550 search_info"
+ },
+ "hypercall_during_machine_init": {
+  "number": "0x1F",
+  "wrapper": "0x9f006a20",
+  "args": "none",
+  "must_return": 0,
+  "on_failure": "panic 'Failed ...' (string @0x9f695880)"
+ },
+ "self_sanitizing": [
+  "GDT@0xa1fa55e0(from static table@0xa0955ad0)",
+  "IDT@0xa1fa4300(all 256 gates rebuilt)",
+  "TSS@0xa1fa6fe0",
+  "pcpu@0xa1fb8f00(bzero 0x980 + dpcpu template@0x9fe5a080)",
+  "Giant+'blocked lock'+icu+dt+wbinvd+l2idsm mutexes",
+  "boothowto@0xa1978190=0x20001000",
+  "phys_avail@0xa1fb8b80/dump_avail@0xa1fb8d80",
+  "proc0/thread0/vmspace0@0xa19788xx"
+ ],
+ "must_be_intact_data": {
+  "0xa0955a28": "0x9e65f630 (cpu-init hook ptr, anti-tamper)",
+  "0xa0955a40": "0x9e6583f8 (memmap getter ptr)",
+  "0xa0955a48": "0x9e65f718",
+  "0xa0955ad0..0xa0955bd6": "GDT source table 13x18B",
+  "0x9fe5a080..0x9fe5add0": "dpcpu template 0xd50",
+  "0x9fe4d0b0": "0x9fe5a080",
+  "0x9fe4d4b8": "0xffffffff9e3f0000",
+  "0x9fec3918": "1 (kstack_pages)",
+  "0xa1f7e4f8": "0x400",
+  "0xa1d71f90": "1",
+  "0xa1d71f98": "7",
+  "0xa1d103e0": "0x18000"
+ }
+}

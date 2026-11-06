@@ -1,0 +1,31 @@
+warning: No executable has been specified and target does not support
+determining executable automatically.  Try using the "file" command.
+0x000000000000fff0 in ?? ()
+Hardware assisted breakpoint 1 at 0xffffffff9e642a90
+
+Breakpoint 1, 0xffffffff9e642a90 in ?? ()
+Breakpoint 2 at 0xffffffff9edfe6bf
+
+Breakpoint 2, 0xffffffff9edfe6bf in ?? ()
+
+=== AT PANIC BRANCH 0x9edfe6bf ===
+rax            0xffffffffa1978860  -1583904672
+rbx            0x32d600000         13646168064
+rcx            0xffffffffa1978860  -1583904672
+rdx            0x5                 5
+rsi            0xffffffffa1978860  -1583904672
+rdi            0xffffffff9edfe6ae  -1629493586
+r12            0x0                 0
+r13            0x32d600000         13646168064
+r14            0xffffffff9f280d30  -1624765136
+r15            0x1                 1
+rbp            0xffffffffa1130d20  0xffffffffa1130d20
+
+=== RBP LOCALS: -0x478 (region struct ptr), -0x460/-0x468/-0x470 (params) ===
+0xffffffffa11308a8:	0xffffffff9f280d30	0xffffffffa1130d90
+0xffffffffa11308b8:	0xffffffffa1130d84	0xffffffffa1130e80
+
+=== [r12] region descriptor struct ===
+0x0:	/tmp/alloc2.gdb:13: Error in sourced command file:
+Cannot access memory at address 0x0
+[Inferior 1 (process 1) detached]

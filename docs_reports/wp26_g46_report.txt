@@ -1,0 +1,640 @@
+WP26 G46 panic sweep — 448 sites patched, 184 skipped
+closure: 2330 fns from 99 stage roots (#1184..#1339)
+
+site        fn          stage  kw  unwind <- real epilogue      fmt
+0x09e6713b5 0x09e6711e0 #1286  .   add rsp, 8; pop rbx; pop r12; pop r13; pop r swap_reserve: & PAGE_MASK
+0x09e6719fa 0x09e6718a0 #1286  .   add rsp, 8; pop rbx; pop r14; pop r15; pop r Bad link in "pager_object_list", elm != prev
+0x09e671a48 0x09e6718a0 #1286  .   add rsp, 8; pop rbx; pop r14; pop r15; pop r Bad link in "pager_object_list", elm != next
+0x09e67308a 0x09e672da0 #1299  .   add rsp, 0x18; pop rbx; pop r12; pop r13; po Bad link in "pager_object_list", elm != prev
+0x09e6730d8 0x09e672da0 #1299  .   add rsp, 0x18; pop rbx; pop r12; pop r13; po Bad link in "pager_object_list", elm != next
+0x09e67334d 0x09e673200 #1286  .   add rsp, 8; pop rbx; pop r12; pop r13; pop r swap_pager_meta_free_all: swb_count != 0
+0x09e6748ea 0x09e674720 #1299  .   add rsp, 0x28; pop rbx; pop r12; pop r13; po swapoff: failed to locate %d swap blocks
+0x09e696540 0x09e696470 #1303  .   pop rbx; pop r14; pop rbp                    Bad link in "bio_queue", elm != prev->next, 
+0x09e696591 0x09e696470 #1303  .   pop rbx; pop r14; pop rbp                    Bad link in "bio_queue", elm != next->prev, 
+0x09e6967ae 0x09e6966b0 #1303  .   pop rbx; pop r14; pop rbp                    Bad link in "bio_queue", elm != next->prev, 
+0x09e6a312b 0x09e6a2f80 #1310  .   add rsp, 8; pop rbx; pop r14; pop r15; pop r Bad link in "devlink", elm != prev->next, el
+0x09e6a31b6 0x09e6a2f80 #1310  .   add rsp, 8; pop rbx; pop r14; pop r15; pop r Bad link in "devlink", elm != next->prev, el
+0x09e6a33db 0x09e6a3350 #1285  .   add rsp, 8; pop rbx; pop rbp                 devclass_delete_device: inconsistent device 
+0x09e6a39a7 0x09e6a34e0 #1285  .   add rsp, 0x28; pop rbx; pop r12; pop r13; po device_probe_child: parent device has no dev
+0x09e6b626e 0x09e6b61a0 #1286  Y   add rsp, 8; pop rbx; pop rbp                 vmspace_free: attempt to free already freed 
+0x09e6b66d8 0x09e6b65a0 #1321  .   add rsp, 0x18; pop rbx; pop r14; pop r15; po VMID %d is assigned to a system map %p
+0x09e6b6810 0x09e6b66f0 #1321  .   pop rbx; pop r12; pop r14; pop r15; pop rbp  dmem_aod_free aod_pool %p start %#lx size %#
+0x09e6b935c 0x09e6b8ee0 #1321  .   add rsp, 0x28; pop rbx; pop r12; pop r13; po wire failure: %s %u %d
+0x09e6ba061 0x09e6b9cb0 #1321  .   add rsp, 0x88; pop rbx; pop r12; pop r13; po [KERNEL] %s: page doesn't exists. object:%p,
+0x09e6ba8e2 0x09e6ba710 #1286  .   add rsp, 0x38; pop rbx; pop r12; pop r13; po Bad entry start/end for new stack entry
+0x09e6c0524 0x09e6c0300 #1321  .   add rsp, 8; pop rbx; pop r12; pop r13; pop r Bad link in "link", elm != prev->next, elm=%
+0x09e6c0566 0x09e6c0300 #1321  .   add rsp, 8; pop rbx; pop r12; pop r13; pop r Bad link in "link", elm != next->prev, elm=%
+0x09e6c2d61 0x09e6c2ae0 #1321  .   add rsp, 0x18; pop rbx; pop r12; pop r13; po Bad link in "link", elm != prev->next, elm=%
+0x09e6c2e41 0x09e6c2ae0 #1321  .   add rsp, 0x18; pop rbx; pop r12; pop r13; po Bad link in "link", elm != next->prev, elm=%
+0x09e6c56d2 0x09e6c5320 #1195  .   add rsp, 0x78; pop rbx; pop r12; pop r13; po gvmsw->map error %d
+0x09e6d3490 0x09e6d2d70 #1195  .   add rsp, 0x28; pop rbx; pop r12; pop r13; po <bin>
+0x09e6e89b5 0x09e6e8870 #1318  .   add rsp, 0x28; pop rbx; pop r12; pop r13; po %s: swi_add %d
+0x09e704ef3 0x09e704e20 #1234  Y   add rsp, 8; pop rbx; pop rbp                 failed to initialize a polling timer hardwar
+0x09e7079f6 0x09e7078a0 #1234  .   pop rbx; pop r14; pop rbp                    <bin>
+0x09e707a87 0x09e707a00 #1234  .   pop rbx; pop r14; pop rbp                    Bad link in "kn_tqe", elm != prev->next, elm
+0x09e707acc 0x09e707a00 #1234  .   pop rbx; pop r14; pop rbp                    Bad link in "kn_tqe", elm != next->prev, elm
+0x09e742333 0x09e7422b0 #1267  .   pop rbx; pop r14; pop rbp                    <bin>
+0x09e76cf71 0x09e76cdd0 #1299  .   add rsp, 8; pop rbx; pop r12; pop r13; pop r %s: locking bug
+0x09e76e75b 0x09e76e570 #1226  .   add rsp, 8; pop rbx; pop r14; pop r15; pop r Bad link in "uq_lockq", elm != next->prev, e
+0x09e76e795 0x09e76e570 #1226  .   add rsp, 8; pop rbx; pop r14; pop r15; pop r Bad link in "uq_lockq", elm != prev->next, e
+0x09e76ebb1 0x09e76ea90 #1299  .   pop rbx; pop r14; pop rbp                    Bad link in "ushm_obj_link", elm != prev->ne
+0x09e76ec2f 0x09e76ea90 #1299  .   pop rbx; pop r14; pop rbp                    Bad link in "ushm_obj_link", elm != next->pr
+0x09e76ef94 0x09e76ed90 #1303  .   add rsp, 0x38; pop rbx; pop r12; pop r13; po Bad link in "pi_link", elm != prev->next, el
+0x09e76efd6 0x09e76ed90 #1303  .   add rsp, 0x38; pop rbx; pop r12; pop r13; po Bad link in "pi_link", elm != next->prev, el
+0x09e776b4d 0x09e776590 #1303  .   add rsp, 0x48; pop rbx; pop r12; pop r13; po Bad link in "uq_lockq", elm != prev->next, e
+0x09e776b8f 0x09e776590 #1303  .   add rsp, 0x48; pop rbx; pop r12; pop r13; po Bad link in "uq_lockq", elm != next->prev, e
+0x09e780e15 0x09e780c50 #1321  .   add rsp, 0x18; pop rbx; pop r12; pop r13; po <bin>
+0x09e783370 0x09e7832d0 #1295  .   add rsp, 8; pop rbx; pop rbp                 Bad link in "dr_entry", elm != prev->next, e
+0x09e7833b3 0x09e7832d0 #1295  .   add rsp, 8; pop rbx; pop rbp                 Bad link in "dr_entry", elm != next->prev, e
+0x09e784290 0x09e7841f0 #1295  .   pop rbx; pop r14; pop rbp                    Bad link in "ndpr_entry", elm != prev->next,
+0x09e7842d5 0x09e7841f0 #1295  .   pop rbx; pop r14; pop rbp                    Bad link in "ndpr_entry", elm != next->prev,
+0x09e78d828 0x09e78d770 #1327  .   add rsp, 0x18; pop rbx; pop rbp              failed to register event (VERI)
+0x09e78ebdd 0x09e78ea60 #1295  .   add rsp, 0x18; pop rbx; pop r14; pop r15; po Bad link in "in6m_entry", elm != prev->next,
+0x09e78ec20 0x09e78ea60 #1295  .   add rsp, 0x18; pop rbx; pop r14; pop r15; po Bad link in "in6m_entry", elm != next->prev,
+0x09e792135 0x09e792050 #1333  .   add rsp, 8; pop rbx; pop rbp                 Bad link in "lc_next", elm != prev->next, el
+0x09e792175 0x09e792050 #1333  .   add rsp, 8; pop rbx; pop rbp                 Bad link in "lc_next", elm != next->prev, el
+0x09e7b4c2d 0x09e7b4960 #1321  .   add rsp, 0x18; pop rbx; pop r12; pop r13; po Bad link in "link", elm != prev->next, elm=%
+0x09e7b4c6d 0x09e7b4960 #1321  .   add rsp, 0x18; pop rbx; pop r12; pop r13; po Bad link in "link", elm != next->prev, elm=%
+0x09e7ba382 0x09e7b9fb0 #1333  .   add rsp, 0x38; pop rbx; pop r12; pop r13; po Bad link in "dap_link", elm != prev->next, e
+0x09e7ba3c4 0x09e7b9fb0 #1333  .   add rsp, 0x38; pop rbx; pop r12; pop r13; po Bad link in "dap_link", elm != next->prev, e
+0x09e7ba606 0x09e7ba3d0 #1333  .   add rsp, 0x28; pop rbx; pop r12; pop r13; po Bad link in "dap_link", elm != prev->next, e
+0x09e7ba646 0x09e7ba3d0 #1333  .   add rsp, 0x28; pop rbx; pop r12; pop r13; po Bad link in "dap_link", elm != next->prev, e
+0x09e7bc78e 0x09e7bc5a0 #1321  .   add rsp, 0x38; pop rbx; pop r12; pop r13; po unmappable dmem offset 0x%lx is given to dme
+0x09e7be994 0x09e7be410 #1286  .   add rsp, 0x78; pop rbx; pop r12; pop r13; po Bad link in "osle", elm != prev->next, elm=%
+0x09e7bea11 0x09e7be410 #1286  .   add rsp, 0x78; pop rbx; pop r12; pop r13; po Bad link in "osle", elm != next->prev, elm=%
+0x09e7e396c 0x09e7e37c0 #1265  .   add rsp, 8; pop rbx; pop r12; pop r13; pop r %s: rnh NULL
+0x09e7e5381 0x09e7e5140 #1191  .   add rsp, 0x28; pop rbx; pop r12; pop r13; po %s: key %jx is already present
+0x09e7e5971 0x09e7e5770 #1306  Y   add rsp, 8; pop rbx; pop r14; pop r15; pop r pctrie_remove: impossible to locate the key
+0x09e7e59cd 0x09e7e5770 #1306  .   add rsp, 8; pop rbx; pop r14; pop r15; pop r %s: invalid key found
+0x09e7ebbe3 0x09e7ebb20 #1195  .   pop rbx; pop r14; pop rbp                    Bad link in "rl_q_link", elm != prev->next, 
+0x09e7ebc23 0x09e7ebb20 #1195  .   pop rbx; pop r14; pop rbp                    Bad link in "rl_q_link", elm != next->prev, 
+0x09e7ebd5e 0x09e7ebc30 #1195  .   pop rbx; pop r14; pop rbp                    Bad link in "rl_q_link", elm != prev->next, 
+0x09e7ebda1 0x09e7ebc30 #1195  .   pop rbx; pop r14; pop rbp                    Bad link in "rl_q_link", elm != next->prev, 
+0x09e81d382 0x09e81d1b0 #1286  .   pop rbx; pop r12; pop r14; pop r15; pop rbp  Bad link in "td_lockq", elm != next->prev, e
+0x09e81d3bc 0x09e81d1b0 #1286  .   pop rbx; pop r12; pop r14; pop r15; pop rbp  Bad link in "td_lockq", elm != prev->next, e
+0x09e81dcbc 0x09e81db50 #1250  .   pop rbx; pop r12; pop r14; pop r15; pop rbp  Bad link in "ts_hash", elm != prev->next, el
+0x09e81dd36 0x09e81db50 #1250  .   pop rbx; pop r12; pop r14; pop r15; pop rbp  Bad link in "ts_hash", elm != next->prev, el
+0x09e825cb5 0x09e825bc0 #1327  .   add rsp, 8; pop rbx; pop r12; pop r13; pop r invalid id:%d
+0x09e826005 0x09e825f80 #1327  .   pop rbx; pop r14; pop rbp                    invalid id:%d
+0x09e82a379 0x09e829e20 #1295  .   add rsp, 8; pop rbx; pop r14; pop r15; pop r UMA slab won't fit.
+0x09e82f2b7 0x09e82f0a0 #1295  .   add rsp, 8; pop rbx; pop r12; pop r13; pop r Bad link in "ub_link", elm != prev->next, el
+0x09e82f2f7 0x09e82f0a0 #1295  .   add rsp, 8; pop rbx; pop r12; pop r13; pop r Bad link in "ub_link", elm != next->prev, el
+0x09e82f49d 0x09e82f300 #1295  .   pop rbx; pop r12; pop r14; pop r15; pop rbp  Bad link in "us_type._us_link", elm != prev-
+0x09e82f4df 0x09e82f300 #1295  .   pop rbx; pop r12; pop r14; pop r15; pop rbp  Bad link in "us_type._us_link", elm != next-
+0x09e82f7a2 0x09e82f5f0 #1191  .   add rsp, 0x18; pop rbx; pop r12; pop r13; po Bad link in "us_type._us_link", elm != prev-
+0x09e82f7e4 0x09e82f5f0 #1191  .   add rsp, 0x18; pop rbx; pop r12; pop r13; po Bad link in "us_type._us_link", elm != next-
+0x09e82f80a 0x09e82f5f0 #1191  .   add rsp, 0x18; pop rbx; pop r12; pop r13; po UMA: Increase vm.boot_pages
+0x09e83f93c 0x09e83f8c0 #1218  .   add rsp, 8; pop rbx; pop r14; pop r15; pop r cfi_check_fail: data %p, caller %p, callee %
+0x09e84e03f 0x09e84ddf0 #1286  .   add rsp, 0x18; pop rbx; pop r12; pop r13; po Bad link in "b_freelist", elm != prev->next,
+0x09e84e08d 0x09e84ddf0 #1286  .   add rsp, 0x18; pop rbx; pop r12; pop r13; po Bad link in "b_freelist", elm != next->prev,
+0x09e84e276 0x09e84e0a0 #1307  .   pop rbx; pop r12; pop r14; pop r15; pop rbp  Bad link in "b_freelist", elm != prev->next,
+0x09e84e2c4 0x09e84e0a0 #1307  .   pop rbx; pop r12; pop r14; pop r15; pop rbp  Bad link in "b_freelist", elm != next->prev,
+0x09e850e54 0x09e850a10 #1321  .   add rsp, 8; pop rbx; pop r12; pop r13; pop r Bad link in "link", elm != prev->next, elm=%
+0x09e851359 0x09e850e60 #1321  .   add rsp, 8; pop rbx; pop r12; pop r13; pop r Bad link in "link", elm != prev->next, elm=%
+0x09e85139b 0x09e850e60 #1321  .   add rsp, 8; pop rbx; pop r12; pop r13; pop r Bad link in "link", elm != next->prev, elm=%
+0x09e8521bc 0x09e851ba0 #1299  .   add rsp, 0x28; pop rbx; pop r12; pop r13; po Bad link in "shadow_list", elm != prev->next
+0x09e852205 0x09e851ba0 #1299  .   add rsp, 0x28; pop rbx; pop r12; pop r13; po Bad link in "shadow_list", elm != next->prev
+0x09e8527fe 0x09e852210 #1299  .   add rsp, 0x18; pop rbx; pop r12; pop r13; po Bad link in "shadow_list", elm != prev->next
+0x09e8528ac 0x09e852210 #1299  .   add rsp, 0x18; pop rbx; pop r12; pop r13; po Bad link in "shadow_list", elm != next->prev
+0x09e853ea6 0x09e853a50 #1286  .   add rsp, 0x38; pop rbx; pop r12; pop r13; po %s: page %p failed exclusive busying
+0x09e892614 0x09e8924d0 #1333  .   add rsp, 8; pop rbx; pop rbp                 Bad link in "ui_hash", elm != prev->next, el
+0x09e892654 0x09e8924d0 #1333  .   add rsp, 8; pop rbx; pop rbp                 Bad link in "ui_hash", elm != next->prev, el
+0x09e8aad87 0x09e8aa860 #1295  .   add rsp, 0x18; pop rbx; pop r12; pop r13; po <bin>
+0x09e8aadc1 0x09e8aa860 #1295  .   add rsp, 0x18; pop rbx; pop r12; pop r13; po Bad link in "if_link", elm != prev->next, el
+0x09e8aae01 0x09e8aa860 #1295  .   add rsp, 0x18; pop rbx; pop r12; pop r13; po Bad link in "if_link", elm != next->prev, el
+0x09e8b6a8b 0x09e8b6a00 #1217  .   add rsp, 8; pop rbx; pop r14; pop r15; pop r mtx_lock in interrupt context
+0x09e8b6e44 0x09e8b6af0 #1217  .   add rsp, 0x48; pop rbx; pop r12; pop r13; po <bin>
+0x09e8b712c 0x09e8b6fa0 #1217  .   add rsp, 8; pop rbx; pop r12; pop r13; pop r <bin>
+0x09e8b7798 0x09e8b76a0 #1195  .   pop rbx; pop r12; pop r14; pop r15; pop rbp  mtx_trylock in interrupt context
+0x09e8b7815 0x09e8b76a0 #1195  .   pop rbx; pop r12; pop r14; pop r15; pop rbp  <bin>
+0x09e8d0963 0x09e8d08d0 #1195  .   add rsp, 8; pop rbx; pop rbp                 <bin>
+0x09e8d1138 0x09e8d0970 #1195  .   add rsp, 8; pop rbx; pop r12; pop r13; pop r cannot find bsf(0,0x14,0)
+0x09e8df09d 0x09e8def20 #1217  .   add rsp, 8; pop rbx; pop r12; pop r13; pop r Bad link in "sf_threads", elm != prev->next,
+0x09e8df0df 0x09e8def20 #1217  .   add rsp, 8; pop rbx; pop r12; pop r13; pop r Bad link in "sf_threads", elm != next->prev,
+0x09e8df1f8 0x09e8df0f0 #1217  .   pop rbx; pop r12; pop r14; pop r15; pop rbp  selrecord: No free selfd on selq
+0x09e8e2622 0x09e8e2430 #1303  .   add rsp, 8; pop rbx; pop r14; pop r15; pop r <bin>
+0x09e8e2bdf 0x09e8e2630 #1303  Y   add rsp, 0x58; pop rbx; pop r12; pop r13; po swapdev: not initialized
+0x09e8e3b7c 0x09e8e3b10 #1303  .   pop rbp                                      unexpected bio length for swapdev
+0x09e8e47ec 0x09e8e46a0 #1303  .   add rsp, 8; pop rbx; pop r12; pop r13; pop r <bin>
+0x09e8e4812 0x09e8e46a0 #1303  .   add rsp, 8; pop rbx; pop r12; pop r13; pop r bad delete cmd
+0x09e8e4872 0x09e8e4820 #1303  .   add rsp, 8; pop rbx; pop rbp                 <bin>
+0x09e8e4898 0x09e8e4820 #1303  .   add rsp, 8; pop rbx; pop rbp                 access invalid offset
+0x09e8e4bf0 0x09e8e48a0 #1303  .   add rsp, 0x48; pop rbx; pop r12; pop r13; po undefined nsid
+0x09e8e4d39 0x09e8e4c00 #1303  .   pop rbp                                      invalid blks ineq
+0x09e8e508f 0x09e8e4d40 #1303  .   add rsp, 0x28; pop rbx; pop r12; pop r13; po undefined nsid
+0x09e8e5191 0x09e8e50f0 #1303  .   pop rbp                                      <bin>
+0x09e8e5233 0x09e8e51a0 #1303  .   add rsp, 8; pop rbx; pop rbp                 no sb found in nsid3
+0x09e8e54a8 0x09e8e53a0 #1303  .   pop rbx; pop r12; pop r14; pop r15; pop rbp  inconsistent list
+0x09e8e5c43 0x09e8e5ba0 #1303  .   pop rbx; pop r12; pop r14; pop r15; pop rbp  no sb found in nsid3
+0x09e8e5cce 0x09e8e5c50 #1303  .   add rsp, 8; pop rbx; pop r14; pop r15; pop r nsid1 gc?
+0x09e8e96e3 0x09e8e9670 #1321  .   pop rbx; pop r14; pop rbp                    <bin>
+0x09e8f1623 0x09e8f1570 #1321  .   add rsp, 0x98; pop rbx; pop r12; pop r13; po residual %#x
+0x09e8fd499 0x09e8fd030 #1295  .   add rsp, 8; pop rbx; pop r12; pop r13; pop r Bad link in "so_list", elm != prev->next, el
+0x09e8fd4db 0x09e8fd030 #1295  .   add rsp, 8; pop rbx; pop r12; pop r13; pop r Bad link in "so_list", elm != next->prev, el
+0x09e937ec4 0x09e937c30 #1195  .   add rsp, 0x38; pop rbx; pop r12; pop r13; po Bad link in "v_actfreelist", elm != prev->ne
+0x09e937f12 0x09e937c30 #1195  .   add rsp, 0x38; pop rbx; pop r12; pop r13; po Bad link in "v_actfreelist", elm != next->pr
+0x09e938717 0x09e938430 #1195  .   add rsp, 0x28; pop rbx; pop r12; pop r13; po vinvalbuf: dirty bufs
+0x09e939124 0x09e938f70 #1195  .   add rsp, 8; pop rbx; pop r14; pop r15; pop r Bad link in "v_actfreelist", elm != prev->ne
+0x09e939172 0x09e938f70 #1195  .   add rsp, 8; pop rbx; pop r14; pop r15; pop r Bad link in "v_actfreelist", elm != next->pr
+0x09e9392a7 0x09e939180 #1195  Y   add rsp, 8; pop rbx; pop r14; pop r15; pop r buf_vlist_add:  Preallocated nodes insuffici
+0x09e9392ec 0x09e939180 #1195  .   add rsp, 8; pop rbx; pop r14; pop r15; pop r Bad link in "b_bobufs", elm != next->prev, e
+0x09e939557 0x09e9394a0 #1306  .   add rsp, 8; pop rbx; pop r14; pop r15; pop r Bad link in "b_bobufs", elm != prev->next, e
+0x09e939599 0x09e9394a0 #1306  .   add rsp, 8; pop rbx; pop r14; pop r15; pop r Bad link in "b_bobufs", elm != next->prev, e
+0x09e939853 0x09e9395a0 #1195  .   pop rbx; pop r12; pop r14; pop r15; pop rbp  vdrop: holdcnt %d
+0x09e939893 0x09e9395a0 #1195  .   pop rbx; pop r12; pop r14; pop r15; pop rbp  Bad link in "v_actfreelist", elm != prev->ne
+0x09e9398e1 0x09e9395a0 #1195  .   pop rbx; pop r12; pop r14; pop r15; pop rbp  Bad link in "v_actfreelist", elm != next->pr
+0x09e939f50 0x09e939d70 #1195  .   add rsp, 0x18; pop rbx; pop r12; pop r13; po <bin>
+0x09e93a42c 0x09e93a130 #1333  .   add rsp, 0x38; pop rbx; pop r12; pop r13; po vputx: usecount not zero
+0x09e93aba7 0x09e93aa30 #1195  .   add rsp, 8; pop rbx; pop r12; pop r13; pop r Bad link in "v_nmntvnodes", elm != next->pre
+0x09e93ac8a 0x09e93abb0 #1195  .   pop rbx; pop r14; pop rbp                    Bad link in "v_nmntvnodes", elm != prev->nex
+0x09e93acce 0x09e93abb0 #1195  .   pop rbx; pop r14; pop rbp                    Bad link in "v_nmntvnodes", elm != next->pre
+0x09e93afd2 0x09e93ace0 #1195  .   add rsp, 0x48; pop rbx; pop r12; pop r13; po vgone: cannot reclaim
+0x09e93b16e 0x09e93afe0 #1195  .   pop rbx; pop r12; pop r14; pop r15; pop rbp  Bad link in "v_nmntvnodes", elm != prev->nex
+0x09e93b1b3 0x09e93afe0 #1195  .   pop rbx; pop r12; pop r14; pop r15; pop rbp  Bad link in "v_nmntvnodes", elm != next->pre
+0x09e93b5a5 0x09e93b260 #1195  .   add rsp, 0x28; pop rbx; pop r12; pop r13; po Bad link in "mnt_upper_link", elm != prev->n
+0x09e93b635 0x09e93b260 #1195  .   add rsp, 0x28; pop rbx; pop r12; pop r13; po Bad link in "mnt_upper_link", elm != next->p
+0x09e93c479 0x09e93c310 #1333  .   pop rbx; pop r12; pop r14; pop r15; pop rbp  Bad link in "v_actfreelist", elm != prev->ne
+0x09e93d912 0x09e93d6b0 #1321  .   add rsp, 8; pop rbx; pop r12; pop r13; pop r Bad link in "v_actfreelist", elm != prev->ne
+0x09e93d9a8 0x09e93d6b0 #1321  .   add rsp, 8; pop rbx; pop r12; pop r13; pop r Bad link in "v_actfreelist", elm != next->pr
+0x09e93f913 0x09e93f6e0 #1195  .   add rsp, 8; pop rbx; pop r12; pop r13; pop r Bad link in "v_actfreelist", elm != prev->ne
+0x09e93f961 0x09e93f6e0 #1195  .   add rsp, 8; pop rbx; pop r12; pop r13; pop r Bad link in "v_actfreelist", elm != next->pr
+0x09e944f1f 0x09e944e40 #1237  .   add rsp, 8; pop rbx; pop rbp                 Bad link in "partpopq", elm != prev->next, e
+0x09e944f62 0x09e944e40 #1237  .   add rsp, 8; pop rbx; pop rbp                 Bad link in "partpopq", elm != next->prev, e
+0x09e9455b0 0x09e945380 #1299  .   add rsp, 0x28; pop rbx; pop r14; pop r15; po Bad link in "objq", elm != prev->next, elm=%
+0x09e9455f2 0x09e945380 #1299  .   add rsp, 0x28; pop rbx; pop r14; pop r15; po Bad link in "objq", elm != next->prev, elm=%
+0x09e94580a 0x09e945660 #1299  .   pop rbx; pop r14; pop rbp                    Bad link in "objq", elm != prev->next, elm=%
+0x09e94584f 0x09e945660 #1299  .   pop rbx; pop r14; pop rbp                    Bad link in "objq", elm != next->prev, elm=%
+0x09e94626a 0x09e946140 #1195  .   pop rbx; pop r12; pop r14; pop r15; pop rbp  Bad link in "objq", elm != prev->next, elm=%
+0x09e9462ac 0x09e946140 #1195  .   pop rbx; pop r12; pop r14; pop r15; pop rbp  Bad link in "objq", elm != next->prev, elm=%
+0x09e946ed8 0x09e946db0 #1335  .   add rsp, 8; pop rbx; pop r14; pop r15; pop r sysctl_remove_oid: corrupt tree, entry: %s
+0x09e94c494 0x09e94c390 #1215  .   add rsp, 8; pop rbx; pop rbp                 Bad link in "ksi_link", elm != prev->next, e
+0x09e94c4d7 0x09e94c390 #1215  .   add rsp, 8; pop rbx; pop rbp                 Bad link in "ksi_link", elm != next->prev, e
+0x09e94c5cb 0x09e94c4e0 #1215  .   pop rbx; pop r14; pop rbp                    Bad link in "ksi_link", elm != prev->next, e
+0x09e94c60e 0x09e94c4e0 #1215  .   pop rbx; pop r14; pop rbp                    Bad link in "ksi_link", elm != next->prev, e
+0x09e94c7d1 0x09e94c680 #1234  .   pop rbx; pop r12; pop r14; pop r15; pop rbp  Bad link in "ksi_link", elm != prev->next, e
+0x09e94c814 0x09e94c680 #1234  .   pop rbx; pop r12; pop r14; pop r15; pop rbp  Bad link in "ksi_link", elm != next->prev, e
+0x09e951dcd 0x09e951cf0 #1337  Y   add rsp, 8; pop rbx; pop r14; pop r15; pop r sigdeferstop: invalid mode %x
+0x09e9526d9 0x09e952560 #1227  .   add rsp, 8; pop rbx; pop rbp                 Bad link in "ksi_link", elm != prev->next, e
+0x09e952719 0x09e952560 #1227  .   add rsp, 8; pop rbx; pop rbp                 Bad link in "ksi_link", elm != next->prev, e
+0x09e96eb31 0x09e96ea10 #1337  .   add rsp, 0x18; pop rbx; pop r12; pop r13; po [KERNEL] Failed to make /dev/notification%d
+0x09e9960c4 0x09e995d80 #1184  .   add rsp, 8; pop rbx; pop r14; pop r15; pop r Unexpected ptype(%d)
+0x09e9964ac 0x09e9963a0 #1234  .   add rsp, 0x10; pop rbx; pop r12; pop r14; po %s: the specified rid %d is not supported by
+0x09e9966e6 0x09e9964c0 #1234  .   add rsp, 8; pop rbx; pop r12; pop r13; pop r cmc_appid(0x%08x)!=req_appid(0x%08x)
+0x09e9968f1 0x09e996830 #1234  .   add rsp, 0x10; pop rbx; pop r12; pop r14; po %s: the specified rid %d is not supported by
+0x09e996a21 0x09e996900 #1234  .   add rsp, 8; pop rbx; pop r12; pop r13; pop r cmc_appid(0x%08x)!=req_appid(0x%08x)
+0x09e99a1aa 0x09e99a0f0 #1310  Y   pop rbx; pop r12; pop r14; pop r15; pop rbp  default_pager_alloc: handle specified
+0x09e99f9a0 0x09e99f610 #1303  Y   add rsp, 0x28; pop rbx; pop r12; pop r13; po free cmpl entry not found(%d). count: %d, la
+0x09e99f9e0 0x09e99f610 #1303  .   add rsp, 0x28; pop rbx; pop r12; pop r13; po Bad link in "list", elm != prev->next, elm=%
+0x09e99fa2e 0x09e99f610 #1303  .   add rsp, 0x28; pop rbx; pop r12; pop r13; po Bad link in "list", elm != next->prev, elm=%
+0x09e99fe42 0x09e99fa70 #1303  .   add rsp, 0x2f8; pop rbx; pop r12; pop r13; p [IOD] free_queue(%d) is corrupted. last opty
+0x09e99fe82 0x09e99fa70 #1303  .   add rsp, 0x2f8; pop rbx; pop r12; pop r13; p Bad link in "list", elm != prev->next, elm=%
+0x09e99fed0 0x09e99fa70 #1303  .   add rsp, 0x2f8; pop rbx; pop r12; pop r13; p Bad link in "list", elm != next->prev, elm=%
+0x09e9d752b 0x09e9d74a0 #1237  .   pop rbx; pop r14; pop rbp                    Bad link in "bt_u.u_hashlist", elm != prev->
+0x09e9d7570 0x09e9d74a0 #1237  .   pop rbx; pop r14; pop rbp                    Bad link in "bt_u.u_hashlist", elm != next->
+0x09e9d75fa 0x09e9d7580 #1237  .   pop rbx; pop r14; pop rbp                    Bad link in "bt_u.u_freelist", elm != prev->
+0x09e9d763f 0x09e9d7580 #1237  .   pop rbx; pop r14; pop rbp                    Bad link in "bt_u.u_freelist", elm != next->
+0x09e9d76fe 0x09e9d7650 #1237  .   add rsp, 8; pop rbx; pop rbp                 Bad link in "bt_seglist", elm != prev->next,
+0x09e9d7741 0x09e9d7650 #1237  .   add rsp, 8; pop rbx; pop rbp                 Bad link in "bt_seglist", elm != next->prev,
+0x09e9d78f8 0x09e9d7750 #1237  .   add rsp, 0x18; pop rbx; pop r14; pop r15; po Bad link in "bt_u.u_freelist", elm != prev->
+0x09e9d7974 0x09e9d7750 #1237  .   add rsp, 0x18; pop rbx; pop r14; pop r15; po Bad link in "bt_u.u_freelist", elm != next->
+0x09e9ea6d4 0x09e9ea430 #1321  .   add rsp, 0x28; pop rbx; pop r12; pop r13; po relookup: lookup on dot-dot
+0x09ea05bc4 0x09ea05b30 #1224  .   pop rbx; pop r14; pop rbp                    can't find the segment for m %p container %d
+0x09ea068f6 0x09ea067e0 #1237  .   pop rbx; pop r12; pop r14; pop r15; pop rbp  required size is %#lx
+0x09ea06929 0x09ea067e0 #1237  .   pop rbx; pop r12; pop r14; pop r15; pop rbp  invalid vm_phys_ext_page_array_state %d
+0x09ea133e1 0x09ea12ca0 #1307  .   add rsp, 0x68; pop rbx; pop r12; pop r13; po %s: page %p failed shared busying
+0x09ea13425 0x09ea12ca0 #1307  .   add rsp, 0x68; pop rbx; pop r12; pop r13; po <bin>
+0x09ea20c3f 0x09ea20b70 #1321  .   add rsp, 8; pop rbx; pop r14; pop r15; pop r %s: Invalid offset %#lx
+0x09ea20c72 0x09ea20b70 #1321  .   add rsp, 8; pop rbx; pop r14; pop r15; pop r %s: self info is not active
+0x09ea21055 0x09ea20cf0 #1321  .   add rsp, 0x18; pop rbx; pop r12; pop r13; po wrong container %d
+0x09ea21204 0x09ea21060 #1321  .   pop rbx; pop r12; pop r14; pop r15; pop rbp  Bad link in "hash_chain", elm != prev->next,
+0x09ea21244 0x09ea21060 #1321  .   pop rbx; pop r12; pop r14; pop r15; pop rbp  Bad link in "hash_chain", elm != next->prev,
+0x09ea21df1 0x09ea21850 #1321  .   add rsp, 0xb8; pop rbx; pop r12; pop r13; po Bad link in "inactive_chain", elm != prev->n
+0x09ea21e35 0x09ea21850 #1321  .   add rsp, 0xb8; pop rbx; pop r12; pop r13; po Bad link in "inactive_chain", elm != next->p
+0x09ea21f1d 0x09ea21850 #1321  Y   add rsp, 0xb8; pop rbx; pop r12; pop r13; po [KERNEL] %s:%u: sceSblAuthMgrFinalize return
+0x09ea221db 0x09ea220c0 #1321  .   add rsp, 8; pop rbx; pop r14; pop r15; pop r Both text container and nda text container a
+0x09ea224d6 0x09ea223c0 #1321  .   pop rbx; pop r14; pop rbp                    %s: %p is active (%d)
+0x09ea2251b 0x09ea223c0 #1321  Y   pop rbx; pop r14; pop rbp                    [KERNEL] %s:%u: sceSblAuthMgrFinalize return
+0x09ea22558 0x09ea223c0 #1321  .   pop rbx; pop r14; pop rbp                    Bad link in "inactive_chain", elm != prev->n
+0x09ea2259d 0x09ea223c0 #1321  .   pop rbx; pop r14; pop rbp                    Bad link in "inactive_chain", elm != next->p
+0x09ea62fd3 0x09ea62ea0 #1215  .   add rsp, 0x58; pop rbx; pop r14; pop r15; po %s[%td]: %s
+0x09ea80a7d 0x09ea80930 #1286  .   add rsp, 0x38; pop rbx; pop r12; pop r13; po acpi added power consumer but can't find it
+0x09ea80dc3 0x09ea80c70 #1286  .   add rsp, 8; pop rbx; pop r14; pop r15; pop r Bad link in "ar_clink", elm != prev->next, e
+0x09ea80e40 0x09ea80c70 #1286  .   add rsp, 8; pop rbx; pop r14; pop r15; pop r Bad link in "ar_clink", elm != next->prev, e
+0x09ea9f67d 0x09ea9f5e0 #1195  .   pop rbx; pop r14; pop rbp                    vn_finished_write: neg cnt
+0x09eaa10bd 0x09eaa1020 #1195  .   pop rbx; pop r14; pop rbp                    vn_finished_secondary_write: neg cnt
+0x09eaa25b2 0x09eaa2470 #1195  .   add rsp, 0x38; pop rbx; pop r12; pop r13; po vn_io_fault_doio: unknown kind of io %d %d
+0x09eaa7143 0x09eaa6f60 #1217  .   pop rbx; pop r14; pop rbp                    Bad link in "td_runq", elm != prev->next, el
+0x09eaa7188 0x09eaa6f60 #1217  .   pop rbx; pop r14; pop rbp                    Bad link in "td_runq", elm != next->prev, el
+0x09eaa817d 0x09eaa8090 #1335  .   add rsp, 8; pop rbx; pop r12; pop r13; pop r Invalid cutd[].pri at cpu = %d
+0x09eaaf22b 0x09eaaf0a0 #1228  .   pop rbx; pop r12; pop r14; pop r15; pop rbp  unhandled event
+0x09eac563b 0x09eac5580 #1295  .   add rsp, 8; pop rbx; pop rbp                 Bad link in "pfil_chain", elm != prev->next,
+0x09eac567e 0x09eac5580 #1295  .   add rsp, 8; pop rbx; pop rbp                 Bad link in "pfil_chain", elm != next->prev,
+0x09eacf3fa 0x09eacedb0 #1285  .   add rsp, 0x68; pop rbx; pop r12; pop r13; po make_dev_sv: bad si_name (error=%d, si_name=
+0x09eacf434 0x09eacedb0 #1285  .   add rsp, 0x68; pop rbx; pop r12; pop r13; po Bad link in "si_list", elm != prev->next, el
+0x09eacf476 0x09eacedb0 #1285  .   add rsp, 0x68; pop rbx; pop r12; pop r13; po Bad link in "si_list", elm != next->prev, el
+0x09eacf982 0x09eacf830 #1285  .   add rsp, 8; pop rbx; pop r12; pop r13; pop r make_dev_alias_v: bad si_name (error=%d, si_
+0x09ead029d 0x09eacfcb0 #1321  .   add rsp, 0x18; pop rbx; pop r12; pop r13; po Bad link in "si_list", elm != prev->next, el
+0x09ead0355 0x09eacfcb0 #1321  .   add rsp, 0x18; pop rbx; pop r12; pop r13; po Bad link in "si_list", elm != next->prev, el
+0x09ead04fb 0x09ead0370 #1285  .   add rsp, 0x18; pop rbx; pop r14; pop r15; po Bad link in "cdp_list", elm != prev->next, e
+0x09ead054c 0x09ead0370 #1285  .   add rsp, 0x18; pop rbx; pop r14; pop r15; po Bad link in "cdp_list", elm != next->prev, e
+0x09eae962c 0x09eae94a0 #1303  .   pop rbx; pop r14; pop rbp                    Invalid schedule td=%d(%s)
+0x09eae96b5 0x09eae9640 #1303  .   add rsp, 8; pop rbx; pop rbp                 start_time == 0
+0x09eaed815 0x09eaed6e0 #1195  .   add rsp, 8; pop rbx; pop rbp                 RDRAND failed %d times, elem[%zu]
+0x09eaefdaf 0x09eaefce0 #1237  Y   pop rbx; pop r14; pop rbp                    W:/Build/J03950001/sys/mp4/x86/kernel/module
+0x09eaf8a49 0x09eaf8980 #1195  Y   add rsp, 0x10; pop rbx; pop r12; pop r14; po unlock_and_deallocate: dmem_aod_free(%d, %p,
+0x09eaf9180 0x09eaf8f70 #1195  .   add rsp, 0x38; pop rbx; pop r12; pop r13; po vm_fault_quick_hold_pages: count > max_count
+0x09eaf96c9 0x09eaf9190 #1321  .   add rsp, 0x78; pop rbx; pop r12; pop r13; po %s: page %p failed exclusive busying
+0x09eb1b49f 0x09eb1b380 #1234  .   add rsp, 8; pop rbx; pop r14; pop r15; pop r fdrop: count %d
+0x09eb2dfec 0x09eb2ddb0 #1303  .   add rsp, 8; pop rbx; pop r12; pop r13; pop r Bad link in "ee_link", elm != prev->next, el
+0x09eb2e445 0x09eb2e370 #1237  .   pop rbx; pop r12; pop r14; pop r15; pop rbp  Bad link in "ee_link", elm != prev->next, el
+0x09eb2e488 0x09eb2e370 #1237  .   pop rbx; pop r12; pop r14; pop r15; pop rbp  Bad link in "ee_link", elm != next->prev, el
+0x09eb6ff6d 0x09eb6fd50 #1323  .   add rsp, 8; pop rbx; pop r12; pop r13; pop r Bad link in "ih_next", elm != prev->next, el
+0x09eb6ffe0 0x09eb6fd50 #1323  .   add rsp, 8; pop rbx; pop r12; pop r13; pop r Bad link in "ih_next", elm != next->prev, el
+0x09eb704b8 0x09eb70340 #1323  .   add rsp, 8; pop rbx; pop r12; pop r13; pop r Bad link in "ih_next", elm != prev->next, el
+0x09eb704fa 0x09eb70340 #1323  .   add rsp, 8; pop rbx; pop r12; pop r13; pop r Bad link in "ih_next", elm != next->prev, el
+0x09eb73977 0x09eb73820 #1218  .   add rsp, 8; pop rbx; pop rbp                 Event timer "%s" doesn't support sub-second 
+0x09eb81732 0x09eb81380 #1337  .   add rsp, 8; pop rbx; pop r14; pop r15; pop r Bad link in "nc_dst", elm != prev->next, elm
+0x09eb817af 0x09eb81380 #1337  .   add rsp, 8; pop rbx; pop r14; pop r15; pop r Bad link in "nc_dst", elm != next->prev, elm
+0x09eb81f88 0x09eb817f0 #1337  .   add rsp, 0x38; pop rbx; pop r12; pop r13; po Bad link in "nc_dst", elm != prev->next, elm
+0x09eb81fca 0x09eb817f0 #1337  .   add rsp, 0x38; pop rbx; pop r12; pop r13; po Bad link in "nc_dst", elm != next->prev, elm
+0x09eb822ac 0x09eb82030 #1337  .   add rsp, 0x18; pop rbx; pop r12; pop r13; po Bad link in "nc_hash", elm != prev->next, el
+0x09eb822ec 0x09eb82030 #1337  .   add rsp, 0x18; pop rbx; pop r12; pop r13; po Bad link in "nc_hash", elm != next->prev, el
+0x09eba10a4 0x09eba0ca0 #1327  .   add rsp, 0x28; pop rbx; pop r12; pop r13; po <bin>
+0x09eba152f 0x09eba1280 #1327  .   add rsp, 8; pop rbx; pop r14; pop r15; pop r <bin>
+0x09eba1fc2 0x09eba1f20 #1306  .   add rsp, 0x50; pop rbx; pop r14; pop rbp     Suspend/Resume rule violated
+0x09ebabcf4 0x09ebabb80 #1303  .   add rsp, 8; pop rbx; pop r14; pop r15; pop r Bad link in "events", elm != prev->next, elm
+0x09ebabd34 0x09ebabb80 #1303  .   add rsp, 8; pop rbx; pop r14; pop r15; pop r Bad link in "events", elm != next->prev, elm
+0x09ebabe36 0x09ebabd40 #1303  .   add rsp, 8; pop rbx; pop r14; pop r15; pop r Bad link in "events", elm != prev->next, elm
+0x09ebabe79 0x09ebabd40 #1303  .   add rsp, 8; pop rbx; pop r14; pop r15; pop r Bad link in "events", elm != next->prev, elm
+0x09ebac05b 0x09ebabfb0 #1303  .   pop rbx; pop r14; pop rbp                    failed to suspend g_event_td
+0x09ebc4af3 0x09ebc4760 #1237  .   add rsp, 0x48; pop rbx; pop r12; pop r13; po <bin>
+0x09ebc4e8c 0x09ebc4d40 #1237  .   pop rbx; pop r12; pop r14; pop r15; pop rbp  <bin>
+0x09ebc506c 0x09ebc4eb0 #1237  .   add rsp, 8; pop rbx; pop r12; pop r13; pop r <bin>
+0x09ebc5434 0x09ebc50c0 #1237  .   add rsp, 0x48; pop rbx; pop r12; pop r13; po <bin>
+0x09ebc5874 0x09ebc56e0 #1267  .   pop rbx; pop r12; pop r14; pop r15; pop rbp  <bin>
+0x09ebc59f5 0x09ebc58a0 #1195  .   pop rbx; pop r12; pop r14; pop r15; pop rbp  <bin>
+0x09ebeddf5 0x09ebedce0 #1303  .   add rsp, 8; pop rbx; pop r14; pop r15; pop r Bad link in "provider", elm != prev->next, e
+0x09ebede37 0x09ebedce0 #1303  .   add rsp, 8; pop rbx; pop r14; pop r15; pop r Bad link in "provider", elm != next->prev, e
+0x09ebee059 0x09ebedf80 #1303  .   add rsp, 8; pop rbx; pop r14; pop r15; pop r Bad link in "consumer", elm != prev->next, e
+0x09ebee09b 0x09ebedf80 #1303  .   add rsp, 8; pop rbx; pop r14; pop r15; pop r Bad link in "consumer", elm != next->prev, e
+0x09ebee9b7 0x09ebee8d0 #1295  .   add rsp, 8; pop rbx; pop r14; pop r15; pop r Bad link in "consumers", elm != prev->next, 
+0x09ebee9f9 0x09ebee8d0 #1295  .   add rsp, 8; pop rbx; pop r14; pop r15; pop r Bad link in "consumers", elm != next->prev, 
+0x09ebeeb89 0x09ebeea00 #1295  .   pop rbx; pop r14; pop rbp                    Bad link in "geoms", elm != prev->next, elm=
+0x09ebeebcb 0x09ebeea00 #1295  .   pop rbx; pop r14; pop rbp                    Bad link in "geoms", elm != next->prev, elm=
+0x09ec2527b 0x09ec24ce0 #1295  .   add rsp, 8; pop rbx; pop r12; pop r13; pop r in6_cksum: out of data
+0x09ec2c58f 0x09ec2c380 #1333  .   add rsp, 8; pop rbx; pop r14; pop r15; pop r Bad link in "cs_link", elm != prev->next, el
+0x09ec2c5d1 0x09ec2c380 #1333  .   add rsp, 8; pop rbx; pop r14; pop r15; pop r Bad link in "cs_link", elm != next->prev, el
+0x09ec2e765 0x09ec2e6f0 #1320  .   add rsp, 0x18; pop rbx; pop rbp              <bin>
+0x09ec39476 0x09ec391d0 #1237  .   add rsp, 0x28; pop rbx; pop r12; pop r13; po %s: key %jx is already present
+0x09ec399f4 0x09ec39820 #1237  Y   add rsp, 8; pop rbx; pop rbp                 vm_radix_remove: impossible to locate the ke
+0x09ec39a50 0x09ec39820 #1237  .   add rsp, 8; pop rbx; pop rbp                 %s: invalid key found
+0x09ec6b0a9 0x09ec6acc0 #1260  .   add rsp, 8; pop rbx; pop r12; pop r13; pop r %s: max_datalen < 1
+0x09ec887f4 0x09ec88770 #1303  .   pop rbp                                      scf_slc unknown flag
+0x09ecbac05 0x09ecbaac0 #1295  .   add rsp, 0x18; pop rbx; pop r12; pop r13; po %s: off < sizeof(struct ip6_hdr)
+0x09ecbad83 0x09ecbac10 #1295  .   add rsp, 0x38; pop rbx; pop r14; pop r15; po ip6_nexthdr: m == NULL
+0x09eccd7f2 0x09eccd3c0 #1299  Y   add rsp, 8; pop rbx; pop r12; pop r13; pop r qframe allocation failed
+0x09eccd8d1 0x09eccd850 #1237  .   add rsp, 8; pop rbx; pop rbp                 <bin>
+0x09ecd0a92 0x09ecd07b0 #1321  .   add rsp, 0x28; pop rbx; pop r12; pop r13; po pmap %p va %#lx oldpte %#lx
+0x09ecd0bdc 0x09ecd0aa0 #1321  .   pop rbx; pop r12; pop r14; pop r15; pop rbp  Bad link in "link", elm != next->prev, elm=%
+0x09ecd0c1e 0x09ecd0aa0 #1321  .   pop rbx; pop r12; pop r14; pop r15; pop rbp  Bad link in "link", elm != prev->next, elm=%
+0x09ecd1338 0x09ecd0c30 #1195  .   add rsp, 0x48; pop rbx; pop r12; pop r13; po Bad link in "pv_next", elm != prev->next, el
+0x09ecd137a 0x09ecd0c30 #1195  .   add rsp, 0x48; pop rbx; pop r12; pop r13; po Bad link in "pv_next", elm != next->prev, el
+0x09ecd1751 0x09ecd1540 #1321  .   pop rbx; pop r14; pop rbp                    Bad link in "pc_list", elm != prev->next, el
+0x09ecd17ca 0x09ecd1540 #1321  .   pop rbx; pop r14; pop rbp                    Bad link in "pc_list", elm != next->prev, el
+0x09ecd38c0 0x09ecd3590 #1321  .   add rsp, 8; pop rbx; pop r12; pop r13; pop r Bad link in "pc_list", elm != prev->next, el
+0x09ecd3902 0x09ecd3590 #1321  .   add rsp, 8; pop rbx; pop r12; pop r13; pop r Bad link in "pc_list", elm != next->prev, el
+0x09ecd473d 0x09ecd46d0 #1321  .   add rsp, 0x18; pop rbx; pop r12; pop r13; po can't reach here
+0x09ecd4954 0x09ecd47f0 #1321  .   add rsp, 0x58; pop rbx; pop r12; pop r13; po dmem_vmo_get_type 2: %d
+0x09ecdb9ef 0x09ecdb560 #1299  Y   add rsp, 0x28; pop rbx; pop r12; pop r13; po %s: too many preinit mappings
+0x09ecdbc4f 0x09ecdbbb0 #1237  .   add rsp, 8; pop rbx; pop r14; pop r15; pop r memory attribute change on the direct map fa
+0x09ece1f3a 0x09ece1e00 #1321  .   add rsp, 8; pop rbx; pop r12; pop r13; pop r page table memory exhausted %td
+0x09ece35ff 0x09ece3550 #1321  .   pop rbx; pop r14; pop rbp                    Bad link in "pv_next", elm != prev->next, el
+0x09ece3644 0x09ece3550 #1321  .   pop rbx; pop r14; pop rbp                    Bad link in "pv_next", elm != next->prev, el
+0x09ece4f2c 0x09ece4e00 #1338  Y   add rsp, 8; pop rbx; pop rbp                 %s: failed to init playgo_device
+0x09ed1559d 0x09ed15530 #1305  .   add rsp, 0x10; pop rbx; pop r14; pop rbp     kproc_start: %s: error %d
+0x09ed1587a 0x09ed155b0 #1286  Y   add rsp, 0xb8; pop rbx; pop r12; pop r13; po kproc_create called too soon
+0x09ed15ac9 0x09ed15a60 #1306  .   pop rbx; pop r14; pop rbp                    kthread_start: %s: error %d
+0x09ed15d70 0x09ed15ad0 #1303  .   add rsp, 0x78; pop rbx; pop r12; pop r13; po kthread_add called too soon
+0x09ed4938c 0x09ed49110 #1295  .   add rsp, 0x20; pop rbx; pop r12; pop r14; po Bad link in "ndpr_entry", elm != prev->next,
+0x09ed4940d 0x09ed49110 #1295  .   add rsp, 0x20; pop rbx; pop r12; pop r14; po Bad link in "ndpr_entry", elm != next->prev,
+0x09ed5005e 0x09ed4ff90 #1321  .   pop rbx; pop r14; pop rbp                    Bad link in "igi_link", elm != prev->next, e
+0x09ed5009e 0x09ed4ff90 #1321  .   pop rbx; pop r14; pop rbp                    Bad link in "igi_link", elm != next->prev, e
+0x09ed55006 0x09ed54f40 #1333  .   pop rbx; pop r14; pop rbp                    Bad link in "dei_link", elm != prev->next, e
+0x09ed5504b 0x09ed54f40 #1333  .   pop rbx; pop r14; pop rbp                    Bad link in "dei_link", elm != next->prev, e
+0x09ed55186 0x09ed550c0 #1333  .   pop rbx; pop r14; pop rbp                    Bad link in "dei_link", elm != prev->next, e
+0x09ed551cb 0x09ed550c0 #1333  .   pop rbx; pop r14; pop rbp                    Bad link in "dei_link", elm != next->prev, e
+0x09ed55306 0x09ed55240 #1333  .   pop rbx; pop r14; pop rbp                    Bad link in "dei_link", elm != prev->next, e
+0x09ed5534b 0x09ed55240 #1333  .   pop rbx; pop r14; pop rbp                    Bad link in "dei_link", elm != next->prev, e
+0x09ed55486 0x09ed553c0 #1333  .   pop rbx; pop r14; pop rbp                    Bad link in "dei_link", elm != prev->next, e
+0x09ed554cb 0x09ed553c0 #1333  .   pop rbx; pop r14; pop rbp                    Bad link in "dei_link", elm != next->prev, e
+0x09ed5c2c1 0x09ed5c020 #1303  Y   add rsp, 0x38; pop rbx; pop r12; pop r13; po blist_meta_alloc: allocation too large
+0x09ed5c58c 0x09ed5c380 #1303  .   add rsp, 0x38; pop rbx; pop r12; pop r13; po blst_meta_free: freeing unexpected range
+0x09ed5c5ca 0x09ed5c380 #1303  .   add rsp, 0x38; pop rbx; pop r12; pop r13; po blst_meta_free: freeing already free blocks 
+0x09ed8c2bf 0x09ed8c1c0 #1250  .   pop rbx; pop r12; pop r14; pop r15; pop rbp  Bad link in "hhh_next", elm != prev->next, e
+0x09ed8c307 0x09ed8c1c0 #1250  .   pop rbx; pop r12; pop r14; pop r15; pop rbp  Bad link in "hhh_next", elm != next->prev, e
+0x09ed986b7 0x09ed98570 #1321  .   add rsp, 0x38; pop rbx; pop r12; pop r13; po invalid block state: %#x
+0x09edca4d2 0x09edca2d0 #1286  .   add rsp, 0x18; pop rbx; pop r12; pop r13; po Bad link in "links", elm != prev->next, elm=
+0x09edd9689 0x09edd94a0 #1321  .   add rsp, 0x18; pop rbx; pop r12; pop r13; po <bin>
+0x09edd9727 0x09edd9690 #1321  .   add rsp, 8; pop rbx; pop r12; pop r13; pop r <bin>
+0x09eddcbc6 0x09eddc410 #1321  .   add rsp, 0xa8; pop rbx; pop r12; pop r13; po <bin>
+0x09ede2f32 0x09ede2b20 #1321  .   add rsp, 0x38; pop rbx; pop r12; pop r13; po <bin>
+0x09edf4420 0x09edf4350 #1296  .   pop rbp                                      <bin>
+0x09edf44e0 0x09edf4430 #1296  .   add rsp, 0x18; pop rbx; pop r14; pop r15; po [appmgr] First id must be 0.
+0x09edf8535 0x09edf8390 #1299  .   add rsp, 8; pop rbx; pop r12; pop r13; pop r conflict: existing: [%#lx %#lx), new: [%#lx,
+0x09edfd9d3 0x09edfd670 #1299  .   add rsp, 0x28; pop rbx; pop r12; pop r13; po Too many ddr5 entry
+0x09edfefbd 0x09edfeed0 #1285  .   add rsp, 8; pop rbx; pop r14; pop r15; pop r Bad link in "list", elm != prev->next, elm=%
+0x09edfeffd 0x09edfeed0 #1285  .   add rsp, 8; pop rbx; pop r14; pop r15; pop r Bad link in "list", elm != next->prev, elm=%
+0x09edff1a6 0x09edff0a0 #1214  .   add rsp, 8; pop rbx; pop r14; pop r15; pop r <bin>
+0x09edff21b 0x09edff0a0 #1214  .   add rsp, 8; pop rbx; pop r14; pop r15; pop r <bin>
+0x09edff3f3 0x09edff330 #1214  .   add rsp, 8; pop rbx; pop rbp                 UNR corruption: No clear bit in bitmap.
+0x09edff92a 0x09edff470 #1214  .   add rsp, 0x10; pop rbx; pop r14; pop rbp     Bad link in "list", elm != prev->next, elm=%
+0x09edff9fa 0x09edff470 #1214  .   add rsp, 0x10; pop rbx; pop r14; pop rbp     Bad link in "list", elm != next->prev, elm=%
+0x09edffe62 0x09edffb40 #1214  Y   add rsp, 0x18; pop rbx; pop r12; pop r13; po alloc_unr_specificl: up->ptr != NULL (up=%p)
+0x09edffe9f 0x09edffb40 #1214  .   add rsp, 0x18; pop rbx; pop r12; pop r13; po Bad link in "list", elm != prev->next, elm=%
+0x09edffee2 0x09edffb40 #1214  .   add rsp, 0x18; pop rbx; pop r12; pop r13; po Bad link in "list", elm != next->prev, elm=%
+0x09ee00a01 0x09ee00330 #1214  .   add rsp, 8; pop rbx; pop r12; pop r13; pop r Bad link in "list", elm != prev->next, elm=%
+0x09ee00a70 0x09ee00330 #1214  .   add rsp, 8; pop rbx; pop r12; pop r13; pop r Bad link in "list", elm != next->prev, elm=%
+0x09ee27141 0x09ee26e80 #1321  Y   add rsp, 0x48; pop rbx; pop r12; pop r13; po %s: failed to allocate a debug_rwmem window.
+0x09ee2763c 0x09ee27390 #1321  Y   add rsp, 0x48; pop rbx; pop r12; pop r13; po %s: failed to allocate a write window.
+0x09ee347a3 0x09ee346f0 #1303  .   pop rbx; pop r14; pop rbp                    Bad link in "bio_queue", elm != prev->next, 
+0x09ee347f4 0x09ee346f0 #1303  .   pop rbx; pop r14; pop rbp                    Bad link in "bio_queue", elm != next->prev, 
+0x09ee40e5a 0x09ee40b50 #1286  .   add rsp, 0x18; pop rbx; pop r12; pop r13; po could not copy LDT
+0x09ee63bda 0x09ee639e0 #1295  .   add rsp, 0x48; pop rbx; pop r12; pop r13; po nd6_dad_start: ifa->ifa_ifp == NULL
+0x09ee8ca8a 0x09ee8c9d0 #1306  .   pop rbx; pop r14; pop rbp                    Bad link in "b_freelist", elm != prev->next,
+0x09ee8cadb 0x09ee8c9d0 #1306  .   pop rbx; pop r14; pop rbp                    Bad link in "b_freelist", elm != next->prev,
+0x09ee8d488 0x09ee8cd80 #1306  .   add rsp, 0x68; pop rbx; pop r12; pop r13; po <bin>
+0x09ee8d67a 0x09ee8d490 #1306  .   add rsp, 0x28; pop rbx; pop r12; pop r13; po %s: page %p failed shared busying
+0x09ee8db10 0x09ee8d690 #1306  Y   add rsp, 8; pop rbx; pop r12; pop r13; pop r losing buffer 2
+0x09ee8db5e 0x09ee8d690 #1306  .   add rsp, 8; pop rbx; pop r12; pop r13; pop r brelse: has B_DELWRI%s w/o BX_VNDIRTY
+0x09ee8f838 0x09ee8f670 #1306  .   add rsp, 0x28; pop rbx; pop r12; pop r13; po vfs_vmio_invalidate: Unexpected bogus page.
+0x09ee8fa0d 0x09ee8f840 #1306  Y   add rsp, 8; pop rbx; pop r14; pop r15; pop r losing buffer 1
+0x09ee8fe59 0x09ee8fc10 #1306  .   add rsp, 0x28; pop rbx; pop r12; pop r13; po GB_NOWAIT_BD and GB_UNMAPPED %p
+0x09ee90b58 0x09ee909f0 #1306  .   add rsp, 8; pop rbx; pop r12; pop r13; pop r %s: page %p failed shared busying
+0x09ee930b2 0x09ee92af0 #1307  .   add rsp, 0x78; pop rbx; pop r12; pop r13; po Bad link in "b_freelist", elm != prev->next,
+0x09ee93102 0x09ee92af0 #1307  .   add rsp, 0x78; pop rbx; pop r12; pop r13; po Bad link in "b_freelist", elm != next->prev,
+0x09eeaabf8 0x09eeaa710 #1321  .   add rsp, 0x38; pop rbx; pop r12; pop r13; po dmem_vmo_get_type failed %d
+0x09eeb1493 0x09eeb1380 #1250  Y   pop rbx; pop r14; pop rbp                    Bad link in "rmp_qentry", elm != prev->next,
+0x09eeb14d5 0x09eeb1380 #1250  Y   pop rbx; pop r14; pop rbp                    Bad link in "rmp_qentry", elm != next->prev,
+0x09eeb180c 0x09eeb1700 #1250  .   pop rbx; pop r14; pop rbp                    <bin>
+0x09eeb19ce 0x09eeb1870 #1250  .   pop rbx; pop r12; pop r14; pop r15; pop rbp  <bin>
+0x09eeb761c 0x09eeb7560 #1323  .   add rsp, 8; pop rbx; pop rbp                 Bad link in "link", elm != prev->next, elm=%
+0x09eeb7838 0x09eeb7630 #1286  .   add rsp, 0x20; pop rbx; pop r12; pop r14; po Bad link in "link", elm != prev->next, elm=%
+0x09eeb7878 0x09eeb7630 #1286  .   add rsp, 0x20; pop rbx; pop r12; pop r14; po Bad link in "link", elm != next->prev, elm=%
+0x09eed0231 0x09eed0060 #1337  .   add rsp, 0x18; pop rbx; pop r12; pop r13; po Bad link in "v_hashlist", elm != prev->next,
+0x09eed0273 0x09eed0060 #1337  .   add rsp, 0x18; pop rbx; pop r12; pop r13; po Bad link in "v_hashlist", elm != next->prev,
+0x09ef135f8 0x09ef13510 #1321  .   add rsp, 8; pop rbx; pop r14; pop r15; pop r <bin>
+0x09ef171f6 0x09ef17070 #1321  .   add rsp, 0x18; pop rbx; pop r12; pop r13; po <bin>
+0x09ef1b150 0x09ef1ad10 #1321  .   add rsp, 8; pop rbx; pop r12; pop r13; pop r Bad link in "link", elm != prev->next, elm=%
+0x09ef1b192 0x09ef1ad10 #1321  .   add rsp, 8; pop rbx; pop r12; pop r13; pop r Bad link in "link", elm != next->prev, elm=%
+0x09ef1b72c 0x09ef1b600 #1321  .   pop rbx; pop r12; pop r14; pop r15; pop rbp  <bin>
+0x09ef21fa3 0x09ef21de0 #1321  .   add rsp, 8; pop rbx; pop r12; pop r13; pop r <bin>
+0x09ef22008 0x09ef21de0 #1321  .   add rsp, 8; pop rbx; pop r12; pop r13; pop r <bin>
+0x09ef22aa1 0x09ef22a50 #1321  .   pop rbx; pop r14; pop rbp                    <bin>
+0x09ef22b32 0x09ef22ab0 #1321  .   pop rbx; pop r14; pop rbp                    <bin>
+0x09ef22ccb 0x09ef22b40 #1321  .   pop rbx; pop r12; pop r14; pop r15; pop rbp  <bin>
+0x09ef22d29 0x09ef22b40 #1321  .   pop rbx; pop r12; pop r14; pop r15; pop rbp  <bin>
+0x09ef791b0 0x09ef78f60 #1195  .   add rsp, 8; pop rbx; pop r12; pop r13; pop r vm_page_free: freeing wired page %p
+0x09ef796e8 0x09ef79600 #1195  .   add rsp, 8; pop rbx; pop r14; pop r15; pop r Bad link in "listq", elm != prev->next, elm=
+0x09ef7972a 0x09ef79600 #1195  .   add rsp, 8; pop rbx; pop r14; pop r15; pop r Bad link in "listq", elm != next->prev, elm=
+0x09ef79981 0x09ef79880 #1195  .   pop rbx; pop r12; pop r14; pop r15; pop rbp  Bad link in "listq", elm != prev->next, elm=
+0x09ef799f4 0x09ef79880 #1195  .   pop rbx; pop r12; pop r14; pop r15; pop rbp  Bad link in "listq", elm != next->prev, elm=
+0x09ef79bc7 0x09ef79ad0 #1237  .   pop rbx; pop r14; pop rbp                    Bad link in "listq", elm != next->prev, elm=
+0x09ef7a776 0x09ef7a1a0 #1237  .   add rsp, 0x38; pop rbx; pop r12; pop r13; po invalid container %d object %p pindex %#lx
+0x09ef7a7a2 0x09ef7a1a0 #1237  Y   add rsp, 0x38; pop rbx; pop r12; pop r13; po vm_page_alloc: cache page %p is missing from
+0x09ef7ac94 0x09ef7a7b0 #1237  .   add rsp, 0xa8; pop rbx; pop r12; pop r13; po vpar overflow
+0x09ef7acce 0x09ef7a7b0 #1237  .   add rsp, 0xa8; pop rbx; pop r12; pop r13; po Bad link in "vpar_tqe", elm != prev->next, e
+0x09ef7ad43 0x09ef7a7b0 #1237  .   add rsp, 0xa8; pop rbx; pop r12; pop r13; po Bad link in "vpar_tqe", elm != next->prev, e
+0x09ef7c3c5 0x09ef7c320 #1299  .   add rsp, 8; pop rbx; pop rbp                 Bad link in "plinks.q", elm != prev->next, e
+0x09ef7c408 0x09ef7c320 #1299  .   add rsp, 8; pop rbx; pop rbp                 Bad link in "plinks.q", elm != next->prev, e
+0x09ef7c5e0 0x09ef7c530 #1299  .   add rsp, 8; pop rbx; pop rbp                 Bad link in "plinks.q", elm != prev->next, e
+0x09ef7c623 0x09ef7c530 #1299  .   add rsp, 8; pop rbx; pop rbp                 Bad link in "plinks.q", elm != next->prev, e
+0x09ef7cb93 0x09ef7ca70 #1299  .   add rsp, 8; pop rbx; pop r12; pop r13; pop r vm_page_unwire: page %p's wire count is zero
+0x09ef7cd2e 0x09ef7cba0 #1299  .   add rsp, 8; pop rbx; pop r12; pop r13; pop r Bad link in "plinks.q", elm != prev->next, e
+0x09ef7d474 0x09ef7d230 #1237  .   add rsp, 8; pop rbx; pop r12; pop r13; pop r %s: page %p failed shared busying
+0x09ef7e62b 0x09ef7e550 #1299  .   pop rbp                                      wrong ordering of vpar_ranking_at_peak
+0x09ef810c3 0x09ef81020 #1303  .   pop rbx; pop r14; pop rbp                    Bad link in "td_plist", elm != prev->next, e
+0x09ef81108 0x09ef81020 #1303  .   pop rbx; pop r14; pop rbp                    Invalid p_suspcount
+0x09ef8114d 0x09ef81020 #1303  .   pop rbx; pop r14; pop rbp                    Bad link in "td_plist", elm != next->prev, e
+0x09ef81df1 0x09ef81a90 #1191  .   add rsp, 8; pop rbx; pop r12; pop r13; pop r stopped thread did not exit
+0x09ef82618 0x09ef82420 #1286  .   pop rbx; pop r12; pop r14; pop r15; pop rbp  Bad link in "td_hash", elm != prev->next, el
+0x09ef8265d 0x09ef82420 #1286  .   pop rbx; pop r12; pop r14; pop r15; pop rbp  Bad link in "td_hash", elm != next->prev, el
+0x09ef8a311 0x09ef8a010 #1218  .   add rsp, 0x28; pop rbx; pop r12; pop r13; po Bad link in "c_links.le", elm != prev->next,
+0x09ef8a386 0x09ef8a010 #1218  .   add rsp, 0x28; pop rbx; pop r12; pop r13; po Bad link in "c_links.le", elm != next->prev,
+0x09ef8aeec 0x09ef8aa40 #1228  .   add rsp, 0x48; pop rbx; pop r12; pop r13; po Invalid CPU in callout %d
+0x09ef8af53 0x09ef8aa40 #1228  .   add rsp, 0x48; pop rbx; pop r12; pop r13; po Bad link in "c_links.tqe", elm != prev->next
+0x09ef8afc2 0x09ef8aa40 #1228  .   add rsp, 0x48; pop rbx; pop r12; pop r13; po Bad link in "c_links.tqe", elm != next->prev
+0x09ef8b58a 0x09ef8afd0 #1228  .   add rsp, 0x38; pop rbx; pop r12; pop r13; po Bad link in "c_links.tqe", elm != prev->next
+0x09ef8b5f9 0x09ef8afd0 #1228  .   add rsp, 0x38; pop rbx; pop r12; pop r13; po Bad link in "c_links.tqe", elm != next->prev
+0x09ef8bbfd 0x09ef8b9c0 #1228  Y   add rsp, 0x38; pop rbx; pop r12; pop r13; po died while creating standard software ithrea
+0x09ef8bcc2 0x09ef8bc30 #1322  .   pop rbx; pop r14; pop rbp                    died while binding standard software ithread
+0x09efd7179 0x09efd6f60 #1267  .   add rsp, 8; pop rbx; pop r14; pop r15; pop r Bad link in "p_sibling", elm != prev->next, 
+0x09efd722c 0x09efd6f60 #1267  .   add rsp, 8; pop rbx; pop r14; pop r15; pop r Bad link in "p_orphan", elm != next->prev, e
+0x09efd8237 0x09efd8160 #1267  .   pop rbx; pop r14; pop rbp                    Bad link in "p_orphan", elm != prev->next, e
+0x09efd8288 0x09efd8160 #1267  .   pop rbx; pop r14; pop rbp                    Bad link in "p_orphan", elm != next->prev, e
+0x09efdd29b 0x09efdd1c0 #1339  Y   pop rbp                                      init ampr system_event
+0x09efe2740 0x09efe25f0 #1191  .   pop rbx; pop r12; pop r14; pop r15; pop rbp  <bin>
+0x09efe2822 0x09efe2750 #1286  .   add rsp, 8; pop rbx; pop r14; pop r15; pop r <bin>
+0x09efe286a 0x09efe2750 #1286  .   add rsp, 8; pop rbx; pop r14; pop r15; pop r <bin>
+0x09eff6ba6 0x09eff6b20 #1303  .   pop rbp                                      setrunnable(2)
+0x09f00a49f 0x09f00a3e0 #1285  .   add rsp, 8; pop rbx; pop rbp                 %s in interrupt context
+0x09f00a511 0x09f00a4b0 #1191  .   add rsp, 0x10; pop rbp                       timed sleep before timers are working
+0x09f00b073 0x09f00ae50 #1303  .   add rsp, 8; pop rbx; pop r12; pop r13; pop r Bad link in "sq_hash", elm != prev->next, el
+0x09f00b0fa 0x09f00ae50 #1303  .   add rsp, 8; pop rbx; pop r12; pop r13; pop r Bad link in "sq_hash", elm != next->prev, el
+0x09f024527 0x09f024260 #1310  .   add rsp, 0x58; pop rbx; pop r12; pop r13; po <bin>
+0x09f03ba3d 0x09f03b920 #1294  .   pop rbx; pop r12; pop r14; pop r15; pop rbp  %s in interrupt context
+0x09f03c490 0x09f03c300 #1285  .   add rsp, 8; pop rbx; pop r12; pop r13; pop r <bin>
+0x09f03c605 0x09f03c4b0 #1285  .   pop rbx; pop r12; pop r14; pop r15; pop rbp  <bin>
+0x09f03c824 0x09f03c720 #1321  .   pop rbx; pop r12; pop r14; pop r15; pop rbp  downgrade of a recursed lock
+0x09f072817 0x09f072070 #1299  .   add rsp, 0x38; pop rbx; pop r12; pop r13; po Bad link in "ipq_list", elm != prev->next, e
+0x09f072857 0x09f072070 #1299  .   add rsp, 0x38; pop rbx; pop r12; pop r13; po Bad link in "ipq_list", elm != next->prev, e
+0x09f0729f3 0x09f072860 #1299  .   add rsp, 8; pop rbx; pop r12; pop r13; pop r Bad link in "ipq_list", elm != prev->next, e
+0x09f072a33 0x09f072860 #1299  .   add rsp, 8; pop rbx; pop r12; pop r13; pop r Bad link in "ipq_list", elm != next->prev, e
+0x09f086264 0x09f085d80 #1321  .   add rsp, 0x38; pop rbx; pop r12; pop r13; po <bin>
+
+skipped:
+  0x9e9ea9da fn 0x9e9ea8f0: rsp-unbalanced(cfg-unreachable)
+  0x9f024bf4 fn 0x9f024ba0: rsp-unbalanced(cfg-unreachable)
+  0x9eeb795c fn 0x9eeb78d0: rsp-unbalanced(cfg-unreachable)
+  0x9e704ec6 fn 0x9e704e20: rsp-unbalanced(cfg-unreachable)
+  0x9e8e31d9 fn 0x9e8e2c50: no-epilogue
+  0x9ef1cf2c fn 0x9ef1cd10: epilogue-ownership
+  0x9ef1cf52 fn 0x9ef1cd10: epilogue-ownership
+  0x9e887b00 fn 0x9e887a70: no-epilogue
+  0x9efe21ca fn 0x9efe1690: no-prologue
+  0x9efe2279 fn 0x9efe1690: no-prologue
+  0x9eaed6d3 fn 0x9eaed6b0: core-excluded
+  0x9edff2e0 fn 0x9edff280: epilogue-ownership
+  0x9edff325 fn 0x9edff280: epilogue-ownership
+  0x9eff8f25 fn 0x9eff8df0: rsp-unbalanced(cfg-unreachable)
+  0x9e8b7f27 fn 0x9e8b7e50: epilogue-ownership
+  0x9e74239a fn 0x9e742340: no-epilogue
+  0x9e8b768a fn 0x9e8b75e0: no-epilogue
+  0x9e92a8fc fn 0x9e92a7d0: no-epilogue
+  0x9ed15e95 fn 0x9ed15d80: epilogue-ownership
+  0x9ed15ed7 fn 0x9ed15d80: epilogue-ownership
+  0x9eb2e225 fn 0x9eb2e080: no-epilogue
+  0x9eb2e268 fn 0x9eb2e080: no-epilogue
+  0x9ed162bb fn 0x9ed161b0: no-epilogue
+  0x9e8e3d70 fn 0x9e8e3c00: epilogue-ownership
+  0x9e8e3d96 fn 0x9e8e3c00: epilogue-ownership
+  0x9e8e464f fn 0x9e8e3c00: no-prologue
+  0x9e8e4675 fn 0x9e8e3c00: no-prologue
+  0x9e8e50e3 fn 0x9e8e50c0: epilogue-ownership
+  0x9e8e5b99 fn 0x9e8e5b76: epilogue-ownership
+  0x9ef186ad fn 0x9ef17ea0: no-prologue
+  0x9e6b9c88 fn 0x9e6b9370: no-prologue
+  0x9e6b72d0 fn 0x9e6b7210: rsp-unbalanced(cfg-unreachable)
+  0x9ebe16d8 fn 0x9ebe13f0: rsp-unbalanced(cfg-unreachable)
+  0x9ebe17f3 fn 0x9ebe13f0: rsp-unbalanced(cfg-unreachable)
+  0x9e82ce3f fn 0x9e82c0c0: no-prologue
+  0x9e81db26 fn 0x9e81d840: no-epilogue
+  0x9e81e1d8 fn 0x9e81deb0: rsp-unbalanced(cfg-unreachable)
+  0x9e81e21a fn 0x9e81deb0: rsp-unbalanced(cfg-unreachable)
+  0x9eb735e3 fn 0x9eb73280: epilogue-ownership
+  0x9eb727e6 fn 0x9eb72760: epilogue-ownership
+  0x9ea05c62 fn 0x9ea05bd0: rsp-unbalanced(cfg-unreachable)
+  0x9ea05ca5 fn 0x9ea05bd0: rsp-unbalanced(cfg-unreachable)
+  0x9e82e1b7 fn 0x9e82e18b: epilogue-ownership
+  0x9e7047bf fn 0x9e704610: no-epilogue
+  0x9ecf8d4c fn 0x9ecf8c30: rsp-unbalanced(cfg-unreachable)
+  0x9ecf8d8f fn 0x9ecf8c30: rsp-unbalanced(cfg-unreachable)
+  0x9eaa6aae fn 0x9eaa6850: no-epilogue
+  0x9ed4a20c fn 0x9ed48f00: no-prologue
+  0x9ed4a291 fn 0x9ed48f00: no-prologue
+  0x9ef80fd1 fn 0x9ef80cf0: no-epilogue
+  0x9ef80ff7 fn 0x9ef80cf0: no-epilogue
+  0x9ee346dc fn 0x9ee34440: no-epilogue
+  0x9ee8ea08 fn 0x9ee8e830: prologue-mismatch(['r15', 'r14', 'rbx', 'rax']|0 vs ['rbx', 'r14', 'r15', 'rbp']|24)
+  0x9e6bf7cc fn 0x9e6bedc0: no-prologue
+  0x9e6bf81c fn 0x9e6bf7f9: no-epilogue
+  0x9ecddee2 fn 0x9ecddeb4: epilogue-ownership
+  0x9eccfdc3 fn 0x9eccfd95: epilogue-ownership
+  0x9e7e4d1e fn 0x9e7e4cf2: no-epilogue
+  0x9eef3b5a fn 0x9eef3970: epilogue-ownership
+  0x9eaf88c9 fn 0x9eaf6b40: no-prologue
+  0x9eaf890a fn 0x9eaf6b40: no-prologue
+  0x9eaf893e fn 0x9eaf6b40: no-prologue
+  0x9ee00259 fn 0x9edffff0: epilogue-ownership
+  0x9ee002a4 fn 0x9edffff0: epilogue-ownership
+  0x9ee002e1 fn 0x9edffff0: epilogue-ownership
+  0x9ee00324 fn 0x9edffff0: epilogue-ownership
+  0x9e81d50f fn 0x9e81d3d0: no-epilogue
+  0x9eb6f928 fn 0x9eb6f670: rsp-unbalanced(cfg-unreachable)
+  0x9eb6fa5b fn 0x9eb6f930: rsp-unbalanced(cfg-unreachable)
+  0x9e950fdb fn 0x9e950540: no-prologue
+  0x9efd73b3 fn 0x9efd7350: no-epilogue
+  0x9efd7f0a fn 0x9efd7350: no-prologue
+  0x9efd7f58 fn 0x9efd7350: no-prologue
+  0x9eaceb4c fn 0x9eacea70: no-epilogue
+  0x9eaceb8e fn 0x9eacea70: no-epilogue
+  0x9e6c1498 fn 0x9e6c07f0: no-prologue
+  0x9e6715b7 fn 0x9e6714d0: epilogue-ownership
+  0x9f0a2c7d fn 0x9f0a1b80: no-prologue
+  0x9ee75847 fn 0x9ee755e0: no-epilogue
+  0x9ee7588c fn 0x9ee755e0: no-epilogue
+  0x9ea24ab1 fn 0x9ea22c50: no-prologue
+  0x9e6a22d2 fn 0x9e6a20a0: rsp-unbalanced(cfg [-16312, -16272, -16232, -16192, -16152, -16112, -16072, -16032, -15992, -15952, -15912, -15872, -15832, -15792, -15752, -15712, -15672, -15632, -15592, -15552, -15512, -15472, -15432, -15392, -15352, -15312, -15272, -15232, -15192, -15152, -15112, -15072, -15032, -14992, -14952, -14912, -14872, -14832, -14792, -14752, -14712, -14672, -14632, -14592, -14552, -14512, -14472, -14432, -14392, -14352, -14312, -14272, -14232, -14192, -14152, -14112, -14072, -14032, -13992, -13952, -13912, -13872, -13832, -13792, -13752, -13712, -13672, -13632, -13592, -13552, -13512, -13472, -13432, -13392, -13352, -13312, -13272, -13232, -13192, -13152, -13112, -13072, -13032, -12992, -12952, -12912, -12872, -12832, -12792, -12752, -12712, -12672, -12632, -12592, -12552, -12512, -12472, -12432, -12392, -12352, -12312, -12272, -12232, -12192, -12152, -12112, -12072, -12032, -11992, -11952, -11912, -11872, -11832, -11792, -11752, -11712, -11672, -11632, -11592, -11552, -11512, -11472, -11432, -11392, -11352, -11312, -11272, -11232, -11192, -11152, -11112, -11072, -11032, -10992, -10952, -10912, -10872, -10832, -10792, -10752, -10712, -10672, -10632, -10592, -10552, -10512, -10472, -10432, -10392, -10352, -10312, -10272, -10232, -10192, -10152, -10112, -10072, -10032, -9992, -9952, -9912, -9872, -9832, -9792, -9752, -9712, -9672, -9632, -9592, -9552, -9512, -9472, -9432, -9392, -9352, -9312, -9272, -9232, -9192, -9152, -9112, -9072, -9032, -8992, -8952, -8912, -8872, -8832, -8792, -8752, -8712, -8672, -8632, -8592, -8552, -8512, -8472, -8432, -8392, -8352, -8312, -8272, -8232, -8192, -8152, -8112, -8072, -8032, -7992, -7952, -7912, -7872, -7832, -7792, -7752, -7712, -7672, -7632, -7592, -7552, -7512, -7472, -7432, -7392, -7352, -7312, -7272, -7232, -7192, -7152, -7112, -7072, -7032, -6992, -6952, -6912, -6872, -6832, -6792, -6752, -6712, -6672, -6632, -6592, -6552, -6512, -6472, -6432, -6392, -6352, -6312, -6272, -6232, -6192, -6152, -6112, -6072, -6032, -5992, -5952, -5912, -5872, -5832, -5792, -5752, -5712, -5672, -5632, -5592, -5552, -5512, -5472, -5432, -5392, -5352, -5312, -5272, -5232, -5192, -5152, -5112, -5072, -5032, -4992, -4952, -4912, -4872, -4832, -4792, -4752, -4712, -4672, -4632, -4592, -4552, -4512, -4472, -4432, -4392, -4352, -4312, -4272, -4232, -4192, -4152, -4112, -4072, -4032, -3992, -3952, -3912, -3872, -3832, -3792, -3752, -3712, -3672, -3632, -3592, -3552, -3512, -3472, -3432, -3392, -3352, -3312, -3272, -3232, -3192, -3152, -3112, -3072, -3032, -2992, -2952, -2912, -2872, -2832, -2792, -2752, -2712, -2672, -2632, -2592, -2552, -2512, -2472, -2432, -2392, -2352, -2312, -2272, -2232, -2192, -2152, -2112, -2072, -2032, -1992, -1952, -1912, -1872, -1832, -1792, -1752, -1712, -1672, -1632, -1592, -1552, -1512, -1472, -1432, -1392, -1352, -1312, -1272, -1232, -1192, -1152, -1112, -1072, -1032, -992, -952, -912, -872, -832, -792, -752, -712, -672, -632, -592, -552, -512, -472, -432, -392, -352, -312, -272, -232, -192, -152, -112, -72, -32] vs -32)
+  0x9e6a2314 fn 0x9e6a20a0: rsp-unbalanced(cfg [-16312, -16272, -16232, -16192, -16152, -16112, -16072, -16032, -15992, -15952, -15912, -15872, -15832, -15792, -15752, -15712, -15672, -15632, -15592, -15552, -15512, -15472, -15432, -15392, -15352, -15312, -15272, -15232, -15192, -15152, -15112, -15072, -15032, -14992, -14952, -14912, -14872, -14832, -14792, -14752, -14712, -14672, -14632, -14592, -14552, -14512, -14472, -14432, -14392, -14352, -14312, -14272, -14232, -14192, -14152, -14112, -14072, -14032, -13992, -13952, -13912, -13872, -13832, -13792, -13752, -13712, -13672, -13632, -13592, -13552, -13512, -13472, -13432, -13392, -13352, -13312, -13272, -13232, -13192, -13152, -13112, -13072, -13032, -12992, -12952, -12912, -12872, -12832, -12792, -12752, -12712, -12672, -12632, -12592, -12552, -12512, -12472, -12432, -12392, -12352, -12312, -12272, -12232, -12192, -12152, -12112, -12072, -12032, -11992, -11952, -11912, -11872, -11832, -11792, -11752, -11712, -11672, -11632, -11592, -11552, -11512, -11472, -11432, -11392, -11352, -11312, -11272, -11232, -11192, -11152, -11112, -11072, -11032, -10992, -10952, -10912, -10872, -10832, -10792, -10752, -10712, -10672, -10632, -10592, -10552, -10512, -10472, -10432, -10392, -10352, -10312, -10272, -10232, -10192, -10152, -10112, -10072, -10032, -9992, -9952, -9912, -9872, -9832, -9792, -9752, -9712, -9672, -9632, -9592, -9552, -9512, -9472, -9432, -9392, -9352, -9312, -9272, -9232, -9192, -9152, -9112, -9072, -9032, -8992, -8952, -8912, -8872, -8832, -8792, -8752, -8712, -8672, -8632, -8592, -8552, -8512, -8472, -8432, -8392, -8352, -8312, -8272, -8232, -8192, -8152, -8112, -8072, -8032, -7992, -7952, -7912, -7872, -7832, -7792, -7752, -7712, -7672, -7632, -7592, -7552, -7512, -7472, -7432, -7392, -7352, -7312, -7272, -7232, -7192, -7152, -7112, -7072, -7032, -6992, -6952, -6912, -6872, -6832, -6792, -6752, -6712, -6672, -6632, -6592, -6552, -6512, -6472, -6432, -6392, -6352, -6312, -6272, -6232, -6192, -6152, -6112, -6072, -6032, -5992, -5952, -5912, -5872, -5832, -5792, -5752, -5712, -5672, -5632, -5592, -5552, -5512, -5472, -5432, -5392, -5352, -5312, -5272, -5232, -5192, -5152, -5112, -5072, -5032, -4992, -4952, -4912, -4872, -4832, -4792, -4752, -4712, -4672, -4632, -4592, -4552, -4512, -4472, -4432, -4392, -4352, -4312, -4272, -4232, -4192, -4152, -4112, -4072, -4032, -3992, -3952, -3912, -3872, -3832, -3792, -3752, -3712, -3672, -3632, -3592, -3552, -3512, -3472, -3432, -3392, -3352, -3312, -3272, -3232, -3192, -3152, -3112, -3072, -3032, -2992, -2952, -2912, -2872, -2832, -2792, -2752, -2712, -2672, -2632, -2592, -2552, -2512, -2472, -2432, -2392, -2352, -2312, -2272, -2232, -2192, -2152, -2112, -2072, -2032, -1992, -1952, -1912, -1872, -1832, -1792, -1752, -1712, -1672, -1632, -1592, -1552, -1512, -1472, -1432, -1392, -1352, -1312, -1272, -1232, -1192, -1152, -1112, -1072, -1032, -992, -952, -912, -872, -832, -792, -752, -712, -672, -632, -592, -552, -512, -472, -432, -392, -352, -312, -272, -232, -192, -152, -112, -72, -32] vs -32)
+  0x9ef7c4e9 fn 0x9ef7c410: epilogue-ownership
+  0x9ef7c529 fn 0x9ef7c410: epilogue-ownership
+  0x9ef7c9a6 fn 0x9ef7c630: epilogue-ownership
+  0x9ef7c9e6 fn 0x9ef7c630: epilogue-ownership
+  0x9e852cf5 fn 0x9e852b40: no-epilogue
+  0x9e852d6c fn 0x9e852b40: no-epilogue
+  0x9e945334 fn 0x9e945240: epilogue-ownership
+  0x9e945377 fn 0x9e945240: epilogue-ownership
+  0x9edf9fb5 fn 0x9edf92f0: no-prologue
+  0x9edfa03a fn 0x9edf92f0: no-prologue
+  0x9eae8670 fn 0x9eae8530: no-epilogue
+  0x9eae86df fn 0x9eae8530: no-epilogue
+  0x9e99ffc9 fn 0x9e99fee0: no-epilogue
+  0x9ebedf2b fn 0x9ebede60: no-epilogue
+  0x9ebedf6d fn 0x9ebede60: no-epilogue
+  0x9ebed719 fn 0x9ebed5f0: no-epilogue
+  0x9ebed790 fn 0x9ebed5f0: no-epilogue
+  0x9ee34b19 fn 0x9ee34800: epilogue-ownership
+  0x9ee8fbaa fn 0x9ee8fa30: no-epilogue
+  0x9ee8f665 fn 0x9ee8ed40: no-prologue
+  0x9e93941c fn 0x9e939300: epilogue-ownership
+  0x9e939456 fn 0x9e939300: epilogue-ownership
+  0x9e939498 fn 0x9e939300: epilogue-ownership
+  0x9e9ea403 fn 0x9e9e9650: no-prologue
+  0x9ecd5fbe fn 0x9ecd5c80: no-epilogue
+  0x9edde831 fn 0x9eddd000: no-prologue
+  0x9ece3ed3 fn 0x9ece3550: no-prologue
+  0x9ecd951a fn 0x9ecd9420: no-epilogue
+  0x9ecd955c fn 0x9ecd9420: no-epilogue
+  0x9ece215c fn 0x9ece1ff0: no-epilogue
+  0x9ece328e fn 0x9ece27d0: no-prologue
+  0x9ece32d0 fn 0x9ece27d0: no-prologue
+  0x9ed5674c fn 0x9ed559e0: no-prologue
+  0x9ed567ce fn 0x9ed559e0: no-prologue
+  0x9ed57345 fn 0x9ed559e0: no-prologue
+  0x9ed5738a fn 0x9ed559e0: no-prologue
+  0x9ed7bb8e fn 0x9ed7ba40: rsp-unbalanced(cfg-unreachable)
+  0x9ecda98c fn 0x9ecd9bc0: no-prologue
+  0x9ecda9c6 fn 0x9ecd9bc0: no-prologue
+  0x9ea8172d fn 0x9ea81490: prologue-mismatch(['r15', 'r14', 'r13', 'r12', 'rbx']|72 vs ['rbx', 'r12', 'r13', 'r14', 'r15', 'rbp']|0)
+  0x9e6c1e38 fn 0x9e6c15e0: no-prologue
+  0x9e6c571e fn 0x9e6c56f2: no-epilogue
+  0x9ecd8ecd fn 0x9ecd82d0: no-prologue
+  0x9ecd8f3a fn 0x9ecd82d0: no-prologue
+  0x9ecd8fb3 fn 0x9ecd82d0: no-prologue
+  0x9e6d3c17 fn 0x9e6d34e0: no-epilogue
+  0x9ef8a91a fn 0x9ef8a860: no-epilogue
+  0x9ef8a95d fn 0x9ef8a860: no-epilogue
+  0x9e9519d1 fn 0x9e951730: rsp-unbalanced(cfg [-64] vs -48)
+  0x9ec0ec29 fn 0x9ec0ea80: rsp-unbalanced(cfg [-16376, -16312, -16248, -16184, -16120, -16056, -15992, -15928, -15864, -15800, -15736, -15672, -15608, -15544, -15480, -15416, -15352, -15288, -15224, -15160, -15096, -15032, -14968, -14904, -14840, -14776, -14712, -14648, -14584, -14520, -14456, -14392, -14328, -14264, -14200, -14136, -14072, -14008, -13944, -13880, -13816, -13752, -13688, -13624, -13560, -13496, -13432, -13368, -13304, -13240, -13176, -13112, -13048, -12984, -12920, -12856, -12792, -12728, -12664, -12600, -12536, -12472, -12408, -12344, -12280, -12216, -12152, -12088, -12024, -11960, -11896, -11832, -11768, -11704, -11640, -11576, -11512, -11448, -11384, -11320, -11256, -11192, -11128, -11064, -11000, -10936, -10872, -10808, -10744, -10680, -10616, -10552, -10488, -10424, -10360, -10296, -10232, -10168, -10104, -10040, -9976, -9912, -9848, -9784, -9720, -9656, -9592, -9528, -9464, -9400, -9336, -9272, -9208, -9144, -9080, -9016, -8952, -8888, -8824, -8760, -8696, -8632, -8568, -8504, -8440, -8376, -8312, -8248, -8184, -8120, -8056, -7992, -7928, -7864, -7800, -7736, -7672, -7608, -7544, -7480, -7416, -7352, -7288, -7224, -7160, -7096, -7032, -6968, -6904, -6840, -6776, -6712, -6648, -6584, -6520, -6456, -6392, -6328, -6264, -6200, -6136, -6072, -6008, -5944, -5880, -5816, -5752, -5688, -5624, -5560, -5496, -5432, -5368, -5304, -5240, -5176, -5112, -5048, -4984, -4920, -4856, -4792, -4728, -4664, -4600, -4536, -4472, -4408, -4344, -4280, -4216, -4152, -4088, -4024, -3960, -3896, -3832, -3768, -3704, -3640, -3576, -3512, -3448, -3384, -3320, -3256, -3192, -3128, -3064, -3000, -2936, -2872, -2808, -2744, -2680, -2616, -2552, -2488, -2424, -2360, -2296, -2232, -2168, -2104, -2040, -1976, -1912, -1848, -1784, -1720, -1656, -1592, -1528, -1464, -1400, -1336, -1272, -1208, -1144, -1080, -1016, -952, -888, -824, -760, -696, -632, -568, -504, -440, -376, -312, -248, -184, -120, -56] vs -64)
+  0x9eb9d4e0 fn 0x9eb9d2c0: no-epilogue
+  0x9eb9d596 fn 0x9eb9d2c0: no-epilogue
+  0x9e81de5b fn 0x9e81db50: rsp-unbalanced(cfg-unreachable)
+  0x9e81de9d fn 0x9e81db50: rsp-unbalanced(cfg-unreachable)
+  0x9e76e067 fn 0x9e76e038: epilogue-ownership
+  0x9ef827b9 fn 0x9ef82720: no-epilogue
+  0x9ef827fb fn 0x9ef82720: no-epilogue
+  0x9eae88ec fn 0x9eae8830: no-epilogue
+  0x9ef81a3f fn 0x9ef81850: no-epilogue
+  0x9ef81ebd fn 0x9ef81e30: no-epilogue
+  0x9e8e8c74 fn 0x9e8e8b80: no-epilogue
+  0x9e674486 fn 0x9e674380: no-epilogue
+  0x9ece7884 fn 0x9ece7460: rsp-unbalanced(cfg [-16000, -15448, -14896, -14344, -13792, -13240, -12688, -12136, -11584, -11032, -10480, -9928, -9376, -8824, -8272, -7720, -7168, -6616, -6064, -5512, -4960, -4408, -3856, -3304, -2752, -2200, -1648, -1096, -544] vs -544)
+  0x9e82af86 fn 0x9e82a930: no-epilogue
+  0x9e82afc9 fn 0x9e82a930: no-epilogue
+  0x9e7835ac fn 0x9e783500: no-epilogue
+  0x9e7835ef fn 0x9e783500: no-epilogue
+  0x9e7e08df fn 0x9e7e07d0: epilogue-ownership
+  0x9ee75cba fn 0x9ee75a30: epilogue-ownership
+  0x9ee75d87 fn 0x9ee75a30: epilogue-ownership
+  0x9ed97cc3 fn 0x9ed97c00: epilogue-ownership
+  0x9ed97d03 fn 0x9ed97c00: epilogue-ownership
+  0x9e674714 fn 0x9e674630: epilogue-ownership
+  0x9f072f46 fn 0x9f072e80: epilogue-ownership
+  0x9f072f86 fn 0x9f072e80: epilogue-ownership
+  0x9edfe621 fn 0x9edfd670: no-prologue
+  0x9edfe6a7 fn 0x9edfd670: no-prologue
+  0x9eccd393 fn 0x9eccd370: epilogue-ownership
+  0x9ebab5b0 fn 0x9ebab230: epilogue-ownership
+  0x9ebab5f0 fn 0x9ebab230: epilogue-ownership
+  0x9eae96f8 fn 0x9eae96d5: epilogue-ownership
+  0x9eae9bb5 fn 0x9eae9960: epilogue-ownership
+  0x9e939b33 fn 0x9e9399a0: no-epilogue
+  0x9e939b6d fn 0x9e9399a0: no-epilogue
+  0x9e939baf fn 0x9e9399a0: no-epilogue
+  0x9ecd46bb fn 0x9ecd3d40: no-prologue
+  0x9ecd3a76 fn 0x9ecd3a48: epilogue-ownership
+  0x9e7bd7af fn 0x9e7bd783: no-epilogue
+  0x9e88bcfa fn 0x9e88bc30: no-epilogue
+  0x9e88bd4d fn 0x9e88bc30: no-epilogue
+  0x9ede3c60 fn 0x9ede2b20: no-prologue
+  0x9ede3ca7 fn 0x9ede2b20: no-prologue
+  0x9ede3cf2 fn 0x9ede2b20: no-prologue
+  0x9ede45fd fn 0x9ede2b20: no-prologue
+  0x9e8e9836 fn 0x9e8e96f0: rsp-unbalanced(cfg [-64] vs -48)
+  0x9e8262f4 fn 0x9e826240: epilogue-ownership
+  0x9ecf759b fn 0x9ecf7578: no-epilogue
+  0x9e9d088f fn 0x9e9cfb60: no-prologue
+  0x9e9d08ed fn 0x9e9cfb60: no-prologue
+  0x9e7b490a fn 0x9e7b47a0: no-epilogue
+  0x9e7b494f fn 0x9e7b47a0: no-epilogue
+
+crossmp global users in closure:

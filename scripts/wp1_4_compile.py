@@ -1,0 +1,288 @@
+#!/usr/bin/env python3
+"""WP1-fix final compilation: wp1_4 report + wp2_constants.json
+Consolidates the three corrections/answers:
+  Q1: real cold-boot entry chain (resumectx mislabel fixed)
+  Q2: mi_startup done-stamp semantics + WP2 reset recipe
+  Q3: the 8 custom MSRs (0xC0000110..0x117) = per-trap-frame state, no .data values
+"""
+import sys, json, struct
+sys.path.insert(0, "./scripts")
+import wp1_lib as L
+
+OUT = "./download/ps5_wp1"
+REP = []
+def P(s=""):
+    REP.append(s)
+
+P("=" * 100)
+P("WP1-FIX: HAMMER_TIME CORRECTION + MI_STARTUP DISSECTION + CUSTOM-MSR MECHANISM")
+P("PS5 kernel 13.60 live dump — byte-verified engineering addendum to wp1_report.md")
+P("=" * 100)
+
+P("""
+================================================================================
+Q1 — THE REAL COLD-BOOT ENTRY (user's resumectx correction: CONFIRMED)
+================================================================================
+USER'S HYPOTHESIS FULLY CONFIRMED. 0xffffffff9e6428f0 is NOT hammer_time:
+
+  0xffffffff9e6427d0  savectx(pcb *rdi)   — saves 15 regs, CR0/2/3/4, DR0-7,
+       GS_BASE/KGS_BASE/TSC_AUX, EFER/STAR/LSTAR/CSTAR/SFMASK, GDTR/IDTR/LDTR/TR
+       into pcb; returns 1.  (STANDARD MSRs only — NOT the 8 custom ones)
+  0xffffffff9e6428f0  resumectx(pcb *rdi) — restores all of the above,
+       pushes saved RIP, `xor eax,eax; ret` → returns 0 (FreeBSD convention)
+  0xffffffff9e3f0010  WAKEUP TRAMPOLINE (Rest Mode / S3 resume):
+       lgdt temp GDT @0xa1e8dce0 (limit 0x40) → retfq CS=0x20 → lgdt real GDTR
+       → call resumectx → verify global canary unchanged → ret (or panic+ud2)
+  image-start 16B blob (e8 6b 5d 4f 00 + zeros) = call 0x9e8e5d70 = once-flag
+       initializer (wakeup-flow helper) — NOT the cold entry.
+
+THE REAL COLD-BOOT CHAIN (byte-verified):
+  LOADER (enters in long mode, kernel mapping + low-phys identity map active)
+    → btext @ 0xffffffff9e642a90:
+        mov word ptr [phys 0x472], 0x1234     ; classic FreeBSD warm-boot flag
+        push 2; popfq
+        mov rbp, rsp                          ; loader stack: [rbp+4]=boothowto,
+                                               ; [rbp+8]=bootdev (dword each)
+        lea rsp, [bootstack]
+        mov edi, [rbp+4]; mov esi, [rbp+8]
+        xor rbp, rbp
+        call 0xffffffff9edf8790               ; machine init (hammer_time-equiv):
+                                               ; reads loader metadata at PHYS
+                                               ; 0x9bf4c / 0x9bf54 / 0x9b6f4 and
+                                               ; tables at PHYS 0x780..0x878;
+                                               ; builds + loads IDT
+                                               ; (pseudo-desc @0xa1fa8a50 →
+                                               ;  base 0xa1fa4300, 256 gates);
+                                               ; returns kernel stack top in RAX
+        mov rsp, rax
+        call 0xffffffff9e9261f0               ; mi_startup  ← THE SYSINIT LOOP
+        hlt; jmp $                            ; never returns
+
+  AP (application CPU) entry @ 0xffffffff9e642a40: rdi = cpu#, per-CPU bootstack
+        slot (bootstack + cpu*0x80 - 8), re-base CR0=PE|NE|WP|PG, CR4=PAE,
+        jmp 0x9e780e70 (per-CPU init continuation).
+
+>>> WP2 ELF ENTRY POINT = 0xffffffff9e642a90 <<<  (btext; long-mode entry,
+    needs valid RSP w/ boothowto@+4, bootdev@+8, kernel VA map, low-phys
+    identity map, and loader metadata blocks — see LOADER CONTRACT below.)
+
+================================================================================
+Q2 — MI_STARTUP DISSECTION + done_stamp SEMANTICS (the WP2-critical answer)
+================================================================================
+mi_startup = 0xffffffff9e9261f0 — identified by: refs sysinit_set AND by the
+__FILE__ string 'W:/Build/J03950001/sys/freebsd/sys/kern/init_main.c' @0x9f6f7f92
+in the adjacent function (same object).
+
+REAL sysinit_set BOUNDS (from mi_startup's own cold-path LEAs):
+  start = 0xffffffff9fe51fb0   (lea r13 @0x9e92622a)
+  end   = 0xffffffff9fe55488   (lea rax @0x9e926231)      ← NOT 0x9fe55068!
+  = 1691 pointer slots, ZERO NULLs. (WP1's earlier '1559 entries' undercounted
+   by 132 due to parser constraints — corrected here.)
+
+struct sysinit (24 bytes) = { u32 si_sub, u32 si_order, u64 func@+8, u64 udata@+16 }
+  — this is the STOCK FreeBSD 9.3 layout. Field 0 is NOT a Sony-invented
+  'done_stamp': it IS si_sub, and the done-mechism is FreeBSD's SI_SUB_DONE.
+
+THE LOOP (byte-exact):
+  1. FILTER pass: predicate(0x10, entry, 0x28) — set-membership/range check
+     (6-case table @0x9eef6b20); compacts the array in place.
+  2. SORT: comparison sort on (si_sub, si_order) ascending  (@0x9e9262a6..30f)
+  3. EXECUTE loop @0x9e926300:
+       SKIP-CHECK : 0x9e926311:  83 38 02      cmp dword ptr [rax], 2
+                     0x9e926314:  72 ea         jb  next          ; si_sub < 2 → SKIP
+                     (so si_sub==0 SI_SUB_DUMMY and si_sub==1 SI_SUB_DONE skip)
+       THUNK CALL : 0x9e926331:  ff d1          call rcx          ; func(udata)
+                     (func=[struct+8], udata=[struct+0x10]; func==NULL variant
+                      uses [struct+0x18]/[struct+0x20])
+       DONE-STAMP : 0x9e926337:  c7 00 01 00 00 00   mov dword ptr [rax], 1
+                     → after each thunk runs, si_sub := 1 (SI_SUB_DONE)
+  4. Tail: after full pass → printf-class call + jmp 0x9e92aa50 (boot thread
+     completion). mi_startup does not return to btext (btext ends hlt).
+
+LIVE STATE (this dump): 1586 entries si_sub==1 (DONE) + 105 si_sub==0:
+  - slot 0 = terminator-ish entry (si_sub=0, si_order=0xFFFFFFF, func=NULL)
+  - 104 entries at slots 1239+ = si_sub=0/si_order=0 with VALID thunks
+    (Sony-disabled / never-run placeholder inits — they never executed on
+     the real console either)
+  Re-entrancy globals: being_run @0xa19781b0, end @0xa19781a8
+  (live values: START / 0x9fe54650 — kernel was holding a mid re-run window
+   at dump time), aux @0xa19781a0, @0xa1978198.
+
+>>> THE WP2 RESET RECIPE (what value to write so ALL stages re-run):
+  YOU CANNOT write a constant >=2 to every si_sub: the boot-time SORT would
+  reorder by (const, si_order) — catastrophic wrong boot order.
+
+  RECIPE (clean, no binary patch needed):
+   1. The dump's array order == the (post-sort) EXECUTION order of the real
+      13.60 boot — it is correct by construction.
+   2. Reconstruct si_sub per entry by GROUP DETECTION:
+        walk slots 0..1690; keep synthetic_sub = 2;
+        for each DONE entry: if si_order < previous DONE entry's si_order
+        → new subsystem group → synthetic_sub += 1;
+        write synthetic_sub into that entry's si_sub field.
+      (~148 strict-decrease boundaries detected; true group count slightly
+       higher due to equal-order boundaries — resolve with the sysuninit_set
+       histogram [1171 entries with ORIGINAL (si_sub,si_order) intact!] +
+       FreeBSD 9.3 enum + file-evidence anchors)
+   3. The 104 disabled entries + slot 0: write si_sub := 1 (stay skipped,
+      exactly like the real boot; slot 0 has func=NULL → must stay skipped)
+   4. Reset mi_startup globals to cold state: being_run=0, end=0, aux=0
+   5. At boot the kernel's own sort passes over the already-sorted array
+      with ZERO swaps → order preserved bit-for-bit → all 1586 real stages
+      re-run in the exact original sequence.
+
+  SURGICAL ALTERNATIVE (if recipe-2 group detection is undesired):
+   - NOP the skip-check: 6 bytes @0x9e926311 (83 38 02 72 ea → 90 90 90 90 90 90... 
+     note: 5 bytes: 83 38 02 72 ea) and neutralize the sort's two swap-jumps
+     (@0x9e9262ed jne, @0x9e9262f7 ja → NOPs) and force si_sub:=1 on slot 0.
+     More invasive — recipe above is preferred.
+""")
+
+P("""
+================================================================================
+Q3 — THE 8 CUSTOM MSRs 0xC0000110..0xC0000117 (mechanism fully decoded)
+================================================================================
+USER'S PREMISE CORRECTED (important): savectx does NOT save these 8 MSRs.
+They are handled by a completely different mechanism — the EXTENDED TRAP FRAME:
+
+  IDT wiring (verified for ALL 256 vectors):
+    IDT @0xffffffffa1fa4300 (256 gates; pseudo-desc @0xa1fa8a50)
+    gate layout: off_lo@+0, sel@+2 (=0x20), attrs@+4 (0x8E00 intr / 0xEE00
+    DPL3), off_mid@+6, off_hi@+8 (=0xFFFFFFFF)   ← type word at +4, NOT +6!
+    handler = 0xffffffff_{off_mid}_{off_lo} → thunk island (0x9e65a0xx..a3xx)
+    → jmp → extended entry stub (0x9e642c00..0x9e648200)
+
+  EXTENDED TRAP FRAME (Sony addition over FreeBSD 9.3, size 0xe8 + iret frame):
+    +0x00..0x70   15 GP regs
+    +0x78         vector/trapno (dword)
+    +0x7c/+0x7e   fs / gs
+    +0x80         err
+    +0x88         frame flags (dword): stubs write 1;  bit3(8) = restore-MSRs
+    +0x8c/+0x8e   es / ds
+    +0x90         MSR 0x1DD   (AMD Zen2 LastBranchFromIP — LBR!)
+    +0x98         MSR 0x1DE   (AMD Zen2 LastBranchToIP   — LBR!)
+    +0xa0..0xd8   MSR 0xC0000110 .. 0xC0000117   ← the 8 Sony-custom MSRs
+    +0xe0         (stub writes 0)
+    +0xe8/+0xf0/+0xf8  interrupted RIP / CS / RFLAGS (CPU-pushed iret frame)
+
+  ~56 entry stubs (one per distinct vector path) each execute:
+    rdmsr 0x1DD, 0x1DE, 0xC0000110..0xC0000117  →  frame slots +0x90..0xd8
+  3 exit paths restore them:
+    syscall-exit @0x9e644a7c, doreti @0x9e647a1f, ast-path @0x9e647ff1
+    each gated by:  test dword ptr [frame+0x88], 8 ; je skip_restore
+                    → restore 8 MSRs from frame slots +0xa0..0xd8
+
+  *** NO KERNEL CODE EVER SETS BIT 3 *** (exhaustive byte-pattern search over
+  the whole .text: zero `or [reg+0x88],8`, zero `mov [reg+0x88],8/9`, zero
+  `bts [reg+0x88],3`, zero rsp-relative forms). Either the Sony HV writes the
+  flag into the frame (kernel/HV cooperative protocol) or the machinery is
+  dormant. The 8 MSRs are NEVER read by any C code — pure save/restore
+  passthrough, values never interpreted.
+
+  0x1DD/0x1DE IDENTIFIED: AMD Zen2 LBR registers — the crash-report printer
+  (0x9e7deb00) prints them with format 'last branch from        = 0x%lx'
+  (@0x9f7748e2; siblings 'rbp = 0x%lx' @0x9f7748d0, 'instruction
+  pointer\\t= 0x%lx:0x%lx...' @0x9f6b88e0).
+
+  WHERE ARE THE RUNTIME VALUES?
+    - savectx global pcb (crash/suspend path) @0xa1e36a80, 0x1c0 bytes:
+      ALL ZERO in this dump (console never entered the save path pre-dump)
+    - suspend-path mirror globals: 0x1DD→@0xa1e36dc0, 0x1DE→@0xa1e36dc8:
+      ALL ZERO
+    - live trap frames: kernel stacks live OUTSIDE the dumped image range
+    >>> CONCLUSION: the actual runtime VALUES are NOT recoverable from this
+        dump — AND THEY DO NOT NEED TO BE:
+
+  *** QEMU/KVM ENGINEERING ANSWER ***
+    Implement all 10 MSRs (0x1DD, 0x1DE, 0xC0000110..0xC0000117) as:
+      rdmsr → return 0 (or constant)   ;   wrmsr → accept & ignore
+    CRITICAL: these rdmsr/wrmsr execute on EVERY interrupt, exception and
+    syscall (all 256 IDT vectors route through the extended stubs!). If the
+    VMM raises #GP on any of them (KVM default for unknown MSR on non-AMD
+    hosts), the kernel Triple-Faults at the FIRST interrupt after IDT load —
+    precisely the failure mode the user predicted. The KVM shim MUST
+    whitelist these 10 MSR indexes in its MSR pass-list.
+
+================================================================================
+EXTRA DISCOVERIES (bonus, WP2/WP3-relevant)
+================================================================================
+  * SYSCALL GATES (user-callable, DPL=3 / attr 0xEE00):
+      vec 0x92  → stub 0x9e642c20   (trap gate; primary syscall vector)
+      vec 0x03  → stub 0x9e642ac0   (int3, DPL3 — debug/syscall class)
+      vec 0x43  → stub 0x9e643b40
+      vec 0x44  → stub 0x9e643ca0
+      vec 0x45  → stub 0x9e643e00
+  * savectx callers = the CRASH-DUMP cluster (0x9ebe0950..0x9ebe2000):
+      strings 'failed to crash from a53io (%d)', 'failed to crash from amm
+      (%d)', 'failed to request EMC crash report(%d)', 'mDBG: Panic test.',
+      'mDBG: Crash test.' — the dump-submission path, preceded by a Syscon
+      power-mode command (call 0x9e67b160 with edi=5) — Rest-Mode entry seq.
+  * LOADER CONTRACT (from init fn 0x9edf8790 — what our QEMU loader must
+      provide before jumping to btext):
+      - long mode ON; kernel VA mapping for 0xffffffff9e3f0000..0xa46b0000
+      - low-phys identity mapping (kernel writes phys 0x472)
+      - RSP valid; [rsp+4]=boothowto (dword), [rsp+8]=bootdev (dword)
+      - metadata at PHYS 0x9bf4c, 0x9bf54, 0x9b6f4; table at PHYS 0x780..0x878;
+        phys 0x20 read  (full semantics = first task of WP2/WP3 RE)
+  * KERNEL SELECTORS: CS=0x20, DS/SS/ES=0x28, FS=0x13, GS=0x1b (from
+      resumectx/wakeup-stub constants)
+  * The 'locore page' 0x9e6427d0..0x9e642ac0 contains, in order:
+      savectx, resumectx, AP-entry, btext — then the IDT extended stubs.
+""")
+
+open(f"{OUT}/wp1_4_hammertime_correction.txt", "w").write("\n".join(REP))
+
+# machine-readable constants for WP2
+consts = {
+  "entry": {
+    "btext_cold_entry": "0xffffffff9e642a90",
+    "ap_entry": "0xffffffff9e642a40",
+    "wakeup_trampoline": "0xffffffff9e3f0010",
+    "resumectx": "0xffffffff9e6428f0",
+    "savectx": "0xffffffff9e6427d0",
+    "machine_init": "0xffffffff9edf8790",
+    "mi_startup": "0xffffffff9e9261f0",
+    "boot_stack_rip_rel_at": "0xffffffff9e642aa0 (lea rsp,[rip+0x2aee559])",
+    "loader_contract_phys": ["0x9bf4c", "0x9bf54", "0x9b6f4", "0x780-0x878", "0x20", "0x472 (written)"],
+    "loader_stack_args": {"boothowto": "+4 (dword)", "bootdev": "+8 (dword)"}
+  },
+  "mi_startup": {
+    "skip_check": {"va": "0xffffffff9e926311", "bytes": "83 38 02", "semantics": "skip if si_sub < 2 (unsigned)"},
+    "thunk_call": {"va": "0xffffffff9e926331", "bytes": "ff d1"},
+    "done_stamp": {"va": "0xffffffff9e926337", "bytes": "c7 00 01 00 00 00", "semantics": "si_sub := 1 (SI_SUB_DONE)"},
+    "sysinit_set": {"lo": "0xffffffff9fe51fb0", "hi": "0xffffffff9fe55488", "slots": 1691,
+                     "live_done": 1586, "live_dummy": 105, "dummy_slots_head": [0, 1239]},
+    "struct": {"size": 24, "si_sub": "+0 u32", "si_order": "+4 u32", "func": "+8 u64", "udata": "+16 u64"},
+    "globals": {"being_run": "0xffffffffa19781b0", "end": "0xffffffffa19781a8",
+                 "aux1": "0xffffffffa19781a0", "aux2": "0xffffffffa1978198"},
+    "wp2_reset_recipe": [
+      "group-detect: new group when si_order decreases among DONE entries; assign synthetic si_sub=2,3,4.. ascending",
+      "104 disabled entries + slot0: si_sub := 1",
+      "reset globals being_run/end/aux to 0",
+      "kernel sort then reproduces exact array order with zero swaps"
+    ]
+  },
+  "custom_msrs": {
+    "family": ["0x1dd", "0x1de", "0xc0000110", "0xc0000111", "0xc0000112", "0xc0000113",
+                "0xc0000114", "0xc0000115", "0xc0000116", "0xc0000117"],
+    "mechanism": "extended trapframe: saved by ALL 256 IDT vector stubs into frame +0x90..0xd8; restored by 3 exit paths iff frame_flags(+0x88) bit3 set; bit3 NEVER set by kernel code",
+    "qemu_policy": "rdmsr returns 0, wrmsr ignored, MUST NOT #GP (executes on every interrupt)",
+    "lbr_identification": "0x1DD=LastBranchFromIP, 0x1DE=LastBranchToIP (AMD Zen2 LBR; printed by crash-report printer)",
+    "saved_global_pcb": "0xffffffffa1e36a80 (0x1c0 bytes, all-zero in dump)",
+    "suspend_mirror": {"msr_0x1dd": "0xffffffffa1e36dc0", "msr_0x1de": "0xffffffffa1e36dc8"}
+  },
+  "idt": {
+    "base": "0xffffffffa1fa4300", "entries": 256, "pseudo_descriptor": "0xffffffffa1fa8a50",
+    "gate_layout": "off_lo@+0, sel@+2(0x20), attrs@+4(0x8E00/0xEE00), off_mid@+6, off_hi@+8",
+    "thunk_islands": "0xffffffff9e65a000..0xffffffff9e65a3a8",
+    "extended_stubs": "0xffffffff9e642c00..0xffffffff9e648200",
+    "syscall_vectors_dpl3": {"0x03": "0xffffffff9e642ac0", "0x43": "0xffffffff9e643b40",
+                              "0x44": "0xffffffff9e643ca0", "0x45": "0xffffffff9e643e00",
+                              "0x92": "0xffffffff9e642c20"}
+  },
+  "selectors": {"cs": "0x20", "ds_ss_es": "0x28", "fs": "0x13", "gs": "0x1b",
+                 "temp_gdt_wakeup": "0xffffffffa1e8dce0 (limit 0x40)"}
+}
+json.dump(consts, open(f"{OUT}/wp2_constants.json", "w"), indent=1)
+print(f"saved -> {OUT}/wp1_4_hammertime_correction.txt")
+print(f"saved -> {OUT}/wp2_constants.json")

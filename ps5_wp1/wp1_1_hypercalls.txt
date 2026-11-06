@@ -1,0 +1,1001 @@
+====================================================================================================
+A) WRAPPER REGION FUNCTION SPLIT  0xffffffff9f006a10 .. 0xffffffff9f00720d
+====================================================================================================
+
+-- look-behind: 0x9f0069e0..0x9f006a10 --
+   0xffffffff9f0069e0  eb11                   jmp 0xffffffff9f0069f3
+   0xffffffff9f0069e2  488d3df760fe01         lea rdi, [rip + 0x1fe60f7]
+   0xffffffff9f0069e9  4c89fe                 mov rsi, r15
+   0xffffffff9f0069ec  e8cf8e83ff             call 0xffffffff9e83f8c0
+   0xffffffff9f0069f1  ebd3                   jmp 0xffffffff9f0069c6
+   0xffffffff9f0069f3  4889df                 mov rdi, rbx
+   0xffffffff9f0069f6  31f6                   xor esi, esi
+   0xffffffff9f0069f8  31d2                   xor edx, edx
+   0xffffffff9f0069fa  31c9                   xor ecx, ecx
+   0xffffffff9f0069fc  4883c408               add rsp, 8
+   0xffffffff9f006a00  5b                     pop rbx
+   0xffffffff9f006a01  415c                   pop r12
+   0xffffffff9f006a03  415d                   pop r13
+   0xffffffff9f006a05  415e                   pop r14
+   0xffffffff9f006a07  415f                   pop r15
+   0xffffffff9f006a09  5d                     pop rbp
+   0xffffffff9f006a0a  e991058bff             jmp 0xffffffff9e8b6fa0
+   0xffffffff9f006a0f  90                     nop 
+
+split into 36 functions, 33 vmmcall sites; 26 wrappers
+
+-- false-positive proof: context around 0x9e6ab6c9 (real stream = FPU code) --
+   0xffffffff9e6ab6b8  400000                 add byte ptr [rax], al
+   0xffffffff9e6ab6bb  7748                   ja 0xffffffff9e6ab705
+   0xffffffff9e6ab6bd  81fffe3f0000           cmp edi, 0x3ffe
+   0xffffffff9e6ab6c3  7774                   ja 0xffffffff9e6ab739
+   0xffffffff9e6ab6c5  dc0575f20f01           fadd qword ptr [rip + 0x10ff275]
+   0xffffffff9e6ab6cb  d9ee                   fldz 
+   0xffffffff9e6ab6cd  d9c9                   fxch st(1)
+   0xffffffff9e6ab6cf  dfe9                   fucompi st(1)
+   0xffffffff9e6ab6d1  0f86ec010000           jbe 0xffffffff9e6ab8c3
+   0xffffffff9e6ab6d7  85ff                   test edi, edi
+   0xffffffff9e6ab6d9  7512                   jne 0xffffffff9e6ab6ed
+   0xffffffff9e6ab6db  4889ca                 mov rdx, rcx
+   0xffffffff9e6ab6de  89c9                   mov ecx, ecx
+   0xffffffff9e6ab6e0  48c1ea20               shr rdx, 0x20
+global scan: raw=37, true after adjudication=33
+true vmmcall sites OUTSIDE wrapper region: NONE (all inside)
+
+====================================================================================================
+B) PER-WRAPPER ABI (EAX number + argument marshalling)
+====================================================================================================
+
+wrapper 0xffffffff9f006a10..0xffffffff9f006a1e ( 14 B)  vmmcall x1  EAX@sites=[{'kind': 'const', 'val': 4}]
+   0xffffffff9f006a10  55                   push rbp
+   0xffffffff9f006a11  4889e5               mov rbp, rsp
+   0xffffffff9f006a14  b804000000           mov eax, 4
+   0xffffffff9f006a19  0f01d9               vmmcall  <<< VMMCALL
+   0xffffffff9f006a1c  5d                   pop rbp
+   0xffffffff9f006a1d  c3                   ret 
+
+wrapper 0xffffffff9f006a20..0xffffffff9f006a2e ( 14 B)  vmmcall x1  EAX@sites=[{'kind': 'const', 'val': 31}]
+   0xffffffff9f006a20  55                   push rbp
+   0xffffffff9f006a21  4889e5               mov rbp, rsp
+   0xffffffff9f006a24  b81f000000           mov eax, 0x1f
+   0xffffffff9f006a29  0f01d9               vmmcall  <<< VMMCALL
+   0xffffffff9f006a2c  5d                   pop rbp
+   0xffffffff9f006a2d  c3                   ret 
+
+wrapper 0xffffffff9f006a30..0xffffffff9f006a3e ( 14 B)  vmmcall x1  EAX@sites=[{'kind': 'const', 'val': 5}]
+   0xffffffff9f006a30  55                   push rbp
+   0xffffffff9f006a31  4889e5               mov rbp, rsp
+   0xffffffff9f006a34  b805000000           mov eax, 5
+   0xffffffff9f006a39  0f01d9               vmmcall  <<< VMMCALL
+   0xffffffff9f006a3c  5d                   pop rbp
+   0xffffffff9f006a3d  c3                   ret 
+
+wrapper 0xffffffff9f006a40..0xffffffff9f006a71 ( 49 B)  vmmcall x1  EAX@sites=[{'kind': 'const', 'val': 10}]  tail-jmp->0xffffffff9f006a73
+   arg-register writes in wrapper:
+     mov ebx, 0xfffe7960
+     mov edi, 0xa
+   0xffffffff9f006a40  55                   push rbp
+   0xffffffff9f006a41  4889e5               mov rbp, rsp
+   0xffffffff9f006a44  53                   push rbx
+   0xffffffff9f006a45  50                   push rax
+   0xffffffff9f006a46  bb6079feff           mov ebx, 0xfffe7960
+   0xffffffff9f006a4b  0f1f440000           nop dword ptr [rax + rax]
+   0xffffffff9f006a50  b80a000000           mov eax, 0xa
+   0xffffffff9f006a55  0f01d9               vmmcall  <<< VMMCALL
+   0xffffffff9f006a58  85c0                 test eax, eax
+   0xffffffff9f006a5a  7415                 je 0xffffffff9f006a71
+   0xffffffff9f006a5c  bf0a000000           mov edi, 0xa
+   0xffffffff9f006a61  e87a7785ff           call 0xffffffff9e85e1e0
+   0xffffffff9f006a66  ffc3                 inc ebx
+   0xffffffff9f006a68  75e6                 jne 0xffffffff9f006a50
+   0xffffffff9f006a6a  b8ffffffff           mov eax, 0xffffffff
+   0xffffffff9f006a6f  eb02                 jmp 0xffffffff9f006a73
+
+wrapper 0xffffffff9f006a80..0xffffffff9f006aff (127 B)  vmmcall x1  EAX@sites=[{'kind': 'const', 'val': 11}]
+   arg-register writes in wrapper:
+     lea rsi, [rip + 0x76ba47]
+     lea rcx, [rip + 0x6da27d]
+     lea r8, [rip + 0x78099d]
+     mov edi, 0x8000
+     mov edx, 0x155
+     mov rcx, r13
+     mov rdx, qword ptr [rbp - 0x30]
+   0xffffffff9f006a80  55                   push rbp
+   0xffffffff9f006a81  4889e5               mov rbp, rsp
+   0xffffffff9f006a84  4157                 push r15
+   0xffffffff9f006a86  4156                 push r14
+   0xffffffff9f006a88  4155                 push r13
+   0xffffffff9f006a8a  4154                 push r12
+   0xffffffff9f006a8c  53                   push rbx
+   0xffffffff9f006a8d  50                   push rax
+   0xffffffff9f006a8e  488b02               mov rax, qword ptr [rdx]
+   0xffffffff9f006a91  488b1f               mov rbx, qword ptr [rdi]
+   0xffffffff9f006a94  4c8b2e               mov r13, qword ptr [rsi]
+   0xffffffff9f006a97  4989d6               mov r14, rdx
+   0xffffffff9f006a9a  4989f7               mov r15, rsi
+   0xffffffff9f006a9d  4989fc               mov r12, rdi
+   0xffffffff9f006aa0  488d3547ba7600       lea rsi, [rip + 0x76ba47]
+   0xffffffff9f006aa7  488d0d7da26d00       lea rcx, [rip + 0x6da27d]
+   0xffffffff9f006aae  4c8d059d097800       lea r8, [rip + 0x78099d]
+   0xffffffff9f006ab5  bf00800000           mov edi, 0x8000
+   0xffffffff9f006aba  ba55010000           mov edx, 0x155
+   0xffffffff9f006abf  4531c9               xor r9d, r9d
+   0xffffffff9f006ac2  488945d0             mov qword ptr [rbp - 0x30], rax
+   0xffffffff9f006ac6  6a00                 push 0
+   0xffffffff9f006ac8  6a00                 push 0
+   0xffffffff9f006aca  6a00                 push 0
+   0xffffffff9f006acc  6a00                 push 0
+   0xffffffff9f006ace  e85d51feff           call 0xffffffff9efebc30
+   0xffffffff9f006ad3  4883c420             add rsp, 0x20
+   0xffffffff9f006ad7  b80b000000           mov eax, 0xb
+   0xffffffff9f006adc  4c89e9               mov rcx, r13
+   0xffffffff9f006adf  488b55d0             mov rdx, qword ptr [rbp - 0x30]
+   0xffffffff9f006ae3  0f01d9               vmmcall  <<< VMMCALL
+   0xffffffff9f006ae6  49891c24             mov qword ptr [r12], rbx
+   0xffffffff9f006aea  49890f               mov qword ptr [r15], rcx
+   0xffffffff9f006aed  498916               mov qword ptr [r14], rdx
+   0xffffffff9f006af0  4883c408             add rsp, 8
+   0xffffffff9f006af4  5b                   pop rbx
+   0xffffffff9f006af5  415c                 pop r12
+   0xffffffff9f006af7  415d                 pop r13
+   0xffffffff9f006af9  415e                 pop r14
+   0xffffffff9f006afb  415f                 pop r15
+   0xffffffff9f006afd  5d                   pop rbp
+   0xffffffff9f006afe  c3                   ret 
+
+wrapper 0xffffffff9f006b00..0xffffffff9f006b1f ( 31 B)  vmmcall x1  EAX@sites=[{'kind': 'const', 'val': 6}]
+   arg-register writes in wrapper:
+     mov r9, rcx
+     mov rcx, rsi
+   0xffffffff9f006b00  55                   push rbp
+   0xffffffff9f006b01  4889e5               mov rbp, rsp
+   0xffffffff9f006b04  53                   push rbx
+   0xffffffff9f006b05  4989c9               mov r9, rcx
+   0xffffffff9f006b08  4889f1               mov rcx, rsi
+   0xffffffff9f006b0b  b806000000           mov eax, 6
+   0xffffffff9f006b10  4889fb               mov rbx, rdi
+   0xffffffff9f006b13  0f01d9               vmmcall  <<< VMMCALL
+   0xffffffff9f006b16  498911               mov qword ptr [r9], rdx
+   0xffffffff9f006b19  418908               mov dword ptr [r8], ecx
+   0xffffffff9f006b1c  5b                   pop rbx
+   0xffffffff9f006b1d  5d                   pop rbp
+   0xffffffff9f006b1e  c3                   ret 
+
+wrapper 0xffffffff9f006b20..0xffffffff9f006b32 ( 18 B)  vmmcall x1  EAX@sites=[{'kind': 'const', 'val': 7}]
+   arg-register writes in wrapper:
+     mov ebx, edi
+   0xffffffff9f006b20  55                   push rbp
+   0xffffffff9f006b21  4889e5               mov rbp, rsp
+   0xffffffff9f006b24  53                   push rbx
+   0xffffffff9f006b25  b807000000           mov eax, 7
+   0xffffffff9f006b2a  89fb                 mov ebx, edi
+   0xffffffff9f006b2c  0f01d9               vmmcall  <<< VMMCALL
+   0xffffffff9f006b2f  5b                   pop rbx
+   0xffffffff9f006b30  5d                   pop rbp
+   0xffffffff9f006b31  c3                   ret 
+
+wrapper 0xffffffff9f006b40..0xffffffff9f006b54 ( 20 B)  vmmcall x1  EAX@sites=[{'kind': 'const', 'val': 8}]
+   arg-register writes in wrapper:
+     mov ecx, esi
+     mov ebx, edi
+   0xffffffff9f006b40  55                   push rbp
+   0xffffffff9f006b41  4889e5               mov rbp, rsp
+   0xffffffff9f006b44  53                   push rbx
+   0xffffffff9f006b45  89f1                 mov ecx, esi
+   0xffffffff9f006b47  b808000000           mov eax, 8
+   0xffffffff9f006b4c  89fb                 mov ebx, edi
+   0xffffffff9f006b4e  0f01d9               vmmcall  <<< VMMCALL
+   0xffffffff9f006b51  5b                   pop rbx
+   0xffffffff9f006b52  5d                   pop rbp
+   0xffffffff9f006b53  c3                   ret 
+
+wrapper 0xffffffff9f006b60..0xffffffff9f006b74 ( 20 B)  vmmcall x1  EAX@sites=[{'kind': 'const', 'val': 9}]
+   arg-register writes in wrapper:
+     mov ecx, esi
+     mov ebx, edi
+   0xffffffff9f006b60  55                   push rbp
+   0xffffffff9f006b61  4889e5               mov rbp, rsp
+   0xffffffff9f006b64  53                   push rbx
+   0xffffffff9f006b65  89f1                 mov ecx, esi
+   0xffffffff9f006b67  b809000000           mov eax, 9
+   0xffffffff9f006b6c  89fb                 mov ebx, edi
+   0xffffffff9f006b6e  0f01d9               vmmcall  <<< VMMCALL
+   0xffffffff9f006b71  5b                   pop rbx
+   0xffffffff9f006b72  5d                   pop rbp
+   0xffffffff9f006b73  c3                   ret 
+
+wrapper 0xffffffff9f006b80..0xffffffff9f006b9d ( 29 B)  vmmcall x1  EAX@sites=[{'kind': 'const', 'val': 12}]
+   arg-register writes in wrapper:
+     mov r8, rcx
+     mov ecx, esi
+     mov ebx, edi
+   0xffffffff9f006b80  55                   push rbp
+   0xffffffff9f006b81  4889e5               mov rbp, rsp
+   0xffffffff9f006b84  53                   push rbx
+   0xffffffff9f006b85  4989c8               mov r8, rcx
+   0xffffffff9f006b88  89f1                 mov ecx, esi
+   0xffffffff9f006b8a  b80c000000           mov eax, 0xc
+   0xffffffff9f006b8f  89fb                 mov ebx, edi
+   0xffffffff9f006b91  0f01d9               vmmcall  <<< VMMCALL
+   0xffffffff9f006b94  48891a               mov qword ptr [rdx], rbx
+   0xffffffff9f006b97  498908               mov qword ptr [r8], rcx
+   0xffffffff9f006b9a  5b                   pop rbx
+   0xffffffff9f006b9b  5d                   pop rbp
+   0xffffffff9f006b9c  c3                   ret 
+
+wrapper 0xffffffff9f006ba0..0xffffffff9f006c6b (203 B)  vmmcall x1  EAX@sites=[{'kind': 'const', 'val': 13}]
+   arg-register writes in wrapper:
+     lea rdx, [rip + 0x76b930]
+     mov rdi, r14
+     mov ecx, 0x1ad
+     xor esi, esi
+     mov rdi, r14
+     xor esi, esi
+     mov rdi, qword ptr [r14]
+     xor esi, esi
+     xor edx, edx
+     xor ecx, ecx
+     mov ecx, eax
+     mov ebx, r12d
+     lea rdx, [rip + 0x76b8b9]
+     mov rdi, r14
+     mov ecx, 0x1c3
+     xor esi, esi
+     mov ebx, eax
+     mov rdi, r14
+     mov rdi, qword ptr [r14]
+     xor esi, esi
+     xor edx, edx
+     xor ecx, ecx
+   0xffffffff9f006ba0  55                   push rbp
+   0xffffffff9f006ba1  4889e5               mov rbp, rsp
+   0xffffffff9f006ba4  4157                 push r15
+   0xffffffff9f006ba6  4156                 push r14
+   0xffffffff9f006ba8  4154                 push r12
+   0xffffffff9f006baa  53                   push rbx
+   0xffffffff9f006bab  4989ff               mov r15, rdi
+   0xffffffff9f006bae  654c8b342500000000   mov r14, qword ptr gs:[0]
+   0xffffffff9f006bb7  488d1530b97600       lea rdx, [rip + 0x76b930]
+   0xffffffff9f006bbe  4c89f7               mov rdi, r14
+   0xffffffff9f006bc1  b9ad010000           mov ecx, 0x1ad
+   0xffffffff9f006bc6  31f6                 xor esi, esi
+   0xffffffff9f006bc8  4531e4               xor r12d, r12d
+   0xffffffff9f006bcb  e8e00c8bff           call 0xffffffff9e8b78b0
+   0xffffffff9f006bd0  4c89f7               mov rdi, r14
+   0xffffffff9f006bd3  31f6                 xor esi, esi
+   0xffffffff9f006bd5  e8e60baaff           call 0xffffffff9eaa77c0
+   0xffffffff9f006bda  498b3e               mov rdi, qword ptr [r14]
+   0xffffffff9f006bdd  31f6                 xor esi, esi
+   0xffffffff9f006bdf  31d2                 xor edx, edx
+   0xffffffff9f006be1  31c9                 xor ecx, ecx
+   0xffffffff9f006be3  4883c718             add rdi, 0x18
+   0xffffffff9f006be7  e834098bff           call 0xffffffff9e8b7520
+   0xffffffff9f006bec  4983c718             add r15, 0x18
+   0xffffffff9f006bf0  31c0                 xor eax, eax
+   0xffffffff9f006bf2  66666666662e0f1f840000000000 nop word ptr cs:[rax + rax]
+   0xffffffff9f006c00  89c1                 mov ecx, eax
+   0xffffffff9f006c02  b80d000000           mov eax, 0xd
+   0xffffffff9f006c07  4489e3               mov ebx, r12d
+   0xffffffff9f006c0a  0f01d9               vmmcall  <<< VMMCALL
+   0xffffffff9f006c0d  49895fe8             mov qword ptr [r15 - 0x18], rbx
+   0xffffffff9f006c11  498957f0             mov qword ptr [r15 - 0x10], rdx
+   0xffffffff9f006c15  49897ff8             mov qword ptr [r15 - 8], rdi
+   0xffffffff9f006c19  498937               mov qword ptr [r15], rsi
+   0xffffffff9f006c1c  85c9                 test ecx, ecx
+   0xffffffff9f006c1e  0f45c1               cmovne eax, ecx
+   0xffffffff9f006c21  49ffc4               inc r12
+   0xffffffff9f006c24  4983c720             add r15, 0x20
+   0xffffffff9f006c28  4983fc10             cmp r12, 0x10
+   0xffffffff9f006c2c  75d2                 jne 0xffffffff9f006c00
+   0xffffffff9f006c2e  488d15b9b87600       lea rdx, [rip + 0x76b8b9]
+   0xffffffff9f006c35  4c89f7               mov rdi, r14
+   0xffffffff9f006c38  b9c3010000           mov ecx, 0x1c3
+   0xffffffff9f006c3d  31f6                 xor esi, esi
+   0xffffffff9f006c3f  89c3                 mov ebx, eax
+   0xffffffff9f006c41  e86a0c8bff           call 0xffffffff9e8b78b0
+   0xffffffff9f006c46  4c89f7               mov rdi, r14
+   0xffffffff9f006c49  e8120caaff           call 0xffffffff9eaa7860
+   0xffffffff9f006c4e  498b3e               mov rdi, qword ptr [r14]
+   0xffffffff9f006c51  31f6                 xor esi, esi
+   0xffffffff9f006c53  31d2                 xor edx, edx
+   0xffffffff9f006c55  31c9                 xor ecx, ecx
+   0xffffffff9f006c57  4883c718             add rdi, 0x18
+   0xffffffff9f006c5b  e8c0088bff           call 0xffffffff9e8b7520
+   0xffffffff9f006c60  89d8                 mov eax, ebx
+   0xffffffff9f006c62  5b                   pop rbx
+   0xffffffff9f006c63  415c                 pop r12
+   0xffffffff9f006c65  415e                 pop r14
+   0xffffffff9f006c67  415f                 pop r15
+   0xffffffff9f006c69  5d                   pop rbp
+   0xffffffff9f006c6a  c3                   ret 
+
+wrapper 0xffffffff9f006c92..0xffffffff9f006ed4 (578 B)  vmmcall x8  EAX@sites=[{'kind': 'const', 'val': 13}, {'kind': 'const', 'val': 13}, {'kind': 'const', 'val': 13}, {'kind': 'const', 'val': 13}, {'kind': 'const', 'val': 13}, {'kind': 'const', 'val': 13}, {'kind': 'const', 'val': 13}, {'kind': 'const', 'val': 13}]
+   arg-register writes in wrapper:
+     mov rdi, r12
+     mov ecx, 0x1ec
+     xor esi, esi
+     mov rdx, rbx
+     mov rdi, r12
+     mov rdi, qword ptr [r12]
+     xor esi, esi
+     xor edx, edx
+     xor ecx, ecx
+     mov rdx, rbx
+     lea rdi, [rip + 0x7a3c45]
+     mov ecx, 0x1d7
+     xor esi, esi
+     mov ebx, dword ptr [rdi + r15*4]
+     mov rdi, r12
+     mov rdi, r12
+     mov esi, ebx
+     mov rdi, qword ptr [r12]
+     xor esi, esi
+     xor edx, edx
+     xor ecx, ecx
+     xor ebx, ebx
+     mov ebx, 1
+     mov ecx, eax
+     mov ecx, r8d
+     mov ebx, 2
+     mov ebx, 3
+     mov ecx, eax
+     mov ecx, r8d
+     mov ebx, 4
+     mov ebx, 5
+     mov ecx, eax
+     mov ecx, r8d
+     mov ebx, 6
+     mov ebx, 7
+   0xffffffff9f006c92  66666666662e0f1f840000000000 nop word ptr cs:[rax + rax]
+   0xffffffff9f006ca0  488d1d47b87600       lea rbx, [rip + 0x76b847]
+   0xffffffff9f006ca7  4c89e7               mov rdi, r12
+   0xffffffff9f006caa  b9ec010000           mov ecx, 0x1ec
+   0xffffffff9f006caf  31f6                 xor esi, esi
+   0xffffffff9f006cb1  4889da               mov rdx, rbx
+   0xffffffff9f006cb4  e8f70b8bff           call 0xffffffff9e8b78b0
+   0xffffffff9f006cb9  4c89e7               mov rdi, r12
+   0xffffffff9f006cbc  e89f0baaff           call 0xffffffff9eaa7860
+   0xffffffff9f006cc1  498b3c24             mov rdi, qword ptr [r12]
+   0xffffffff9f006cc5  31f6                 xor esi, esi
+   0xffffffff9f006cc7  31d2                 xor edx, edx
+   0xffffffff9f006cc9  31c9                 xor ecx, ecx
+   0xffffffff9f006ccb  4883c718             add rdi, 0x18
+   0xffffffff9f006ccf  e84c088bff           call 0xffffffff9e8b7520
+   0xffffffff9f006cd4  f645d001             test byte ptr [rbp - 0x30], 1
+   0xffffffff9f006cd8  4889da               mov rdx, rbx
+   0xffffffff9f006cdb  41bf01000000         mov r15d, 1
+   0xffffffff9f006ce1  b800000000           mov eax, 0
+   0xffffffff9f006ce6  0f84d6010000         je 0xffffffff9f006ec2
+   0xffffffff9f006cec  488d3d453c7a00       lea rdi, [rip + 0x7a3c45]
+   0xffffffff9f006cf3  488945d0             mov qword ptr [rbp - 0x30], rax
+   0xffffffff9f006cf7  b9d7010000           mov ecx, 0x1d7
+   0xffffffff9f006cfc  31f6                 xor esi, esi
+   0xffffffff9f006cfe  428b1cbf             mov ebx, dword ptr [rdi + r15*4]
+   0xffffffff9f006d02  654c8b242500000000   mov r12, qword ptr gs:[0]
+   0xffffffff9f006d0b  4c89e7               mov rdi, r12
+   0xffffffff9f006d0e  e89d0b8bff           call 0xffffffff9e8b78b0
+   0xffffffff9f006d13  4c89e7               mov rdi, r12
+   0xffffffff9f006d16  89de                 mov esi, ebx
+   0xffffffff9f006d18  e8a30aaaff           call 0xffffffff9eaa77c0
+   0xffffffff9f006d1d  498b3c24             mov rdi, qword ptr [r12]
+   0xffffffff9f006d21  31f6                 xor esi, esi
+   0xffffffff9f006d23  31d2                 xor edx, edx
+   0xffffffff9f006d25  31c9                 xor ecx, ecx
+   0xffffffff9f006d27  4883c718             add rdi, 0x18
+   0xffffffff9f006d2b  e8f0078bff           call 0xffffffff9e8b7520
+   0xffffffff9f006d30  b80d000000           mov eax, 0xd
+   0xffffffff9f006d35  31db                 xor ebx, ebx
+   0xffffffff9f006d37  0f01d9               vmmcall  <<< VMMCALL
+   0xffffffff9f006d3a  49c1e708             shl r15, 8
+   0xffffffff9f006d3e  4189c0               mov r8d, eax
+   0xffffffff9f006d41  4585ed               test r13d, r13d
+   0xffffffff9f006d44  b80d000000           mov eax, 0xd
+   0xffffffff9f006d49  4b891c3e             mov qword ptr [r14 + r15], rbx
+   0xffffffff9f006d4d  4b89543e08           mov qword ptr [r14 + r15 + 8], rdx
+   0xffffffff9f006d52  4b897c3e10           mov qword ptr [r14 + r15 + 0x10], rdi
+   0xffffffff9f006d57  4b89743e18           mov qword ptr [r14 + r15 + 0x18], rsi
+   0xffffffff9f006d5c  450f45c5             cmovne r8d, r13d
+   0xffffffff9f006d60  bb01000000           mov ebx, 1
+   0xffffffff9f006d65  0f01d9               vmmcall  <<< VMMCALL
+   0xffffffff9f006d68  89c1                 mov ecx, eax
+   0xffffffff9f006d6a  4b895c3e20           mov qword ptr [r14 + r15 + 0x20], rbx
+   0xffffffff9f006d6f  4b89543e28           mov qword ptr [r14 + r15 + 0x28], rdx
+   0xffffffff9f006d74  4b897c3e30           mov qword ptr [r14 + r15 + 0x30], rdi
+   0xffffffff9f006d79  4b89743e38           mov qword ptr [r14 + r15 + 0x38], rsi
+   0xffffffff9f006d7e  4585c0               test r8d, r8d
+   0xffffffff9f006d81  7403                 je 0xffffffff9f006d86
+   0xffffffff9f006d83  4489c1               mov ecx, r8d
+   0xffffffff9f006d86  b80d000000           mov eax, 0xd
+   0xffffffff9f006d8b  bb02000000           mov ebx, 2
+   0xffffffff9f006d90  0f01d9               vmmcall  <<< VMMCALL
+   0xffffffff9f006d93  4189c0               mov r8d, eax
+   0xffffffff9f006d96  4b895c3e40           mov qword ptr [r14 + r15 + 0x40], rbx
+   0xffffffff9f006d9b  4b89543e48           mov qword ptr [r14 + r15 + 0x48], rdx
+   0xffffffff9f006da0  4b897c3e50           mov qword ptr [r14 + r15 + 0x50], rdi
+   0xffffffff9f006da5  4b89743e58           mov qword ptr [r14 + r15 + 0x58], rsi
+   0xffffffff9f006daa  85c9                 test ecx, ecx
+   0xffffffff9f006dac  7403                 je 0xffffffff9f006db1
+   0xffffffff9f006dae  4189c8               mov r8d, ecx
+   0xffffffff9f006db1  b80d000000           mov eax, 0xd
+   0xffffffff9f006db6  bb03000000           mov ebx, 3
+   0xffffffff9f006dbb  0f01d9               vmmcall  <<< VMMCALL
+   0xffffffff9f006dbe  89c1                 mov ecx, eax
+   0xffffffff9f006dc0  4b895c3e60           mov qword ptr [r14 + r15 + 0x60], rbx
+   0xffffffff9f006dc5  4b89543e68           mov qword ptr [r14 + r15 + 0x68], rdx
+   0xffffffff9f006dca  4b897c3e70           mov qword ptr [r14 + r15 + 0x70], rdi
+   0xffffffff9f006dcf  4b89743e78           mov qword ptr [r14 + r15 + 0x78], rsi
+   0xffffffff9f006dd4  4585c0               test r8d, r8d
+   0xffffffff9f006dd7  7403                 je 0xffffffff9f006ddc
+   0xffffffff9f006dd9  4489c1               mov ecx, r8d
+   0xffffffff9f006ddc  b80d000000           mov eax, 0xd
+   0xffffffff9f006de1  bb04000000           mov ebx, 4
+   0xffffffff9f006de6  0f01d9               vmmcall  <<< VMMCALL
+   0xffffffff9f006de9  4189c0               mov r8d, eax
+   0xffffffff9f006dec  4b899c3e80000000     mov qword ptr [r14 + r15 + 0x80], rbx
+   0xffffffff9f006df4  4b89943e88000000     mov qword ptr [r14 + r15 + 0x88], rdx
+   0xffffffff9f006dfc  4b89bc3e90000000     mov qword ptr [r14 + r15 + 0x90], rdi
+   0xffffffff9f006e04  4b89b43e98000000     mov qword ptr [r14 + r15 + 0x98], rsi
+   0xffffffff9f006e0c  85c9                 test ecx, ecx
+   0xffffffff9f006e0e  7403                 je 0xffffffff9f006e13
+   0xffffffff9f006e10  4189c8               mov r8d, ecx
+   0xffffffff9f006e13  b80d000000           mov eax, 0xd
+   0xffffffff9f006e18  bb05000000           mov ebx, 5
+   0xffffffff9f006e1d  0f01d9               vmmcall  <<< VMMCALL
+   0xffffffff9f006e20  89c1                 mov ecx, eax
+   0xffffffff9f006e22  4b899c3ea0000000     mov qword ptr [r14 + r15 + 0xa0], rbx
+   0xffffffff9f006e2a  4b89943ea8000000     mov qword ptr [r14 + r15 + 0xa8], rdx
+   0xffffffff9f006e32  4b89bc3eb0000000     mov qword ptr [r14 + r15 + 0xb0], rdi
+   0xffffffff9f006e3a  4b89b43eb8000000     mov qword ptr [r14 + r15 + 0xb8], rsi
+   0xffffffff9f006e42  4585c0               test r8d, r8d
+   0xffffffff9f006e45  7403                 je 0xffffffff9f006e4a
+   0xffffffff9f006e47  4489c1               mov ecx, r8d
+   0xffffffff9f006e4a  b80d000000           mov eax, 0xd
+   0xffffffff9f006e4f  bb06000000           mov ebx, 6
+   0xffffffff9f006e54  0f01d9               vmmcall  <<< VMMCALL
+   0xffffffff9f006e57  4189c0               mov r8d, eax
+   0xffffffff9f006e5a  4b899c3ec0000000     mov qword ptr [r14 + r15 + 0xc0], rbx
+   0xffffffff9f006e62  4b89943ec8000000     mov qword ptr [r14 + r15 + 0xc8], rdx
+   0xffffffff9f006e6a  4b89bc3ed0000000     mov qword ptr [r14 + r15 + 0xd0], rdi
+   0xffffffff9f006e72  4b89b43ed8000000     mov qword ptr [r14 + r15 + 0xd8], rsi
+   0xffffffff9f006e7a  85c9                 test ecx, ecx
+   0xffffffff9f006e7c  7403                 je 0xffffffff9f006e81
+   0xffffffff9f006e7e  4189c8               mov r8d, ecx
+   0xffffffff9f006e81  b80d000000           mov eax, 0xd
+   0xffffffff9f006e86  bb07000000           mov ebx, 7
+   0xffffffff9f006e8b  0f01d9               vmmcall  <<< VMMCALL
+   0xffffffff9f006e8e  4189c5               mov r13d, eax
+   0xffffffff9f006e91  4b899c3ee0000000     mov qword ptr [r14 + r15 + 0xe0], rbx
+   0xffffffff9f006e99  4b89943ee8000000     mov qword ptr [r14 + r15 + 0xe8], rdx
+   0xffffffff9f006ea1  4b89bc3ef0000000     mov qword ptr [r14 + r15 + 0xf0], rdi
+   0xffffffff9f006ea9  4b89b43ef8000000     mov qword ptr [r14 + r15 + 0xf8], rsi
+   0xffffffff9f006eb1  4585c0               test r8d, r8d
+   0xffffffff9f006eb4  0f84e6fdffff         je 0xffffffff9f006ca0
+   0xffffffff9f006eba  4589c5               mov r13d, r8d
+   0xffffffff9f006ebd  e9defdffff           jmp 0xffffffff9f006ca0
+   0xffffffff9f006ec2  4489e8               mov eax, r13d
+   0xffffffff9f006ec5  4883c408             add rsp, 8
+   0xffffffff9f006ec9  5b                   pop rbx
+   0xffffffff9f006eca  415c                 pop r12
+   0xffffffff9f006ecc  415d                 pop r13
+   0xffffffff9f006ece  415e                 pop r14
+   0xffffffff9f006ed0  415f                 pop r15
+   0xffffffff9f006ed2  5d                   pop rbp
+   0xffffffff9f006ed3  c3                   ret 
+
+wrapper 0xffffffff9f006ee0..0xffffffff9f006ef8 ( 24 B)  vmmcall x1  EAX@sites=[{'kind': 'const', 'val': 15}]
+   arg-register writes in wrapper:
+     mov rcx, rsi
+     mov edx, edi
+   0xffffffff9f006ee0  55                   push rbp
+   0xffffffff9f006ee1  4889e5               mov rbp, rsp
+   0xffffffff9f006ee4  53                   push rbx
+   0xffffffff9f006ee5  4889d3               mov rbx, rdx
+   0xffffffff9f006ee8  4889f1               mov rcx, rsi
+   0xffffffff9f006eeb  b80f000000           mov eax, 0xf
+   0xffffffff9f006ef0  89fa                 mov edx, edi
+   0xffffffff9f006ef2  0f01d9               vmmcall  <<< VMMCALL
+   0xffffffff9f006ef5  5b                   pop rbx
+   0xffffffff9f006ef6  5d                   pop rbp
+   0xffffffff9f006ef7  c3                   ret 
+
+wrapper 0xffffffff9f006f00..0xffffffff9f006f0e ( 14 B)  vmmcall x1  EAX@sites=[{'kind': 'const', 'val': 16}]
+   0xffffffff9f006f00  55                   push rbp
+   0xffffffff9f006f01  4889e5               mov rbp, rsp
+   0xffffffff9f006f04  b810000000           mov eax, 0x10
+   0xffffffff9f006f09  0f01d9               vmmcall  <<< VMMCALL
+   0xffffffff9f006f0c  5d                   pop rbp
+   0xffffffff9f006f0d  c3                   ret 
+
+wrapper 0xffffffff9f006f10..0xffffffff9f006f25 ( 21 B)  vmmcall x1  EAX@sites=[{'kind': 'const', 'val': 20}]
+   arg-register writes in wrapper:
+     mov rcx, rsi
+     mov ebx, edi
+   0xffffffff9f006f10  55                   push rbp
+   0xffffffff9f006f11  4889e5               mov rbp, rsp
+   0xffffffff9f006f14  53                   push rbx
+   0xffffffff9f006f15  4889f1               mov rcx, rsi
+   0xffffffff9f006f18  b814000000           mov eax, 0x14
+   0xffffffff9f006f1d  89fb                 mov ebx, edi
+   0xffffffff9f006f1f  0f01d9               vmmcall  <<< VMMCALL
+   0xffffffff9f006f22  5b                   pop rbx
+   0xffffffff9f006f23  5d                   pop rbp
+   0xffffffff9f006f24  c3                   ret 
+
+wrapper 0xffffffff9f006f30..0xffffffff9f006f42 ( 18 B)  vmmcall x1  EAX@sites=[{'kind': 'const', 'val': 21}]
+   arg-register writes in wrapper:
+     mov ebx, edi
+   0xffffffff9f006f30  55                   push rbp
+   0xffffffff9f006f31  4889e5               mov rbp, rsp
+   0xffffffff9f006f34  53                   push rbx
+   0xffffffff9f006f35  b815000000           mov eax, 0x15
+   0xffffffff9f006f3a  89fb                 mov ebx, edi
+   0xffffffff9f006f3c  0f01d9               vmmcall  <<< VMMCALL
+   0xffffffff9f006f3f  5b                   pop rbx
+   0xffffffff9f006f40  5d                   pop rbp
+   0xffffffff9f006f41  c3                   ret 
+
+wrapper 0xffffffff9f006f50..0xffffffff9f006f5e ( 14 B)  vmmcall x1  EAX@sites=[{'kind': 'const', 'val': 32}]
+   0xffffffff9f006f50  55                   push rbp
+   0xffffffff9f006f51  4889e5               mov rbp, rsp
+   0xffffffff9f006f54  b820000000           mov eax, 0x20
+   0xffffffff9f006f59  0f01d9               vmmcall  <<< VMMCALL
+   0xffffffff9f006f5c  5d                   pop rbp
+   0xffffffff9f006f5d  c3                   ret 
+
+wrapper 0xffffffff9f006f60..0xffffffff9f006f72 ( 18 B)  vmmcall x1  EAX@sites=[{'kind': 'const', 'val': 19}]
+   arg-register writes in wrapper:
+     mov ebx, edi
+   0xffffffff9f006f60  55                   push rbp
+   0xffffffff9f006f61  4889e5               mov rbp, rsp
+   0xffffffff9f006f64  53                   push rbx
+   0xffffffff9f006f65  b813000000           mov eax, 0x13
+   0xffffffff9f006f6a  89fb                 mov ebx, edi
+   0xffffffff9f006f6c  0f01d9               vmmcall  <<< VMMCALL
+   0xffffffff9f006f6f  5b                   pop rbx
+   0xffffffff9f006f70  5d                   pop rbp
+   0xffffffff9f006f71  c3                   ret 
+
+wrapper 0xffffffff9f006f80..0xffffffff9f006fb1 ( 49 B)  vmmcall x1  EAX@sites=[{'kind': 'const', 'val': 27}]
+   arg-register writes in wrapper:
+     mov rcx, rsi
+     mov rdi, r8
+     mov r9, qword ptr [rbp + 0x10]
+     mov r8, r14
+     mov rsi, r11
+   0xffffffff9f006f80  55                   push rbp
+   0xffffffff9f006f81  4889e5               mov rbp, rsp
+   0xffffffff9f006f84  4156                 push r14
+   0xffffffff9f006f86  53                   push rbx
+   0xffffffff9f006f87  4d89ce               mov r14, r9
+   0xffffffff9f006f8a  4989cb               mov r11, rcx
+   0xffffffff9f006f8d  4889f1               mov rcx, rsi
+   0xffffffff9f006f90  4889fb               mov rbx, rdi
+   0xffffffff9f006f93  4c89c7               mov rdi, r8
+   0xffffffff9f006f96  4c8b4d10             mov r9, qword ptr [rbp + 0x10]
+   0xffffffff9f006f9a  4c8b5518             mov r10, qword ptr [rbp + 0x18]
+   0xffffffff9f006f9e  b81b000000           mov eax, 0x1b
+   0xffffffff9f006fa3  4d89f0               mov r8, r14
+   0xffffffff9f006fa6  4c89de               mov rsi, r11
+   0xffffffff9f006fa9  0f01d9               vmmcall  <<< VMMCALL
+   0xffffffff9f006fac  5b                   pop rbx
+   0xffffffff9f006fad  415e                 pop r14
+   0xffffffff9f006faf  5d                   pop rbp
+   0xffffffff9f006fb0  c3                   ret 
+
+wrapper 0xffffffff9f006fc0..0xffffffff9f006fce ( 14 B)  vmmcall x1  EAX@sites=[{'kind': 'const', 'val': 28}]
+   0xffffffff9f006fc0  55                   push rbp
+   0xffffffff9f006fc1  4889e5               mov rbp, rsp
+   0xffffffff9f006fc4  b81c000000           mov eax, 0x1c
+   0xffffffff9f006fc9  0f01d9               vmmcall  <<< VMMCALL
+   0xffffffff9f006fcc  5d                   pop rbp
+   0xffffffff9f006fcd  c3                   ret 
+
+wrapper 0xffffffff9f006fd0..0xffffffff9f006fe6 ( 22 B)  vmmcall x1  EAX@sites=[{'kind': 'const', 'val': 29}]
+   arg-register writes in wrapper:
+     mov rcx, rsi
+   0xffffffff9f006fd0  55                   push rbp
+   0xffffffff9f006fd1  4889e5               mov rbp, rsp
+   0xffffffff9f006fd4  53                   push rbx
+   0xffffffff9f006fd5  4889f1               mov rcx, rsi
+   0xffffffff9f006fd8  b81d000000           mov eax, 0x1d
+   0xffffffff9f006fdd  4889fb               mov rbx, rdi
+   0xffffffff9f006fe0  0f01d9               vmmcall  <<< VMMCALL
+   0xffffffff9f006fe3  5b                   pop rbx
+   0xffffffff9f006fe4  5d                   pop rbp
+   0xffffffff9f006fe5  c3                   ret 
+
+wrapper 0xffffffff9f006ff0..0xffffffff9f006ffe ( 14 B)  vmmcall x1  EAX@sites=[{'kind': 'const', 'val': 30}]
+   0xffffffff9f006ff0  55                   push rbp
+   0xffffffff9f006ff1  4889e5               mov rbp, rsp
+   0xffffffff9f006ff4  b81e000000           mov eax, 0x1e
+   0xffffffff9f006ff9  0f01d9               vmmcall  <<< VMMCALL
+   0xffffffff9f006ffc  5d                   pop rbp
+   0xffffffff9f006ffd  c3                   ret 
+
+wrapper 0xffffffff9f007000..0xffffffff9f007047 ( 71 B)  vmmcall x1  EAX@sites=[{'kind': 'const', 'val': 38}]
+   arg-register writes in wrapper:
+     mov edi, edx
+     mov ebx, ecx
+     mov rcx, r15
+     mov rdx, r14
+   0xffffffff9f007000  55                   push rbp
+   0xffffffff9f007001  4889e5               mov rbp, rsp
+   0xffffffff9f007004  4157                 push r15
+   0xffffffff9f007006  4156                 push r14
+   0xffffffff9f007008  4154                 push r12
+   0xffffffff9f00700a  53                   push rbx
+   0xffffffff9f00700b  4989fc               mov r12, rdi
+   0xffffffff9f00700e  89d7                 mov edi, edx
+   0xffffffff9f007010  4589c6               mov r14d, r8d
+   0xffffffff9f007013  89cb                 mov ebx, ecx
+   0xffffffff9f007015  4989f7               mov r15, rsi
+   0xffffffff9f007018  e8836ac2ff           call 0xffffffff9ec2daa0
+   0xffffffff9f00701d  0fb6c0               movzx eax, al
+   0xffffffff9f007020  c1e308               shl ebx, 8
+   0xffffffff9f007023  41c1e610             shl r14d, 0x10
+   0xffffffff9f007027  4c89f9               mov rcx, r15
+   0xffffffff9f00702a  4809c3               or rbx, rax
+   0xffffffff9f00702d  b826000000           mov eax, 0x26
+   0xffffffff9f007032  4909de               or r14, rbx
+   0xffffffff9f007035  4c89e3               mov rbx, r12
+   0xffffffff9f007038  4c89f2               mov rdx, r14
+   0xffffffff9f00703b  0f01d9               vmmcall  <<< VMMCALL
+   0xffffffff9f00703e  5b                   pop rbx
+   0xffffffff9f00703f  415c                 pop r12
+   0xffffffff9f007041  415e                 pop r14
+   0xffffffff9f007043  415f                 pop r15
+   0xffffffff9f007045  5d                   pop rbp
+   0xffffffff9f007046  c3                   ret 
+
+wrapper 0xffffffff9f007050..0xffffffff9f00706c ( 28 B)  vmmcall x1  EAX@sites=[{'kind': 'const', 'val': 39}]
+   arg-register writes in wrapper:
+     mov ebx, eax
+   0xffffffff9f007050  55                   push rbp
+   0xffffffff9f007051  4889e5               mov rbp, rsp
+   0xffffffff9f007054  53                   push rbx
+   0xffffffff9f007055  50                   push rax
+   0xffffffff9f007056  e8456ac2ff           call 0xffffffff9ec2daa0
+   0xffffffff9f00705b  89c3                 mov ebx, eax
+   0xffffffff9f00705d  b827000000           mov eax, 0x27
+   0xffffffff9f007062  0f01d9               vmmcall  <<< VMMCALL
+   0xffffffff9f007065  4883c408             add rsp, 8
+   0xffffffff9f007069  5b                   pop rbx
+   0xffffffff9f00706a  5d                   pop rbp
+   0xffffffff9f00706b  c3                   ret 
+
+wrapper 0xffffffff9f007070..0xffffffff9f0070a6 ( 54 B)  vmmcall x1  EAX@sites=[{'kind': 'const', 'val': 40}]
+   arg-register writes in wrapper:
+     mov edi, edx
+     mov ebx, eax
+   0xffffffff9f007070  55                   push rbp
+   0xffffffff9f007071  4889e5               mov rbp, rsp
+   0xffffffff9f007074  4157                 push r15
+   0xffffffff9f007076  4156                 push r14
+   0xffffffff9f007078  53                   push rbx
+   0xffffffff9f007079  50                   push rax
+   0xffffffff9f00707a  4989ff               mov r15, rdi
+   0xffffffff9f00707d  89d7                 mov edi, edx
+   0xffffffff9f00707f  4989f6               mov r14, rsi
+   0xffffffff9f007082  e8196ac2ff           call 0xffffffff9ec2daa0
+   0xffffffff9f007087  89c3                 mov ebx, eax
+   0xffffffff9f007089  b828000000           mov eax, 0x28
+   0xffffffff9f00708e  0f01d9               vmmcall  <<< VMMCALL
+   0xffffffff9f007091  4885d2               test rdx, rdx
+   0xffffffff9f007094  49891f               mov qword ptr [r15], rbx
+   0xffffffff9f007097  410f9506             setne byte ptr [r14]
+   0xffffffff9f00709b  4883c408             add rsp, 8
+   0xffffffff9f00709f  5b                   pop rbx
+   0xffffffff9f0070a0  415e                 pop r14
+   0xffffffff9f0070a2  415f                 pop r15
+   0xffffffff9f0070a4  5d                   pop rbp
+   0xffffffff9f0070a5  c3                   ret 
+
+wrapper 0xffffffff9f0071b0..0xffffffff9f007348 (408 B)  vmmcall x1  EAX@sites=[{'kind': 'const', 'val': 18}]
+   arg-register writes in wrapper:
+     mov rdi, r12
+     xor esi, esi
+     xor edx, edx
+     xor ecx, ecx
+     mov rdi, rbx
+     mov rdx, r13
+     mov ecx, 0xb5
+     xor esi, esi
+     mov rdi, rbx
+     mov esi, r14d
+     mov rdi, qword ptr [rbx]
+     xor esi, esi
+     xor edx, edx
+     xor ecx, ecx
+     mov rdi, rbx
+     mov rdx, r13
+     mov ecx, 0xbb
+     xor esi, esi
+     mov rdi, rbx
+     mov rdi, qword ptr [rbx]
+     xor esi, esi
+     xor edx, edx
+     xor ecx, ecx
+     mov rdi, r12
+     xor esi, esi
+     xor edx, edx
+     xor ecx, ecx
+     mov rdi, r12
+     xor esi, esi
+     xor edx, edx
+     xor ecx, ecx
+     mov rdi, r12
+     xor esi, esi
+     xor edx, edx
+     xor ecx, ecx
+     lea rdi, [rip + 0x31d4fe8]
+     lea rsi, [rip + 0x31d4fc1]
+     mov rcx, r15
+     xor edx, edx
+     mov rdi, r12
+     xor esi, esi
+     xor edx, edx
+     xor ecx, ecx
+     mov rdi, r12
+     xor esi, esi
+     xor edx, edx
+     xor ecx, ecx
+     mov rdi, qword ptr [rdi + 0x28]
+     xor esi, esi
+     xor edx, edx
+     xor ecx, ecx
+     mov rdi, r14
+     lea rdi, [rbx + 0x20]
+     mov rdi, r14
+     xor esi, esi
+     xor edx, edx
+     xor ecx, ecx
+     mov rdi, qword ptr [rbx + 0x28]
+   0xffffffff9f0071b0  4c89e7               mov rdi, r12
+   0xffffffff9f0071b3  c705a3501d0300000000 mov dword ptr [rip + 0x31d50a3], 0
+   0xffffffff9f0071bd  31f6                 xor esi, esi
+   0xffffffff9f0071bf  31d2                 xor edx, edx
+   0xffffffff9f0071c1  31c9                 xor ecx, ecx
+   0xffffffff9f0071c3  e8d8fd8aff           call 0xffffffff9e8b6fa0
+   0xffffffff9f0071c8  4889df               mov rdi, rbx
+   0xffffffff9f0071cb  4c89ea               mov rdx, r13
+   0xffffffff9f0071ce  b9b5000000           mov ecx, 0xb5
+   0xffffffff9f0071d3  31f6                 xor esi, esi
+   0xffffffff9f0071d5  4183f601             xor r14d, 1
+   0xffffffff9f0071d9  e8d2068bff           call 0xffffffff9e8b78b0
+   0xffffffff9f0071de  4889df               mov rdi, rbx
+   0xffffffff9f0071e1  4489f6               mov esi, r14d
+   0xffffffff9f0071e4  e8d705aaff           call 0xffffffff9eaa77c0
+   0xffffffff9f0071e9  488b3b               mov rdi, qword ptr [rbx]
+   0xffffffff9f0071ec  31f6                 xor esi, esi
+   0xffffffff9f0071ee  31d2                 xor edx, edx
+   0xffffffff9f0071f0  31c9                 xor ecx, ecx
+   0xffffffff9f0071f2  4883c718             add rdi, 0x18
+   0xffffffff9f0071f6  e825038bff           call 0xffffffff9e8b7520
+   0xffffffff9f0071fb  4889df               mov rdi, rbx
+   0xffffffff9f0071fe  4c89ea               mov rdx, r13
+   0xffffffff9f007201  b9bb000000           mov ecx, 0xbb
+   0xffffffff9f007206  b812000000           mov eax, 0x12
+   0xffffffff9f00720b  31f6                 xor esi, esi
+   0xffffffff9f00720d  0f01d9               vmmcall  <<< VMMCALL
+   0xffffffff9f007210  e89b068bff           call 0xffffffff9e8b78b0
+   0xffffffff9f007215  4889df               mov rdi, rbx
+   0xffffffff9f007218  e84306aaff           call 0xffffffff9eaa7860
+   0xffffffff9f00721d  488b3b               mov rdi, qword ptr [rbx]
+   0xffffffff9f007220  31f6                 xor esi, esi
+   0xffffffff9f007222  31d2                 xor edx, edx
+   0xffffffff9f007224  31c9                 xor ecx, ecx
+   0xffffffff9f007226  4883c718             add rdi, 0x18
+   0xffffffff9f00722a  e8f1028bff           call 0xffffffff9e8b7520
+   0xffffffff9f00722f  4c89e7               mov rdi, r12
+   0xffffffff9f007232  31f6                 xor esi, esi
+   0xffffffff9f007234  31d2                 xor edx, edx
+   0xffffffff9f007236  31c9                 xor ecx, ecx
+   0xffffffff9f007238  e8c3f78aff           call 0xffffffff9e8b6a00
+   0xffffffff9f00723d  833d1c501d0301       cmp dword ptr [rip + 0x31d501c], 1
+   0xffffffff9f007244  7521                 jne 0xffffffff9f007267
+   0xffffffff9f007246  4c89e7               mov rdi, r12
+   0xffffffff9f007249  31f6                 xor esi, esi
+   0xffffffff9f00724b  31d2                 xor edx, edx
+   0xffffffff9f00724d  31c9                 xor ecx, ecx
+   0xffffffff9f00724f  e84cfd8aff           call 0xffffffff9e8b6fa0
+   0xffffffff9f007254  e857efd0ff           call 0xffffffff9ed161b0
+   0xffffffff9f007259  4c89e7               mov rdi, r12
+   0xffffffff9f00725c  31f6                 xor esi, esi
+   0xffffffff9f00725e  31d2                 xor edx, edx
+   0xffffffff9f007260  31c9                 xor ecx, ecx
+   0xffffffff9f007262  e899f78aff           call 0xffffffff9e8b6a00
+   0xffffffff9f007267  c705ef4f1d0302000000 mov dword ptr [rip + 0x31d4fef], 2
+   0xffffffff9f007271  488d3de84f1d03       lea rdi, [rip + 0x31d4fe8]
+   0xffffffff9f007278  488d35c14f1d03       lea rsi, [rip + 0x31d4fc1]
+   0xffffffff9f00727f  4c89f9               mov rcx, r15
+   0xffffffff9f007282  c7042400010000       mov dword ptr [rsp], 0x100
+   0xffffffff9f007289  31d2                 xor edx, edx
+   0xffffffff9f00728b  4531c9               xor r9d, r9d
+   0xffffffff9f00728e  4c6305cf4f1d03       movsxd r8, dword ptr [rip + 0x31d4fcf]
+   0xffffffff9f007295  4c0faf053391d002     imul r8, qword ptr [rip + 0x2d09133]
+   0xffffffff9f00729d  e8beeffeff           call 0xffffffff9eff6260
+   0xffffffff9f0072a2  833db74f1d0301       cmp dword ptr [rip + 0x31d4fb7], 1
+   0xffffffff9f0072a9  0f8501ffffff         jne 0xffffffff9f0071b0
+   0xffffffff9f0072af  4c89e7               mov rdi, r12
+   0xffffffff9f0072b2  31f6                 xor esi, esi
+   0xffffffff9f0072b4  31d2                 xor edx, edx
+   0xffffffff9f0072b6  31c9                 xor ecx, ecx
+   0xffffffff9f0072b8  e8e3fc8aff           call 0xffffffff9e8b6fa0
+   0xffffffff9f0072bd  e8eeeed0ff           call 0xffffffff9ed161b0
+   0xffffffff9f0072c2  4c89e7               mov rdi, r12
+   0xffffffff9f0072c5  31f6                 xor esi, esi
+   0xffffffff9f0072c7  31d2                 xor edx, edx
+   0xffffffff9f0072c9  31c9                 xor ecx, ecx
+   0xffffffff9f0072cb  e830f78aff           call 0xffffffff9e8b6a00
+   0xffffffff9f0072d0  e9dbfeffff           jmp 0xffffffff9f0071b0
+   0xffffffff9f0072d5  90                   nop 
+   0xffffffff9f0072d6  90                   nop 
+   0xffffffff9f0072d7  90                   nop 
+   0xffffffff9f0072d8  90                   nop 
+   0xffffffff9f0072d9  90                   nop 
+   0xffffffff9f0072da  90                   nop 
+   0xffffffff9f0072db  90                   nop 
+   0xffffffff9f0072dc  90                   nop 
+   0xffffffff9f0072dd  90                   nop 
+   0xffffffff9f0072de  90                   nop 
+   0xffffffff9f0072df  90                   nop 
+   0xffffffff9f0072e0  55                   push rbp
+   0xffffffff9f0072e1  4889e5               mov rbp, rsp
+   0xffffffff9f0072e4  4156                 push r14
+   0xffffffff9f0072e6  53                   push rbx
+   0xffffffff9f0072e7  4889fb               mov rbx, rdi
+   0xffffffff9f0072ea  488b7f28             mov rdi, qword ptr [rdi + 0x28]
+   0xffffffff9f0072ee  e8adecd0ff           call 0xffffffff9ed15fa0
+   0xffffffff9f0072f3  85c0                 test eax, eax
+   0xffffffff9f0072f5  7551                 jne 0xffffffff9f007348
+   0xffffffff9f0072f7  4c8d7318             lea r14, [rbx + 0x18]
+   0xffffffff9f0072fb  31f6                 xor esi, esi
+   0xffffffff9f0072fd  31d2                 xor edx, edx
+   0xffffffff9f0072ff  31c9                 xor ecx, ecx
+   0xffffffff9f007301  4c89f7               mov rdi, r14
+   0xffffffff9f007304  e8f7f68aff           call 0xffffffff9e8b6a00
+   0xffffffff9f007309  837b2002             cmp dword ptr [rbx + 0x20], 2
+   0xffffffff9f00730d  7509                 jne 0xffffffff9f007318
+   0xffffffff9f00730f  488d7b20             lea rdi, [rbx + 0x20]
+   0xffffffff9f007313  e8f8f5feff           call 0xffffffff9eff6910
+   0xffffffff9f007318  4c89f7               mov rdi, r14
+   0xffffffff9f00731b  c7432001000000       mov dword ptr [rbx + 0x20], 1
+   0xffffffff9f007322  31f6                 xor esi, esi
+   0xffffffff9f007324  31d2                 xor edx, edx
+   0xffffffff9f007326  31c9                 xor ecx, ecx
+   0xffffffff9f007328  e873fc8aff           call 0xffffffff9e8b6fa0
+   0xffffffff9f00732d  6b350c91d0023c       imul esi, dword ptr [rip + 0x2d0910c], 0x3c
+   0xffffffff9f007334  488b7b28             mov rdi, qword ptr [rbx + 0x28]
+   0xffffffff9f007338  e8f3ecd0ff           call 0xffffffff9ed16030
+   0xffffffff9f00733d  85c0                 test eax, eax
+   0xffffffff9f00733f  7526                 jne 0xffffffff9f007367
+   0xffffffff9f007341  31c0                 xor eax, eax
+   0xffffffff9f007343  5b                   pop rbx
+   0xffffffff9f007344  415e                 pop r14
+   0xffffffff9f007346  5d                   pop rbp
+   0xffffffff9f007347  c3                   ret 
+
+non-vmmcall functions inside region: [('0xffffffff9f006a71', '0xffffffff9f006a7a'), ('0xffffffff9f006c70', '0xffffffff9f006c92'), ('0xffffffff9f0070b0', '0xffffffff9f0071af'), ('0xffffffff9f007348', '0xffffffff9f007367'), ('0xffffffff9f007367', '0xffffffff9f00738d'), ('0xffffffff9f007390', '0xffffffff9f0073a5'), ('0xffffffff9f0073a5', '0xffffffff9f0073cb'), ('0xffffffff9f0073d0', '0xffffffff9f0073e9'), ('0xffffffff9f0073e9', '0xffffffff9f0073f8'), ('0xffffffff9f0073f8', '0xffffffff9f00740e')]
+
+====================================================================================================
+C) XREF SCAN (E8/E9 rel32 + DATA qword ptrs + TEXT qword ptrs + lea rip)
+====================================================================================================
+
+C1 E8/E9 targeting wrapper region: 53 raw, 53 verified, 0 rejected
+C2 DATA qword pointers into wrapper region: 1
+   @data 0xffffffffa1129218 -> 0xffffffff9f006ee0 (wrapper-start)
+C3 TEXT absolute qwords into wrapper region: 0
+C4 lea rip-relative into wrapper region (verified): 0
+
+====================================================================================================
+D) CALLER SEMANTICS (strings referenced by each caller + data-side names)
+====================================================================================================
+
+distinct (wrapper, caller-function) pairs: 39
+
+--- caller of wrapper 0xffffffff9f006a10: func 0xffffffff9eaa55a0..0xffffffff9eaa5650 (176 B) kinds=['call'] sites=['0xffffffff9eaa55ee']
+
+--- caller of wrapper 0xffffffff9f006a10: func 0xffffffff9ead2d10..0xffffffff9ead54e0 (10192 B) kinds=['call'] sites=['0xffffffff9ead4def']
+    FILE PATHS: ['W:/Build/J03950001/sys/freebsd/sys/kern/kern_exec.c']
+    FORMAT/panic strings: ['EXEC pid:%d']
+    identifier-like: ['copyinstr', 'native', 'process_exec_end', 'process_exec_end2', 'process_exec_pre', 'ps4', 'system', 'unspecified', 'user']
+
+--- caller of wrapper 0xffffffff9f006a20: func 0xffffffff9eaa55a0..0xffffffff9eaa5650 (176 B) kinds=['call'] sites=['0xffffffff9eaa55c1']
+
+--- caller of wrapper 0xffffffff9f006a20: func 0xffffffff9ec0dcd0..0xffffffff9ec0e0b0 (992 B) kinds=['call'] sites=['0xffffffff9ec0ddfb']
+    FORMAT/panic strings: ['Failed to enable cpuid masquerade on %d', 'scheduler returned us to %s']
+    identifier-like: ['init_secondary_tail']
+
+--- caller of wrapper 0xffffffff9f006a20: func 0xffffffff9edf9310..0xffffffff9edfa0b0 (3488 B) kinds=['call'] sites=['0xffffffff9edf9f44']
+    FORMAT/panic strings: ['removal of kernel text [%#lx, %#lx) from s4_preserved_physmap failed']
+    identifier-like: ['dcons.addr', 'dcons.size', 'hw.memtest.tests', 'hw.physmem', 'hw.physmem.start']
+
+--- caller of wrapper 0xffffffff9f006a30: func 0xffffffff9eaa55a0..0xffffffff9eaa5650 (176 B) kinds=['call'] sites=['0xffffffff9eaa561d']
+
+--- caller of wrapper 0xffffffff9f006a40: func 0xffffffff9e8e8b80..0xffffffff9e8e8c80 (256 B) kinds=['call'] sites=['0xffffffff9e8e8bc4']
+
+--- caller of wrapper 0xffffffff9f006a40: func 0xffffffff9e8e8d20..0xffffffff9e8e8e10 (240 B) kinds=['call'] sites=['0xffffffff9e8e8d5b']
+
+--- caller of wrapper 0xffffffff9f006a40: func 0xffffffff9e8ea4f0..0xffffffff9e8ec1f0 (7424 B) kinds=['call'] sites=['0xffffffff9e8eb062', '0xffffffff9e8eb32f', '0xffffffff9e8eb3d0', '0xffffffff9e8eb423']
+    identifier-like: ['amd_iommu_map', 'amd_iommu_register_iofault_handler', 'iommu', 'iommu_intr', 'iommu_pci_attach', 'iommu_pci_resume']
+
+--- caller of wrapper 0xffffffff9f006a40: func 0xffffffff9e8ec665..0xffffffff9e8ec8d0 (619 B) kinds=['call'] sites=['0xffffffff9e8ec760']
+
+--- caller of wrapper 0xffffffff9f006a80: func 0xffffffff9e8e9030..0xffffffff9e8e92c0 (656 B) kinds=['call'] sites=['0xffffffff9e8e9263']
+
+--- caller of wrapper 0xffffffff9f006a80: func 0xffffffff9e8ea4f0..0xffffffff9e8ec1f0 (7424 B) kinds=['call'] sites=['0xffffffff9e8ebd3c', '0xffffffff9e8ebdf5', '0xffffffff9e8ec0ea']
+    identifier-like: ['amd_iommu_map', 'amd_iommu_register_iofault_handler', 'iommu', 'iommu_intr', 'iommu_pci_attach', 'iommu_pci_resume']
+
+--- caller of wrapper 0xffffffff9f006b00: func 0xffffffff9e8ea4f0..0xffffffff9e8ec1f0 (7424 B) kinds=['call'] sites=['0xffffffff9e8eb05d', '0xffffffff9e8eb31d']
+    identifier-like: ['amd_iommu_map', 'amd_iommu_register_iofault_handler', 'iommu', 'iommu_intr', 'iommu_pci_attach', 'iommu_pci_resume']
+
+--- caller of wrapper 0xffffffff9f006b20: func 0xffffffff9e8ea4f0..0xffffffff9e8ec1f0 (7424 B) kinds=['call'] sites=['0xffffffff9e8eb3c3']
+    identifier-like: ['amd_iommu_map', 'amd_iommu_register_iofault_handler', 'iommu', 'iommu_intr', 'iommu_pci_attach', 'iommu_pci_resume']
+
+--- caller of wrapper 0xffffffff9f006b20: func 0xffffffff9e8ec665..0xffffffff9e8ec8d0 (619 B) kinds=['call'] sites=['0xffffffff9e8ec753']
+
+--- caller of wrapper 0xffffffff9f006b40: func 0xffffffff9e8e8b80..0xffffffff9e8e8c80 (256 B) kinds=['call'] sites=['0xffffffff9e8e8bbb']
+
+--- caller of wrapper 0xffffffff9f006b40: func 0xffffffff9e8ea4f0..0xffffffff9e8ec1f0 (7424 B) kinds=['call'] sites=['0xffffffff9e8eb41a']
+    identifier-like: ['amd_iommu_map', 'amd_iommu_register_iofault_handler', 'iommu', 'iommu_intr', 'iommu_pci_attach', 'iommu_pci_resume']
+
+--- caller of wrapper 0xffffffff9f006b60: func 0xffffffff9e8e8d20..0xffffffff9e8e8e10 (240 B) kinds=['call'] sites=['0xffffffff9e8e8d52']
+
+--- caller of wrapper 0xffffffff9f006ba0: func 0xffffffff9f0873d2..0xffffffff9f0877e0 (1038 B) kinds=['call'] sites=['0xffffffff9f087667']
+    identifier-like: ['SceTmr', 'system_resume_phase2', 'system_suspend_phase2_post_sync', 'tmr_viol_spin', 'tmr_violation_worker']
+
+--- caller of wrapper 0xffffffff9f006ba0: func 0xffffffff9f0877e0..0xffffffff9f087c60 (1152 B) kinds=['call'] sites=['0xffffffff9f087959']
+    identifier-like: ['tmr_check_on_boot']
+
+--- caller of wrapper 0xffffffff9f006ee0: func 0xffffffff9e781780..0xffffffff9e7818a0 (288 B) kinds=['call'] sites=['0xffffffff9e781809']
+
+--- caller of wrapper 0xffffffff9f006ee0: func 0xffffffff9ec77360..0xffffffff9ec773e0 (128 B) kinds=['call'] sites=['0xffffffff9ec7737d']
+
+--- caller of wrapper 0xffffffff9f006f00: func 0xffffffff9e7813b0..0xffffffff9e7814f0 (320 B) kinds=['call'] sites=['0xffffffff9e78144f']
+    FORMAT/panic strings: ['acpi_wakeup: failed to resume AP #%d (PHY #%d)']
+
+--- caller of wrapper 0xffffffff9f006f00: func 0xffffffff9ec76ad0..0xffffffff9ec77360 (2192 B) kinds=['call'] sites=['0xffffffff9ec7729d']
+    FORMAT/panic strings: ['AP #%d (PHY# %d) failed!']
+
+--- caller of wrapper 0xffffffff9f006f10: func 0xffffffff9e6ab2b0..0xffffffff9e6ab440 (400 B) kinds=['call'] sites=['0xffffffff9e6ab34c']
+    identifier-like: ['psp_mbox_map_tmr']
+
+--- caller of wrapper 0xffffffff9f006f10: func 0xffffffff9e827220..0xffffffff9e8272f0 (208 B) kinds=['call'] sites=['0xffffffff9e827271', '0xffffffff9e8272b3']
+    FORMAT/panic strings: ['hv_restore_pt_tmr[%d] failed: %d']
+
+--- caller of wrapper 0xffffffff9f006f10: func 0xffffffff9f0a5b20..0xffffffff9f0a5c80 (352 B) kinds=['call'] sites=['0xffffffff9f0a5b4a']
+    identifier-like: ['tmrMap']
+
+--- caller of wrapper 0xffffffff9f006f10: func 0xffffffff9f0a61a0..0xffffffff9f0a6310 (368 B) kinds=['call'] sites=['0xffffffff9f0a61e1']
+    identifier-like: ['sceSblSvpMapPrdyTeeArea']
+
+--- caller of wrapper 0xffffffff9f006f30: func 0xffffffff9e6ab2b0..0xffffffff9e6ab440 (400 B) kinds=['call'] sites=['0xffffffff9e6ab405']
+    identifier-like: ['psp_mbox_map_tmr']
+
+--- caller of wrapper 0xffffffff9f006f30: func 0xffffffff9e827730..0xffffffff9e827810 (224 B) kinds=['call'] sites=['0xffffffff9e827741', '0xffffffff9e827754', '0xffffffff9e827767', '0xffffffff9e82777a', '0xffffffff9e82778d']
+    FORMAT/panic strings: ['hv_restore_pt_tmr[%d] failed: %d']
+
+--- caller of wrapper 0xffffffff9f006f30: func 0xffffffff9f0a5b20..0xffffffff9f0a5c80 (352 B) kinds=['call'] sites=['0xffffffff9f0a5bd6']
+    identifier-like: ['tmrMap']
+
+--- caller of wrapper 0xffffffff9f006f30: func 0xffffffff9f0a5c80..0xffffffff9f0a5e30 (432 B) kinds=['call'] sites=['0xffffffff9f0a5d92']
+    identifier-like: ['tmrUnmap']
+
+--- caller of wrapper 0xffffffff9f006f30: func 0xffffffff9f0a61a0..0xffffffff9f0a6310 (368 B) kinds=['call'] sites=['0xffffffff9f0a62b0']
+    identifier-like: ['sceSblSvpMapPrdyTeeArea']
+
+--- caller of wrapper 0xffffffff9f006f30: func 0xffffffff9f0a6310..0xffffffff9f0a64a0 (400 B) kinds=['call'] sites=['0xffffffff9f0a6397']
+    identifier-like: ['sceSblAacs2BlockScanInAccess', 'sceSblSvpUnmapPrdyTeeArea']
+
+--- caller of wrapper 0xffffffff9f006f50: func 0xffffffff9e651090..0xffffffff9e6511c0 (304 B) kinds=['jmp'] sites=['0xffffffff9e651178']
+    data-side names: [('0xffffffff9f270ed0', -2, 'nsid3'), ('0xffffffff9f270ed0', 1, 'verbosity'), ('0xffffffff9f270ed0', 4, 'vnodes')]
+
+--- caller of wrapper 0xffffffff9f006f60: func 0xffffffff9e966270..0xffffffff9e969550 (13024 B) kinds=['call'] sites=['0xffffffff9e968e5f']
+    FILE PATHS: ['W:/Build/J03950001/sys/freebsd/sys/x86/x86/local_apic.c']
+    FORMAT/panic strings: ['     ID: 0x%08x   VER: 0x%08x LDR: 0x%08x DFR: 0x%08x', '  timer: 0x%08x therm: 0x%08x err: 0x%08x', ' pmc: 0x%08x', ' x2APIC: %d', 'corrupted la_timer_mode %p %d', 'cpu%d:timer']
+    identifier-like: ['KVMKVMKVM', 'LAPIC', 'apic', 'clock', 'hw.lapic_eoi_suppression', 'hw.lapic_tsc_deadline']
+
+wrapper-to-wrapper thunks (in-region, NOT kernel callers): 2
+   thunk func 0xffffffff9f006c70 -> wrapper 0xffffffff9f006c92 via ['jmp']
+   thunk func 0xffffffff9f006f60 -> wrapper 0xffffffff9f0071b0 via ['jmp']
+real kernel callers (out-of-region, string-analyzed): 36

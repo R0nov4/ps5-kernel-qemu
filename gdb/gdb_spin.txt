@@ -1,0 +1,7 @@
+warning: No executable has been specified and target does not support
+determining executable automatically.  Try using the "file" command.
+0x000000000000fff0 in ?? ()
+Breakpoint 1 at 0xffffffff9e8b79ac
+Cannot execute this command while the target is running.
+Use the "interrupt" command to stop the target
+and then try again.

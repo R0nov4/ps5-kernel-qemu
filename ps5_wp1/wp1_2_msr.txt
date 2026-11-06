@@ -1,0 +1,625 @@
+====================================================================================================
+WP1-2: MSR SITE SCAN (rdmsr 0F32 / wrmsr 0F30) — verified + ECX-resolved
+====================================================================================================
+
+raw sites in code region: 1436 (rdmsr 904, wrmsr 532)
+verified: 1397   rejected: 39
+  fn-anchored: 1383, back-sweep-only: 14
+  verified with ECX-kind 'none': 15 (flagged: possibly false positive OR ECX set via uncommon path)
+
+====================================================================================================
+PER-MSR AGGREGATE (direction, sites, functions, subsystem evidence)
+====================================================================================================
+
+distinct MSR keys: 189 const + 8 dynamic-source
+
+MSR   0x00000000 [CUSTOM/UNKNOWN]  dir=R+W  sites=4 (R=2,W=2)  funcs=3  first_site=0xffffffff9e9f49dc
+    files: ['W:/Build/J03950001/sys/freebsd/sys/kern/orbis_pmc.c']
+    ident evidence: ['PowerUsage', 'averageActualPower', 'averageActualPowerCpu', 'averageActualPowerGpu', 'averageGameCoreClockFrequency', 'averageGraphicsClockFrequency']
+
+MSR   0x00000001 [CUSTOM/UNKNOWN]  dir=R  sites=1 (R=1,W=0)  funcs=1  first_site=0xffffffff9ed667e5
+
+MSR   0x00000003 [CUSTOM/UNKNOWN]  dir=R  sites=2 (R=2,W=0)  funcs=1  first_site=0xffffffff9e9f4f8c
+    ident evidence: ['copyout']
+
+MSR   0x00000010 [TSC]  dir=R  sites=2 (R=2,W=0)  funcs=2  first_site=0xffffffff9f00f36f
+    ident evidence: ['mp4_queue0', 'mp4_queue1', 'mp4_queue_mtx0', 'mp4_queue_mtx1', 'mp4_queue_thr0', 'mp4_queue_thr1']
+
+MSR   0x0000001B [IA32_APIC_BASE]  dir=R+W  sites=4 (R=2,W=2)  funcs=1  first_site=0xffffffff9e96655f
+    files: ['W:/Build/J03950001/sys/freebsd/sys/x86/x86/local_apic.c']
+    ident evidence: ['KVMKVMKVM', 'LAPIC', 'apic', 'clock', 'hw.lapic_eoi_suppression', 'hw.lapic_tsc_deadline']
+
+MSR   0x0000003A [CUSTOM/UNKNOWN]  dir=R  sites=1 (R=1,W=0)  funcs=1  first_site=0xffffffff9ed5a67a
+    ident evidence: ['AuthenticAMD', 'EM64T', 'Unknown']
+
+MSR   0x000000E7 [IA32_MPERF]  dir=R+W  sites=8 (R=4,W=4)  funcs=4  first_site=0xffffffff9ebb0865
+    files: ['W:/Build/J03950001/sys/freebsd/sys/x86/x86/cpu_machdep.c']
+    ident evidence: ['AuthenticAMD', 'EM64T', 'Unknown', 'copyin', 'copyout', 'cpufreq']
+
+MSR   0x000000E8 [IA32_APERF]  dir=R+W  sites=8 (R=4,W=4)  funcs=4  first_site=0xffffffff9ebb0870
+    files: ['W:/Build/J03950001/sys/freebsd/sys/x86/x86/cpu_machdep.c']
+    ident evidence: ['AuthenticAMD', 'EM64T', 'Unknown', 'copyin', 'copyout', 'cpufreq']
+
+MSR   0x000000FE [CUSTOM/UNKNOWN]  dir=R  sites=1 (R=1,W=0)  funcs=1  first_site=0xffffffff9e9df630
+
+MSR   0x00000179 [CUSTOM/UNKNOWN]  dir=R  sites=3 (R=3,W=0)  funcs=2  first_site=0xffffffff9ed66343
+    ident evidence: ['count', 'force_scan', 'interval', 'mca', 'records']
+
+MSR   0x0000017A [CUSTOM/UNKNOWN]  dir=R+W  sites=3 (R=2,W=1)  funcs=2  first_site=0xffffffff9ed66796
+
+MSR   0x0000017B [CUSTOM/UNKNOWN]  dir=W  sites=1 (R=0,W=1)  funcs=1  first_site=0xffffffff9ed6635b
+    ident evidence: ['count', 'force_scan', 'interval', 'mca', 'records']
+
+MSR   0x00000198 [IA32_PERF_STATUS]  dir=R  sites=8 (R=8,W=0)  funcs=2  first_site=0xffffffff9efee9d8
+    ident evidence: ['AuthenticAMD', 'acpi_perf', 'est']
+
+MSR   0x00000199 [IA32_PERF_CONTROL]  dir=R+W  sites=6 (R=3,W=3)  funcs=1  first_site=0xffffffff9efeed9d
+    ident evidence: ['AuthenticAMD', 'acpi_perf', 'est']
+
+MSR   0x0000019A [IA32_CLOCK_MODULATION]  dir=R+W  sites=7 (R=4,W=3)  funcs=1  first_site=0xffffffff9e738f85
+    ident evidence: ['p4tcc', 'pslinkHidApp_headset_GetData', 'pslinkHidApp_headset_GetEqBandValues', 'pslinkHidApp_headset_GetEqPresetName', 'pslinkHidApp_headset_GetEqPresetSelection', 'pslinkHidApp_headset_GetNetworkLocale']
+
+MSR   0x000001A0 [IA32_MISC_ENABLE]  dir=R+W  sites=4 (R=3,W=1)  funcs=2  first_site=0xffffffff9ed5b165
+    ident evidence: ['AuthenticAMD', 'acpi_perf', 'est']
+
+MSR   0x000001D9 [IA32_DEBUGCTL]  dir=W  sites=5 (R=0,W=5)  funcs=5  first_site=0xffffffff9e7811ad
+    ident evidence: ['break', 'dcons.addr', 'dcons.size', 'hw.memtest.tests', 'hw.physmem', 'hw.physmem.start']
+
+MSR   0x000001DB [LastBranch_FromIP0]  dir=R  sites=1 (R=1,W=0)  funcs=1  first_site=0xffffffff9e7de26c
+    ident evidence: ['break']
+
+MSR   0x000001DC [LastBranch_ToIP0]  dir=R  sites=1 (R=1,W=0)  funcs=1  first_site=0xffffffff9e7de283
+    ident evidence: ['break']
+
+MSR   0x000001DD [LastBranch_Info? (non-std)]  dir=R  sites=64 (R=64,W=0)  funcs=18  first_site=0xffffffff9e642afd
+    ident evidence: ['SMAP', 'UNKNOWN', 'data', 'instruction', 'kernel', 'read']
+
+MSR   0x000001DE [LastBranch_TOS?]  dir=R  sites=64 (R=64,W=0)  funcs=18  first_site=0xffffffff9e642b15
+    ident evidence: ['SMAP', 'UNKNOWN', 'data', 'instruction', 'kernel', 'read']
+
+MSR   0x00000250 [MTRRfix64K_00000]  dir=R+W  sites=3 (R=2,W=1)  funcs=2  first_site=0xffffffff9e9dfd1c
+    ident evidence: ['BIOS']
+
+MSR   0x00000258 [MTRRfix16K_80000]  dir=R+W  sites=3 (R=2,W=1)  funcs=2  first_site=0xffffffff9e9dfda8
+    ident evidence: ['BIOS']
+
+MSR   0x00000259 [MTRRfix16K_C0000]  dir=R  sites=1 (R=1,W=0)  funcs=1  first_site=0xffffffff9e9dfe38
+    ident evidence: ['BIOS']
+
+MSR   0x00000268 [MTRRfix4K_C0000]  dir=R+W  sites=2 (R=1,W=1)  funcs=1  first_site=0xffffffff9e9e0995
+
+MSR   0x00000277 [IA32_PAT]  dir=W  sites=1 (R=0,W=1)  funcs=1  first_site=0xffffffff9eccd249
+
+MSR   0x000002FE [CUSTOM/UNKNOWN]  dir=W  sites=1 (R=0,W=1)  funcs=1  first_site=0xffffffff9e9f48dd
+    files: ['W:/Build/J03950001/sys/freebsd/sys/kern/orbis_pmc.c']
+
+MSR   0x000002FF [MTRRdefType]  dir=R+W  sites=6 (R=3,W=3)  funcs=3  first_site=0xffffffff9e9df647
+
+MSR   0x0000030E [CUSTOM/UNKNOWN]  dir=W  sites=1 (R=0,W=1)  funcs=1  first_site=0xffffffff9e9f4959
+    files: ['W:/Build/J03950001/sys/freebsd/sys/kern/orbis_pmc.c']
+
+MSR   0x000003F5 [CUSTOM/UNKNOWN]  dir=W  sites=1 (R=0,W=1)  funcs=1  first_site=0xffffffff9e9f431b
+    files: ['W:/Build/J03950001/sys/freebsd/sys/kern/orbis_pmc.c']
+
+MSR   0x00000400 [MC0_CTL]  dir=W  sites=1 (R=0,W=1)  funcs=1  first_site=0xffffffff9ed66611
+    ident evidence: ['count', 'force_scan', 'interval', 'mca', 'records']
+
+MSR   0x00000401 [MC0_STATUS]  dir=W  sites=1 (R=0,W=1)  funcs=1  first_site=0xffffffff9ed6661c
+    ident evidence: ['count', 'force_scan', 'interval', 'mca', 'records']
+
+MSR   0x00000404 [MC1_CTL]  dir=W  sites=1 (R=0,W=1)  funcs=1  first_site=0xffffffff9ed6662d
+    ident evidence: ['count', 'force_scan', 'interval', 'mca', 'records']
+
+MSR   0x00000405 [MC1_STATUS]  dir=W  sites=1 (R=0,W=1)  funcs=1  first_site=0xffffffff9ed66643
+    ident evidence: ['count', 'force_scan', 'interval', 'mca', 'records']
+
+MSR   0x00000408 [MC2_CTL]  dir=W  sites=1 (R=0,W=1)  funcs=1  first_site=0xffffffff9ed66654
+    ident evidence: ['count', 'force_scan', 'interval', 'mca', 'records']
+
+MSR   0x00000409 [MC2_STATUS]  dir=W  sites=1 (R=0,W=1)  funcs=1  first_site=0xffffffff9ed6665f
+    ident evidence: ['count', 'force_scan', 'interval', 'mca', 'records']
+
+MSR   0x0000040C [MC3_CTL]  dir=W  sites=2 (R=0,W=2)  funcs=2  first_site=0xffffffff9e9f47f3
+    files: ['W:/Build/J03950001/sys/freebsd/sys/kern/orbis_pmc.c']
+    ident evidence: ['count', 'force_scan', 'interval', 'mca', 'records']
+
+MSR   0x0000040D [MC3_STATUS]  dir=W  sites=1 (R=0,W=1)  funcs=1  first_site=0xffffffff9ed6667b
+    ident evidence: ['count', 'force_scan', 'interval', 'mca', 'records']
+
+MSR   0x00000410 [MC4_CTL]  dir=W  sites=1 (R=0,W=1)  funcs=1  first_site=0xffffffff9ed666b7
+    ident evidence: ['count', 'force_scan', 'interval', 'mca', 'records']
+
+MSR   0x00000411 [MC4_STATUS]  dir=W  sites=1 (R=0,W=1)  funcs=1  first_site=0xffffffff9ed666c2
+    ident evidence: ['count', 'force_scan', 'interval', 'mca', 'records']
+
+MSR   0x00000414 [MC5_CTL]  dir=W  sites=1 (R=0,W=1)  funcs=1  first_site=0xffffffff9ed666d3
+    ident evidence: ['count', 'force_scan', 'interval', 'mca', 'records']
+
+MSR   0x00000415 [MC5_STATUS]  dir=W  sites=1 (R=0,W=1)  funcs=1  first_site=0xffffffff9ed666de
+    ident evidence: ['count', 'force_scan', 'interval', 'mca', 'records']
+
+MSR   0x00000418 [MC6_CTL]  dir=W  sites=1 (R=0,W=1)  funcs=1  first_site=0xffffffff9ed666ef
+    ident evidence: ['count', 'force_scan', 'interval', 'mca', 'records']
+
+MSR   0x00000419 [MC6_STATUS]  dir=W  sites=1 (R=0,W=1)  funcs=1  first_site=0xffffffff9ed666fa
+    ident evidence: ['count', 'force_scan', 'interval', 'mca', 'records']
+
+MSR   0x00000480 [MTRRphysBase0]  dir=R  sites=1 (R=1,W=0)  funcs=1  first_site=0xffffffff9ed5a693
+    ident evidence: ['AuthenticAMD', 'EM64T', 'Unknown']
+
+MSR   0x00000481 [MTRRphysMask0]  dir=R  sites=1 (R=1,W=0)  funcs=1  first_site=0xffffffff9ed5a6a9
+    ident evidence: ['AuthenticAMD', 'EM64T', 'Unknown']
+
+MSR   0x00000482 [MTRRphysBase1]  dir=R  sites=1 (R=1,W=0)  funcs=1  first_site=0xffffffff9ed5a6b3
+    ident evidence: ['AuthenticAMD', 'EM64T', 'Unknown']
+
+MSR   0x00000483 [MTRRphysMask1]  dir=R  sites=1 (R=1,W=0)  funcs=1  first_site=0xffffffff9ed5a6d0
+    ident evidence: ['AuthenticAMD', 'EM64T', 'Unknown']
+
+MSR   0x00000484 [CUSTOM/UNKNOWN]  dir=R  sites=1 (R=1,W=0)  funcs=1  first_site=0xffffffff9ed5a6d9
+    ident evidence: ['AuthenticAMD', 'EM64T', 'Unknown']
+
+MSR   0x0000048B [MTRRphysBase?]  dir=R  sites=2 (R=2,W=0)  funcs=1  first_site=0xffffffff9ed5a6c7
+    ident evidence: ['AuthenticAMD', 'EM64T', 'Unknown']
+
+MSR   0x0000048C [MTRRphysMask?]  dir=R  sites=1 (R=1,W=0)  funcs=1  first_site=0xffffffff9ed5a8ab
+    ident evidence: ['AuthenticAMD', 'EM64T', 'Unknown']
+
+MSR   0x0000048D [MTRRphysBase?]  dir=R  sites=1 (R=1,W=0)  funcs=1  first_site=0xffffffff9ed5a77a
+    ident evidence: ['AuthenticAMD', 'EM64T', 'Unknown']
+
+MSR   0x0000048E [MTRRphysMask?]  dir=R  sites=1 (R=1,W=0)  funcs=1  first_site=0xffffffff9ed5a784
+    ident evidence: ['AuthenticAMD', 'EM64T', 'Unknown']
+
+MSR   0x0000048F [MTRRphysBase?]  dir=R  sites=1 (R=1,W=0)  funcs=1  first_site=0xffffffff9ed5a7a1
+    ident evidence: ['AuthenticAMD', 'EM64T', 'Unknown']
+
+MSR   0x00000490 [MTRRphysMask?]  dir=R  sites=1 (R=1,W=0)  funcs=1  first_site=0xffffffff9ed5a7aa
+    ident evidence: ['AuthenticAMD', 'EM64T', 'Unknown']
+
+MSR   0x0000052C [CUSTOM/UNKNOWN]  dir=R  sites=1 (R=1,W=0)  funcs=1  first_site=0xffffffff9e9f5043
+    files: ['W:/Build/J03950001/sys/freebsd/sys/kern/orbis_pmc.c']
+    ident evidence: ['opmc_resume', 'opmc_suspend', 'system_resume_phase4', 'system_suspend_phase3']
+
+MSR   0x00000539 [CUSTOM/UNKNOWN]  dir=R  sites=3 (R=3,W=0)  funcs=1  first_site=0xffffffff9e9f506e
+    files: ['W:/Build/J03950001/sys/freebsd/sys/kern/orbis_pmc.c']
+    ident evidence: ['opmc_resume', 'opmc_suspend', 'system_resume_phase4', 'system_suspend_phase3']
+
+MSR   0x000006E0 [CUSTOM/UNKNOWN]  dir=W  sites=3 (R=0,W=3)  funcs=2  first_site=0xffffffff9e96826a
+    files: ['W:/Build/J03950001/sys/freebsd/sys/x86/x86/local_apic.c']
+    ident evidence: ['KVMKVMKVM', 'LAPIC', 'apic', 'clock', 'hw.lapic_eoi_suppression', 'hw.lapic_tsc_deadline']
+
+MSR   0x00000800 [CUSTOM/UNKNOWN]  dir=R  sites=1 (R=1,W=0)  funcs=1  first_site=0xffffffff9ebe1528
+    ident evidence: ['TESTING', 'mDBG:test']
+
+MSR   0x00000802 [CUSTOM/UNKNOWN]  dir=R  sites=2 (R=2,W=0)  funcs=1  first_site=0xffffffff9e96861e
+    files: ['W:/Build/J03950001/sys/freebsd/sys/x86/x86/local_apic.c']
+    ident evidence: ['KVMKVMKVM', 'LAPIC', 'apic', 'clock', 'hw.lapic_eoi_suppression', 'hw.lapic_tsc_deadline']
+
+MSR   0x00000803 [CUSTOM/UNKNOWN]  dir=R  sites=4 (R=4,W=0)  funcs=1  first_site=0xffffffff9e96688c
+    files: ['W:/Build/J03950001/sys/freebsd/sys/x86/x86/local_apic.c']
+    ident evidence: ['KVMKVMKVM', 'LAPIC', 'apic', 'clock', 'hw.lapic_eoi_suppression', 'hw.lapic_tsc_deadline']
+
+MSR   0x00000808 [CUSTOM/UNKNOWN]  dir=R+W  sites=3 (R=2,W=1)  funcs=1  first_site=0xffffffff9e966ab4
+    files: ['W:/Build/J03950001/sys/freebsd/sys/x86/x86/local_apic.c']
+    ident evidence: ['KVMKVMKVM', 'LAPIC', 'apic', 'clock', 'hw.lapic_eoi_suppression', 'hw.lapic_tsc_deadline']
+
+MSR   0x0000080B [CUSTOM/UNKNOWN]  dir=W  sites=2 (R=0,W=2)  funcs=2  first_site=0xffffffff9e645034
+    files: ['W:/Build/J03950001/sys/freebsd/sys/x86/x86/local_apic.c']
+    ident evidence: ['KVMKVMKVM', 'LAPIC', 'apic', 'clock', 'hw.lapic_eoi_suppression', 'hw.lapic_tsc_deadline']
+
+MSR   0x0000080D [CUSTOM/UNKNOWN]  dir=R  sites=1 (R=1,W=0)  funcs=1  first_site=0xffffffff9e968648
+    files: ['W:/Build/J03950001/sys/freebsd/sys/x86/x86/local_apic.c']
+    ident evidence: ['KVMKVMKVM', 'LAPIC', 'apic', 'clock', 'hw.lapic_eoi_suppression', 'hw.lapic_tsc_deadline']
+
+MSR   0x0000080F [CUSTOM/UNKNOWN]  dir=R+W  sites=7 (R=4,W=3)  funcs=1  first_site=0xffffffff9e96659c
+    files: ['W:/Build/J03950001/sys/freebsd/sys/x86/x86/local_apic.c']
+    ident evidence: ['KVMKVMKVM', 'LAPIC', 'apic', 'clock', 'hw.lapic_eoi_suppression', 'hw.lapic_tsc_deadline']
+
+MSR   0x00000811 [AMD_??_0811 (MCA mask?)]  dir=R  sites=1 (R=1,W=0)  funcs=1  first_site=0xffffffff9e6451e9
+
+MSR   0x00000812 [AMD_??_0812]  dir=R  sites=1 (R=1,W=0)  funcs=1  first_site=0xffffffff9e6453b9
+
+MSR   0x00000813 [AMD_??_0813]  dir=R  sites=1 (R=1,W=0)  funcs=1  first_site=0xffffffff9e645589
+
+MSR   0x00000814 [AMD_??_0814]  dir=R  sites=1 (R=1,W=0)  funcs=1  first_site=0xffffffff9e645759
+
+MSR   0x00000815 [AMD_??_0815]  dir=R  sites=1 (R=1,W=0)  funcs=1  first_site=0xffffffff9e645929
+
+MSR   0x00000816 [AMD_??_0816]  dir=R  sites=1 (R=1,W=0)  funcs=1  first_site=0xffffffff9e645af9
+
+MSR   0x00000817 [AMD_??_0817]  dir=R  sites=1 (R=1,W=0)  funcs=1  first_site=0xffffffff9e645cc9
+
+MSR   0x00000828 [CUSTOM/UNKNOWN]  dir=R+W  sites=3 (R=1,W=2)  funcs=2  first_site=0xffffffff9e9683ab
+    files: ['W:/Build/J03950001/sys/freebsd/sys/x86/x86/local_apic.c']
+    ident evidence: ['KVMKVMKVM', 'LAPIC', 'apic', 'clock', 'hw.lapic_eoi_suppression', 'hw.lapic_tsc_deadline']
+
+MSR   0x0000082F [CUSTOM/UNKNOWN]  dir=R+W  sites=3 (R=2,W=1)  funcs=1  first_site=0xffffffff9e9683f0
+    files: ['W:/Build/J03950001/sys/freebsd/sys/x86/x86/local_apic.c']
+    ident evidence: ['KVMKVMKVM', 'LAPIC', 'apic', 'clock', 'hw.lapic_eoi_suppression', 'hw.lapic_tsc_deadline']
+
+MSR   0x00000830 [CUSTOM/UNKNOWN]  dir=R+W  sites=5 (R=3,W=2)  funcs=1  first_site=0xffffffff9e96695d
+    files: ['W:/Build/J03950001/sys/freebsd/sys/x86/x86/local_apic.c']
+    ident evidence: ['KVMKVMKVM', 'LAPIC', 'apic', 'clock', 'hw.lapic_eoi_suppression', 'hw.lapic_tsc_deadline']
+
+MSR   0x00000832 [CUSTOM/UNKNOWN]  dir=R+W  sites=11 (R=2,W=9)  funcs=3  first_site=0xffffffff9e968071
+    files: ['W:/Build/J03950001/sys/freebsd/sys/x86/x86/local_apic.c']
+    ident evidence: ['KVMKVMKVM', 'LAPIC', 'apic', 'clock', 'hw.lapic_eoi_suppression', 'hw.lapic_tsc_deadline']
+
+MSR   0x00000833 [CUSTOM/UNKNOWN]  dir=R  sites=1 (R=1,W=0)  funcs=1  first_site=0xffffffff9e96876e
+    files: ['W:/Build/J03950001/sys/freebsd/sys/x86/x86/local_apic.c']
+    ident evidence: ['KVMKVMKVM', 'LAPIC', 'apic', 'clock', 'hw.lapic_eoi_suppression', 'hw.lapic_tsc_deadline']
+
+MSR   0x00000834 [CUSTOM/UNKNOWN]  dir=R+W  sites=2 (R=1,W=1)  funcs=1  first_site=0xffffffff9e96805d
+    files: ['W:/Build/J03950001/sys/freebsd/sys/x86/x86/local_apic.c']
+    ident evidence: ['KVMKVMKVM', 'LAPIC', 'apic', 'clock', 'hw.lapic_eoi_suppression', 'hw.lapic_tsc_deadline']
+
+MSR   0x00000835 [CUSTOM/UNKNOWN]  dir=R+W  sites=3 (R=2,W=1)  funcs=1  first_site=0xffffffff9e967f8a
+    files: ['W:/Build/J03950001/sys/freebsd/sys/x86/x86/local_apic.c']
+    ident evidence: ['KVMKVMKVM', 'LAPIC', 'apic', 'clock', 'hw.lapic_eoi_suppression', 'hw.lapic_tsc_deadline']
+
+MSR   0x00000836 [CUSTOM/UNKNOWN]  dir=R+W  sites=3 (R=2,W=1)  funcs=1  first_site=0xffffffff9e967fce
+    files: ['W:/Build/J03950001/sys/freebsd/sys/x86/x86/local_apic.c']
+    ident evidence: ['KVMKVMKVM', 'LAPIC', 'apic', 'clock', 'hw.lapic_eoi_suppression', 'hw.lapic_tsc_deadline']
+
+MSR   0x00000837 [CUSTOM/UNKNOWN]  dir=R+W  sites=3 (R=2,W=1)  funcs=1  first_site=0xffffffff9e96834b
+    files: ['W:/Build/J03950001/sys/freebsd/sys/x86/x86/local_apic.c']
+    ident evidence: ['KVMKVMKVM', 'LAPIC', 'apic', 'clock', 'hw.lapic_eoi_suppression', 'hw.lapic_tsc_deadline']
+
+MSR   0x00000838 [AMD_MCi_ADDR?]  dir=W  sites=5 (R=0,W=5)  funcs=3  first_site=0xffffffff9e9682d4
+    files: ['W:/Build/J03950001/sys/freebsd/sys/x86/x86/local_apic.c']
+    ident evidence: ['KVMKVMKVM', 'LAPIC', 'apic', 'clock', 'hw.lapic_eoi_suppression', 'hw.lapic_tsc_deadline']
+
+MSR   0x00000839 [CUSTOM/UNKNOWN]  dir=R  sites=1 (R=1,W=0)  funcs=1  first_site=0xffffffff9e96af6f
+
+MSR   0x0000083E [CUSTOM/UNKNOWN]  dir=W  sites=5 (R=0,W=5)  funcs=3  first_site=0xffffffff9e9681c4
+    files: ['W:/Build/J03950001/sys/freebsd/sys/x86/x86/local_apic.c']
+    ident evidence: ['KVMKVMKVM', 'LAPIC', 'apic', 'clock', 'hw.lapic_eoi_suppression', 'hw.lapic_tsc_deadline']
+
+MSR   0x00000841 [AMD_MCi_STATUS?]  dir=W  sites=1 (R=0,W=1)  funcs=1  first_site=0xffffffff9e966bb2
+    files: ['W:/Build/J03950001/sys/freebsd/sys/x86/x86/local_apic.c']
+    ident evidence: ['KVMKVMKVM', 'LAPIC', 'apic', 'clock', 'hw.lapic_eoi_suppression', 'hw.lapic_tsc_deadline']
+
+MSR   0x00000848 [CUSTOM/UNKNOWN]  dir=R+W  sites=4 (R=2,W=2)  funcs=2  first_site=0xffffffff9e96a0ec
+
+MSR   0x00000849 [CUSTOM/UNKNOWN]  dir=R+W  sites=4 (R=2,W=2)  funcs=2  first_site=0xffffffff9e96a127
+
+MSR   0x0000084A [CUSTOM/UNKNOWN]  dir=R+W  sites=4 (R=2,W=2)  funcs=2  first_site=0xffffffff9e96a162
+
+MSR   0x0000084B [CUSTOM/UNKNOWN]  dir=R+W  sites=4 (R=2,W=2)  funcs=2  first_site=0xffffffff9e96a1b2
+
+MSR   0x0000084C [CUSTOM/UNKNOWN]  dir=R+W  sites=4 (R=2,W=2)  funcs=2  first_site=0xffffffff9e96a214
+
+MSR   0x0000084D [CUSTOM/UNKNOWN]  dir=R+W  sites=68 (R=34,W=34)  funcs=3  first_site=0xffffffff9e966bc2
+    files: ['W:/Build/J03950001/sys/freebsd/sys/x86/x86/local_apic.c']
+    ident evidence: ['KVMKVMKVM', 'LAPIC', 'apic', 'clock', 'hw.lapic_eoi_suppression', 'hw.lapic_tsc_deadline']
+
+MSR   0x0000084E [CUSTOM/UNKNOWN]  dir=R+W  sites=68 (R=34,W=34)  funcs=3  first_site=0xffffffff9e9675c1
+    files: ['W:/Build/J03950001/sys/freebsd/sys/x86/x86/local_apic.c']
+    ident evidence: ['KVMKVMKVM', 'LAPIC', 'apic', 'clock', 'hw.lapic_eoi_suppression', 'hw.lapic_tsc_deadline']
+
+MSR   0x0000084F [CUSTOM/UNKNOWN]  dir=R+W  sites=4 (R=2,W=2)  funcs=2  first_site=0xffffffff9e96a33a
+
+MSR   0x00000850 [CUSTOM/UNKNOWN]  dir=R+W  sites=2 (R=1,W=1)  funcs=1  first_site=0xffffffff9e968433
+    files: ['W:/Build/J03950001/sys/freebsd/sys/x86/x86/local_apic.c']
+    ident evidence: ['KVMKVMKVM', 'LAPIC', 'apic', 'clock', 'hw.lapic_eoi_suppression', 'hw.lapic_tsc_deadline']
+
+MSR   0x00000851 [CUSTOM/UNKNOWN]  dir=R+W  sites=2 (R=1,W=1)  funcs=1  first_site=0xffffffff9e9684e5
+    files: ['W:/Build/J03950001/sys/freebsd/sys/x86/x86/local_apic.c']
+    ident evidence: ['KVMKVMKVM', 'LAPIC', 'apic', 'clock', 'hw.lapic_eoi_suppression', 'hw.lapic_tsc_deadline']
+
+MSR   0x00000852 [CUSTOM/UNKNOWN]  dir=R+W  sites=2 (R=1,W=1)  funcs=1  first_site=0xffffffff9e96848c
+    files: ['W:/Build/J03950001/sys/freebsd/sys/x86/x86/local_apic.c']
+    ident evidence: ['KVMKVMKVM', 'LAPIC', 'apic', 'clock', 'hw.lapic_eoi_suppression', 'hw.lapic_tsc_deadline']
+
+MSR   0x00001107 [CUSTOM/UNKNOWN]  dir=R+W  sites=2 (R=1,W=1)  funcs=1  first_site=0xffffffff9ec3ac17
+
+MSR   0x0000110B [CUSTOM/UNKNOWN]  dir=R+W  sites=2 (R=1,W=1)  funcs=1  first_site=0xffffffff9ec3abc2
+
+MSR   0x00001203 [CUSTOM/UNKNOWN]  dir=R  sites=1 (R=1,W=0)  funcs=1  first_site=0xffffffff9effd7d6
+    ident evidence: ['cpufreq', 'cpufreq_levels_changed', 'cpufreq_post_change', 'cpufreq_pre_change', 'tsc_freq_changed', 'tsc_freq_changing']
+
+MSR   0xC0000080 [EFER]  dir=R+W  sites=8 (R=4,W=4)  funcs=5  first_site=0xffffffff9e642874
+    ident evidence: ['bootflags', 'icu', 'kernelname', 'l2idsm', 'wbinvd']
+
+MSR   0xC0000081 [STAR]  dir=R+W  sites=4 (R=1,W=3)  funcs=4  first_site=0xffffffff9e642887
+    ident evidence: ['bootflags', 'icu', 'kernelname', 'l2idsm', 'wbinvd']
+
+MSR   0xC0000082 [LSTAR]  dir=R+W  sites=4 (R=1,W=3)  funcs=4  first_site=0xffffffff9e64289a
+    ident evidence: ['bootflags', 'icu', 'kernelname', 'l2idsm', 'wbinvd']
+
+MSR   0xC0000083 [CSTAR]  dir=R+W  sites=4 (R=1,W=3)  funcs=4  first_site=0xffffffff9e6428ad
+    ident evidence: ['bootflags', 'icu', 'kernelname', 'l2idsm', 'wbinvd']
+
+MSR   0xC0000084 [FMASK/SFMASK]  dir=R+W  sites=4 (R=1,W=3)  funcs=4  first_site=0xffffffff9e6428c0
+    ident evidence: ['bootflags', 'icu', 'kernelname', 'l2idsm', 'wbinvd']
+
+MSR   0xC0000100 [FS_BASE]  dir=R+W  sites=9 (R=3,W=6)  funcs=6  first_site=0xffffffff9e64284d
+    ident evidence: ['bootflags', 'icu', 'init_secondary_tail', 'kernelname', 'l2idsm', 'wbinvd']
+
+MSR   0xC0000101 [GS_BASE]  dir=R+W  sites=13 (R=5,W=8)  funcs=5  first_site=0xffffffff9e64285a
+    ident evidence: ['bootflags', 'icu', 'kernelname', 'l2idsm', 'wbinvd']
+
+MSR   0xC0000102 [KERNEL_GS_BASE]  dir=R+W  sites=5 (R=1,W=4)  funcs=5  first_site=0xffffffff9e642867
+    ident evidence: ['bootflags', 'icu', 'kernelname', 'l2idsm', 'wbinvd']
+
+MSR   0xC0000103 [TSC_AUX]  dir=W  sites=5 (R=0,W=5)  funcs=3  first_site=0xffffffff9eaa55ea
+    files: ['W:/Build/J03950001/sys/freebsd/sys/kern/kern_exec.c']
+    ident evidence: ['copyinstr', 'native', 'process_exec_end', 'process_exec_end2', 'process_exec_pre', 'ps4']
+
+MSR   0xC000010F [AMD_??_0x10F]  dir=W  sites=2 (R=0,W=2)  funcs=2  first_site=0xffffffff9e7de2a1
+    ident evidence: ['break']
+
+MSR   0xC0000110 [CUSTOM/UNKNOWN]  dir=R+W  sites=51 (R=48,W=3)  funcs=2  first_site=0xffffffff9e642b30
+
+MSR   0xC0000111 [CUSTOM/UNKNOWN]  dir=R+W  sites=51 (R=48,W=3)  funcs=2  first_site=0xffffffff9e642b4b
+
+MSR   0xC0000112 [CUSTOM/UNKNOWN]  dir=R+W  sites=51 (R=48,W=3)  funcs=2  first_site=0xffffffff9e642b66
+
+MSR   0xC0000113 [CUSTOM/UNKNOWN]  dir=R+W  sites=51 (R=48,W=3)  funcs=2  first_site=0xffffffff9e642b81
+
+MSR   0xC0000114 [CUSTOM/UNKNOWN]  dir=R+W  sites=51 (R=48,W=3)  funcs=2  first_site=0xffffffff9e642b9c
+
+MSR   0xC0000115 [CUSTOM/UNKNOWN]  dir=R+W  sites=51 (R=48,W=3)  funcs=2  first_site=0xffffffff9e642bb7
+
+MSR   0xC0000116 [CUSTOM/UNKNOWN]  dir=R+W  sites=51 (R=48,W=3)  funcs=2  first_site=0xffffffff9e642bd2
+
+MSR   0xC0000117 [CUSTOM/UNKNOWN]  dir=R+W  sites=51 (R=48,W=3)  funcs=2  first_site=0xffffffff9e642bed
+
+MSR   0xC001001F [AMD_??_001F]  dir=R+W  sites=2 (R=1,W=1)  funcs=1  first_site=0xffffffff9ec3ab87
+
+MSR   0xC0010041 [AMD_MC0_CTL_MASK?]  dir=R+W  sites=9 (R=1,W=8)  funcs=2  first_site=0xffffffff9ecf4869
+    ident evidence: ['FAT', 'GEOM_LABEL', 'acpi_perf', 'powernow']
+
+MSR   0xC0010042 [AMD_MC1_CTL_MASK?]  dir=R  sites=10 (R=10,W=0)  funcs=3  first_site=0xffffffff9ecf407c
+    ident evidence: ['FAT', 'GEOM_LABEL', 'acpi_perf', 'maxvid', 'powernow', 'startvid']
+
+MSR   0xC0010044 [AMD_MC4_CTL_MASK?]  dir=R+W  sites=2 (R=1,W=1)  funcs=1  first_site=0xffffffff9ed665af
+    ident evidence: ['count', 'force_scan', 'interval', 'mca', 'records']
+
+MSR   0xC0010055 [AMD_SMM_MASK?]  dir=R+W  sites=2 (R=1,W=1)  funcs=1  first_site=0xffffffff9ebb0a83
+    ident evidence: ['acpi', 'hlt', 'mwait', 'spin', 'unknown']
+
+MSR   0xC0010061 [AMD_DBGCTL]  dir=R  sites=4 (R=4,W=0)  funcs=2  first_site=0xffffffff9e94bac2
+    files: ['W:/Build/J03950001/sys/freebsd/sys/x86/cpufreq/hwpstate.c']
+    ident evidence: ['acpi_perf', 'disable_dsp', 'usb_hub_rtk_disable_dsp']
+
+MSR   0xC0010062 [AMD_DBG_STATUS]  dir=W  sites=1 (R=0,W=1)  funcs=1  first_site=0xffffffff9e94c0ba
+    files: ['W:/Build/J03950001/sys/freebsd/sys/x86/cpufreq/hwpstate.c']
+
+MSR   0xC0010063 [AMD_LASTBRANCH_FROM?]  dir=R  sites=2 (R=2,W=0)  funcs=2  first_site=0xffffffff9e94bf64
+    files: ['W:/Build/J03950001/sys/freebsd/sys/x86/cpufreq/hwpstate.c']
+    ident evidence: ['acpi_perf', 'disable_dsp', 'usb_hub_rtk_disable_dsp']
+
+MSR   0xC0010064 [AMD_LBR stack (0x64-0x6B)]  dir=R+W  sites=2 (R=1,W=1)  funcs=1  first_site=0xffffffff9edfa0e5
+
+MSR   0xC0010065 [CUSTOM/UNKNOWN]  dir=R+W  sites=2 (R=1,W=1)  funcs=1  first_site=0xffffffff9edfa0f4
+
+MSR   0xC0010066 [CUSTOM/UNKNOWN]  dir=R+W  sites=2 (R=1,W=1)  funcs=1  first_site=0xffffffff9edfa103
+
+MSR   0xC0010067 [CUSTOM/UNKNOWN]  dir=R+W  sites=2 (R=1,W=1)  funcs=1  first_site=0xffffffff9edfa112
+
+MSR   0xC0010068 [CUSTOM/UNKNOWN]  dir=R+W  sites=2 (R=1,W=1)  funcs=1  first_site=0xffffffff9edfa121
+
+MSR   0xC0010069 [CUSTOM/UNKNOWN]  dir=R+W  sites=2 (R=1,W=1)  funcs=1  first_site=0xffffffff9edfa130
+
+MSR   0xC001006A [CUSTOM/UNKNOWN]  dir=R+W  sites=2 (R=1,W=1)  funcs=1  first_site=0xffffffff9edfa13f
+
+MSR   0xC001006B [CUSTOM/UNKNOWN]  dir=R+W  sites=2 (R=1,W=1)  funcs=1  first_site=0xffffffff9edfa14e
+
+MSR   0xC0010114 [AMD_??_0114 (C-state?)]  dir=R  sites=1 (R=1,W=0)  funcs=1  first_site=0xffffffff9ed5aa71
+    ident evidence: ['AuthenticAMD', 'EM64T', 'Unknown']
+
+MSR   0xC0010190 [AMD_??_0190]  dir=R+W  sites=7 (R=3,W=4)  funcs=3  first_site=0xffffffff9e9f4a99
+    files: ['W:/Build/J03950001/sys/freebsd/sys/kern/orbis_pmc.c']
+    ident evidence: ['opmc_resume', 'opmc_suspend', 'system_resume_phase4', 'system_suspend_phase3']
+
+MSR   0xC0010191 [AMD_??_0191]  dir=R+W  sites=3 (R=1,W=2)  funcs=2  first_site=0xffffffff9e9f4cc4
+    files: ['W:/Build/J03950001/sys/freebsd/sys/kern/orbis_pmc.c']
+    ident evidence: ['copyout', 'opmc_resume', 'opmc_suspend', 'system_resume_phase4', 'system_suspend_phase3']
+
+MSR   0xC0010192 [CUSTOM/UNKNOWN]  dir=R+W  sites=7 (R=3,W=4)  funcs=3  first_site=0xffffffff9e9f4aa4
+    files: ['W:/Build/J03950001/sys/freebsd/sys/kern/orbis_pmc.c']
+    ident evidence: ['opmc_resume', 'opmc_suspend', 'system_resume_phase4', 'system_suspend_phase3']
+
+MSR   0xC0010193 [CUSTOM/UNKNOWN]  dir=R+W  sites=3 (R=1,W=2)  funcs=2  first_site=0xffffffff9e9f4ccb
+    files: ['W:/Build/J03950001/sys/freebsd/sys/kern/orbis_pmc.c']
+    ident evidence: ['copyout', 'opmc_resume', 'opmc_suspend', 'system_resume_phase4', 'system_suspend_phase3']
+
+MSR   0xC0010194 [CUSTOM/UNKNOWN]  dir=R+W  sites=7 (R=3,W=4)  funcs=3  first_site=0xffffffff9e9f4ab1
+    files: ['W:/Build/J03950001/sys/freebsd/sys/kern/orbis_pmc.c']
+    ident evidence: ['opmc_resume', 'opmc_suspend', 'system_resume_phase4', 'system_suspend_phase3']
+
+MSR   0xC0010195 [CUSTOM/UNKNOWN]  dir=R+W  sites=3 (R=1,W=2)  funcs=2  first_site=0xffffffff9e9f4cd2
+    files: ['W:/Build/J03950001/sys/freebsd/sys/kern/orbis_pmc.c']
+    ident evidence: ['copyout', 'opmc_resume', 'opmc_suspend', 'system_resume_phase4', 'system_suspend_phase3']
+
+MSR   0xC0010196 [CUSTOM/UNKNOWN]  dir=R+W  sites=7 (R=3,W=4)  funcs=3  first_site=0xffffffff9e9f4abe
+    files: ['W:/Build/J03950001/sys/freebsd/sys/kern/orbis_pmc.c']
+    ident evidence: ['opmc_resume', 'opmc_suspend', 'system_resume_phase4', 'system_suspend_phase3']
+
+MSR   0xC0010197 [CUSTOM/UNKNOWN]  dir=R+W  sites=4 (R=1,W=3)  funcs=2  first_site=0xffffffff9e9f4cd9
+    files: ['W:/Build/J03950001/sys/freebsd/sys/kern/orbis_pmc.c']
+    ident evidence: ['copyout', 'opmc_resume', 'opmc_suspend', 'system_resume_phase4', 'system_suspend_phase3']
+
+MSR   0xC0010200 [AMD_PERF_CTL[0]]  dir=W  sites=4 (R=0,W=4)  funcs=3  first_site=0xffffffff9e6425de
+
+MSR   0xC0010201 [AMD_PERF_CTR[0]]  dir=R+W  sites=8 (R=4,W=4)  funcs=6  first_site=0xffffffff9e642614
+    files: ['W:/Build/J03950001/sys/freebsd/sys/kern/orbis_pmc.c']
+    ident evidence: ['copyout']
+
+MSR   0xC0010202 [AMD_PERF_CTL[1]]  dir=W  sites=4 (R=0,W=4)  funcs=3  first_site=0xffffffff9e6425e5
+
+MSR   0xC0010203 [AMD_PERF_CTR[1]]  dir=R+W  sites=8 (R=4,W=4)  funcs=6  first_site=0xffffffff9e642629
+    files: ['W:/Build/J03950001/sys/freebsd/sys/kern/orbis_pmc.c']
+    ident evidence: ['copyout']
+
+MSR   0xC0010204 [AMD_PERF_CTL[2]]  dir=W  sites=4 (R=0,W=4)  funcs=3  first_site=0xffffffff9e6425ec
+
+MSR   0xC0010205 [AMD_PERF_CTR[2]]  dir=R+W  sites=8 (R=4,W=4)  funcs=6  first_site=0xffffffff9e64263e
+    files: ['W:/Build/J03950001/sys/freebsd/sys/kern/orbis_pmc.c']
+    ident evidence: ['copyout']
+
+MSR   0xC0010206 [AMD_PERF_CTL[3]]  dir=W  sites=4 (R=0,W=4)  funcs=3  first_site=0xffffffff9e6425f3
+
+MSR   0xC0010207 [AMD_PERF_CTR[3]]  dir=R+W  sites=8 (R=4,W=4)  funcs=6  first_site=0xffffffff9e642653
+    files: ['W:/Build/J03950001/sys/freebsd/sys/kern/orbis_pmc.c']
+    ident evidence: ['copyout']
+
+MSR   0xC0010208 [AMD_PERF_CTL[4]]  dir=W  sites=4 (R=0,W=4)  funcs=3  first_site=0xffffffff9e6425fa
+
+MSR   0xC0010209 [AMD_PERF_CTR[4]]  dir=R+W  sites=8 (R=4,W=4)  funcs=6  first_site=0xffffffff9e642668
+    files: ['W:/Build/J03950001/sys/freebsd/sys/kern/orbis_pmc.c']
+    ident evidence: ['copyout']
+
+MSR   0xC001020A [AMD_PERF_CTL[5]]  dir=W  sites=4 (R=0,W=4)  funcs=3  first_site=0xffffffff9e642601
+
+MSR   0xC001020B [AMD_PERF_CTR[5]]  dir=R+W  sites=8 (R=4,W=4)  funcs=6  first_site=0xffffffff9e64267d
+    files: ['W:/Build/J03950001/sys/freebsd/sys/kern/orbis_pmc.c']
+    ident evidence: ['copyout']
+
+MSR   0xC0010230 [AMD_??_0230 (Zen IBS?)]  dir=R+W  sites=16 (R=6,W=10)  funcs=2  first_site=0xffffffff9e9f3dee
+    files: ['W:/Build/J03950001/sys/freebsd/sys/kern/orbis_pmc.c']
+    ident evidence: ['opmc_resume', 'opmc_suspend', 'system_resume_phase4', 'system_suspend_phase3']
+
+MSR   0xC0010231 [AMD_??_0231]  dir=R+W  sites=6 (R=2,W=4)  funcs=2  first_site=0xffffffff9e9f474c
+    files: ['W:/Build/J03950001/sys/freebsd/sys/kern/orbis_pmc.c']
+    ident evidence: ['opmc_resume', 'opmc_suspend', 'system_resume_phase4', 'system_suspend_phase3']
+
+MSR   0xC0010232 [AMD_??_0232]  dir=R+W  sites=16 (R=6,W=10)  funcs=2  first_site=0xffffffff9e9f3e04
+    files: ['W:/Build/J03950001/sys/freebsd/sys/kern/orbis_pmc.c']
+    ident evidence: ['opmc_resume', 'opmc_suspend', 'system_resume_phase4', 'system_suspend_phase3']
+
+MSR   0xC0010233 [AMD_??_0233]  dir=R+W  sites=6 (R=2,W=4)  funcs=2  first_site=0xffffffff9e9f4753
+    files: ['W:/Build/J03950001/sys/freebsd/sys/kern/orbis_pmc.c']
+    ident evidence: ['opmc_resume', 'opmc_suspend', 'system_resume_phase4', 'system_suspend_phase3']
+
+MSR   0xC0010234 [CUSTOM/UNKNOWN]  dir=R+W  sites=16 (R=6,W=10)  funcs=2  first_site=0xffffffff9e9f3e10
+    files: ['W:/Build/J03950001/sys/freebsd/sys/kern/orbis_pmc.c']
+    ident evidence: ['opmc_resume', 'opmc_suspend', 'system_resume_phase4', 'system_suspend_phase3']
+
+MSR   0xC0010235 [CUSTOM/UNKNOWN]  dir=R+W  sites=6 (R=2,W=4)  funcs=2  first_site=0xffffffff9e9f475a
+    files: ['W:/Build/J03950001/sys/freebsd/sys/kern/orbis_pmc.c']
+    ident evidence: ['opmc_resume', 'opmc_suspend', 'system_resume_phase4', 'system_suspend_phase3']
+
+MSR   0xC0010236 [CUSTOM/UNKNOWN]  dir=R+W  sites=16 (R=6,W=10)  funcs=2  first_site=0xffffffff9e9f3e1d
+    files: ['W:/Build/J03950001/sys/freebsd/sys/kern/orbis_pmc.c']
+    ident evidence: ['opmc_resume', 'opmc_suspend', 'system_resume_phase4', 'system_suspend_phase3']
+
+MSR   0xC0010237 [CUSTOM/UNKNOWN]  dir=R+W  sites=6 (R=2,W=4)  funcs=2  first_site=0xffffffff9e9f4761
+    files: ['W:/Build/J03950001/sys/freebsd/sys/kern/orbis_pmc.c']
+    ident evidence: ['opmc_resume', 'opmc_suspend', 'system_resume_phase4', 'system_suspend_phase3']
+
+MSR   0xC0010238 [CUSTOM/UNKNOWN]  dir=R+W  sites=16 (R=6,W=10)  funcs=2  first_site=0xffffffff9e9f3e2a
+    files: ['W:/Build/J03950001/sys/freebsd/sys/kern/orbis_pmc.c']
+    ident evidence: ['opmc_resume', 'opmc_suspend', 'system_resume_phase4', 'system_suspend_phase3']
+
+MSR   0xC0010239 [CUSTOM/UNKNOWN]  dir=R+W  sites=6 (R=2,W=4)  funcs=2  first_site=0xffffffff9e9f4768
+    files: ['W:/Build/J03950001/sys/freebsd/sys/kern/orbis_pmc.c']
+    ident evidence: ['opmc_resume', 'opmc_suspend', 'system_resume_phase4', 'system_suspend_phase3']
+
+MSR   0xC001023A [CUSTOM/UNKNOWN]  dir=R+W  sites=16 (R=6,W=10)  funcs=2  first_site=0xffffffff9e9f3e37
+    files: ['W:/Build/J03950001/sys/freebsd/sys/kern/orbis_pmc.c']
+    ident evidence: ['opmc_resume', 'opmc_suspend', 'system_resume_phase4', 'system_suspend_phase3']
+
+MSR   0xC001023B [CUSTOM/UNKNOWN]  dir=R+W  sites=6 (R=2,W=4)  funcs=2  first_site=0xffffffff9e9f476f
+    files: ['W:/Build/J03950001/sys/freebsd/sys/kern/orbis_pmc.c']
+    ident evidence: ['opmc_resume', 'opmc_suspend', 'system_resume_phase4', 'system_suspend_phase3']
+
+MSR   0xC0010240 [AMD_??_0240]  dir=R+W  sites=7 (R=3,W=4)  funcs=3  first_site=0xffffffff9e9f4a01
+    files: ['W:/Build/J03950001/sys/freebsd/sys/kern/orbis_pmc.c']
+    ident evidence: ['opmc_resume', 'opmc_suspend', 'system_resume_phase4', 'system_suspend_phase3']
+
+MSR   0xC0010241 [AMD_??_0241]  dir=R+W  sites=3 (R=1,W=2)  funcs=2  first_site=0xffffffff9e9f4c8b
+    files: ['W:/Build/J03950001/sys/freebsd/sys/kern/orbis_pmc.c']
+    ident evidence: ['copyout', 'opmc_resume', 'opmc_suspend', 'system_resume_phase4', 'system_suspend_phase3']
+
+MSR   0xC0010242 [CUSTOM/UNKNOWN]  dir=R+W  sites=7 (R=3,W=4)  funcs=3  first_site=0xffffffff9e9f4a0c
+    files: ['W:/Build/J03950001/sys/freebsd/sys/kern/orbis_pmc.c']
+    ident evidence: ['opmc_resume', 'opmc_suspend', 'system_resume_phase4', 'system_suspend_phase3']
+
+MSR   0xC0010243 [CUSTOM/UNKNOWN]  dir=R+W  sites=3 (R=1,W=2)  funcs=2  first_site=0xffffffff9e9f4c92
+    files: ['W:/Build/J03950001/sys/freebsd/sys/kern/orbis_pmc.c']
+    ident evidence: ['copyout', 'opmc_resume', 'opmc_suspend', 'system_resume_phase4', 'system_suspend_phase3']
+
+MSR   0xC0010244 [CUSTOM/UNKNOWN]  dir=R+W  sites=7 (R=3,W=4)  funcs=3  first_site=0xffffffff9e9f4a19
+    files: ['W:/Build/J03950001/sys/freebsd/sys/kern/orbis_pmc.c']
+    ident evidence: ['opmc_resume', 'opmc_suspend', 'system_resume_phase4', 'system_suspend_phase3']
+
+MSR   0xC0010245 [CUSTOM/UNKNOWN]  dir=R+W  sites=3 (R=1,W=2)  funcs=2  first_site=0xffffffff9e9f4c99
+    files: ['W:/Build/J03950001/sys/freebsd/sys/kern/orbis_pmc.c']
+    ident evidence: ['copyout', 'opmc_resume', 'opmc_suspend', 'system_resume_phase4', 'system_suspend_phase3']
+
+MSR   0xC0010246 [CUSTOM/UNKNOWN]  dir=R+W  sites=7 (R=3,W=4)  funcs=3  first_site=0xffffffff9e9f4a26
+    files: ['W:/Build/J03950001/sys/freebsd/sys/kern/orbis_pmc.c']
+    ident evidence: ['opmc_resume', 'opmc_suspend', 'system_resume_phase4', 'system_suspend_phase3']
+
+MSR   0xC0010247 [CUSTOM/UNKNOWN]  dir=R+W  sites=3 (R=1,W=2)  funcs=2  first_site=0xffffffff9e9f4ca0
+    files: ['W:/Build/J03950001/sys/freebsd/sys/kern/orbis_pmc.c']
+    ident evidence: ['copyout', 'opmc_resume', 'opmc_suspend', 'system_resume_phase4', 'system_suspend_phase3']
+
+MSR   0xC0011005 [AMD_??_1005]  dir=R+W  sites=3 (R=1,W=2)  funcs=1  first_site=0xffffffff9ed5b1a1
+
+MSR   0xC0011019 [AMD_??_1019]  dir=R+W  sites=5 (R=2,W=3)  funcs=4  first_site=0xffffffff9e6423b4
+    ident evidence: ['copyin']
+
+MSR   0xC001101A [AMD_??_101A]  dir=R+W  sites=5 (R=2,W=3)  funcs=4  first_site=0xffffffff9e6423c9
+    ident evidence: ['copyin']
+
+MSR   0xC001101B [AMD_??_101B]  dir=R+W  sites=5 (R=2,W=3)  funcs=4  first_site=0xffffffff9e6423de
+    ident evidence: ['copyin']
+
+MSR   0xC0011024 [AMD_??_1024]  dir=R+W  sites=5 (R=2,W=3)  funcs=4  first_site=0xffffffff9e64241d
+    ident evidence: ['copyin']
+
+MSR   0xC0011025 [AMD_??_1025]  dir=R+W  sites=5 (R=2,W=3)  funcs=4  first_site=0xffffffff9e6423f3
+    ident evidence: ['copyin']
+
+MSR   0xC0011026 [AMD_??_1026]  dir=R+W  sites=5 (R=2,W=3)  funcs=4  first_site=0xffffffff9e642408
+    ident evidence: ['copyin']
+
+MSR   0xC0011027 [AMD_??_1027]  dir=R+W  sites=5 (R=2,W=3)  funcs=4  first_site=0xffffffff9e64239f
+    ident evidence: ['copyin']
+
+MSR   0xC0011029 [AMD_??_1029]  dir=R+W  sites=2 (R=1,W=1)  funcs=1  first_site=0xffffffff9ec3ab49
+
+MSR   0xC0011033 [AMD_??_1033 (Zen2?)]  dir=R+W  sites=19 (R=4,W=15)  funcs=3  first_site=0xffffffff9e96966e
+
+MSR   0xC0011074 [AMD_??_1074]  dir=R+W  sites=3 (R=1,W=2)  funcs=1  first_site=0xffffffff9eda2250
+    files: ['W:/Build/J03950001/sys/internal/modules/mp1/bapm_param_set/bapm_param_set.c']
+    ident evidence: ['mp1_set_bapm_param_set_all', 'set_wc_cpu_switch']
+
+MSR   0xC0011076 [AMD_??_1076]  dir=W  sites=1 (R=0,W=1)  funcs=1  first_site=0xffffffff9eda227a
+    files: ['W:/Build/J03950001/sys/internal/modules/mp1/bapm_param_set/bapm_param_set.c']
+    ident evidence: ['mp1_set_bapm_param_set_all', 'set_wc_cpu_switch']
+
+MSR   0xC0011077 [AMD_??_1077]  dir=W  sites=1 (R=0,W=1)  funcs=1  first_site=0xffffffff9eda2293
+    files: ['W:/Build/J03950001/sys/internal/modules/mp1/bapm_param_set/bapm_param_set.c']
+    ident evidence: ['mp1_set_bapm_param_set_all', 'set_wc_cpu_switch']
+
+MSR   0xC0011083 [AMD_??_1083]  dir=R  sites=1 (R=1,W=0)  funcs=1  first_site=0xffffffff9ebe1083
+
+MSR   0xC00110AD [AMD_??_10AD (Zen2 resync?)]  dir=R  sites=6 (R=6,W=0)  funcs=6  first_site=0xffffffff9e72f8a1
+    ident evidence: ['_gbase_free_vm_space', 'gbase_gvmsw_close', 'gbase_gvmsw_invalidate_tlb', 'gbase_gvmsw_map', 'gbase_gvmsw_protect', 'gbase_gvmsw_set_attr']
+
+MSR          dyn [dynamic (mov ecx, edi)]  dir=R+W  sites=4 (R=3,W=1)  funcs=3  first_site=0xffffffff9e649aed
+    files: ['W:/Build/J03950001/sys/freebsd/sys/x86/x86/local_apic.c']
+    ident evidence: ['KVMKVMKVM', 'LAPIC', 'apic', 'clock', 'hw.lapic_eoi_suppression', 'hw.lapic_tsc_deadline']
+
+MSR          dyn [dynamic (no ECX def before site (same function))]  dir=R+W  sites=15 (R=3,W=12)  funcs=15  first_site=0xffffffff9e71100d
+    files: ['W:/Build/J03950001/sys/mp4/x86/kernel/modules/a53mm/a53mm_command.c', 'W:/Build/J03950001/sys/mp4/x86/kernel/modules/a53mm/a53mm_command.c:110', 'W:/Build/J03950001/sys/mp4/x86/kernel/modules/a53mm/a53mm_command.c:113']
+    ident evidence: ['AmmGiveDmem', 'MapperAdmin', 'copyout', 'dsfield', 'exfldio', 'exoparg2']
+
+MSR          dyn [dynamic (mov ecx, dword ptr [rbp - 0x2c])]  dir=R  sites=1 (R=1,W=0)  funcs=1  first_site=0xffffffff9e9dfef8
+    ident evidence: ['BIOS']
+
+MSR          dyn [dynamic (mov ecx, r14d)]  dir=R  sites=2 (R=2,W=0)  funcs=1  first_site=0xffffffff9e9dffea
+    ident evidence: ['BIOS']
+
+MSR          dyn [dynamic (mov ecx, esi)]  dir=R+W  sites=3 (R=2,W=1)  funcs=2  first_site=0xffffffff9e9e0cc8
+
+MSR          dyn [dynamic (mov ecx, r8d)]  dir=R  sites=1 (R=1,W=0)  funcs=1  first_site=0xffffffff9ebe1bcf
+
+MSR          dyn [dynamic (mov ecx, r12d)]  dir=R+W  sites=4 (R=3,W=1)  funcs=1  first_site=0xffffffff9ed668b3
+
+MSR          dyn [dynamic (mov rcx, qword ptr [r12 - 8])]  dir=W  sites=1 (R=0,W=1)  funcs=1  first_site=0xffffffff9e9e0ca8

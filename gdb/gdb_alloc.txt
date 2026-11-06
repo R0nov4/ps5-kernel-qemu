@@ -1,0 +1,20 @@
+warning: No executable has been specified and target does not support
+determining executable automatically.  Try using the "file" command.
+0x000000000000fff0 in ?? ()
+Hardware assisted breakpoint 1 at 0xffffffff9e642a90
+
+Breakpoint 1, 0xffffffff9e642a90 in ?? ()
+Breakpoint 2 at 0xffffffff9edfe6bf
+Breakpoint 3 at 0xffffffff9edf8120
+
+Breakpoint 2, 0xffffffff9edfe6bf in ?? ()
+
+=== ALLOCATOR CALL 1 ===
+rip            0xffffffff9edfe6bf  0xffffffff9edfe6bf
+rdi            0xffffffff9edfe6ae  -1629493586
+rsi            0xffffffffa1978860  -1583904672
+rcx            0xffffffffa1978860  -1583904672
+rdx            0x5                 5
+Cannot execute this command while the target is running.
+Use the "interrupt" command to stop the target
+and then try again.

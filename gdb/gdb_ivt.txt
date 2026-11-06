@@ -1,0 +1,49 @@
+warning: No executable has been specified and target does not support
+determining executable automatically.  Try using the "file" command.
+0x000000000000fff0 in ?? ()
+Hardware assisted breakpoint 1 at 0xffffffff9edfd670
+
+Breakpoint 1, 0xffffffff9edfd670 in ?? ()
+
+=== REGION FN ENTRY 0x9edfd670 ===
+rip            0xffffffff9edfd670  0xffffffff9edfd670
+rsp            0xffffffffa1130d28  0xffffffffa1130d28
+rbp            0xffffffffa1130fa0  0xffffffffa1130fa0
+rdi            0xffffffffa1130e80  -1592586624
+rsi            0xffffffffa1130d84  -1592586876
+rdx            0xffffffffa1130d90  -1592586864
+rcx            0xffffffffa1130d80  -1592586880
+r8             0x5                 5
+r9             0x4                 4
+r13            0xffffffffa1fa6fe0  -1577422880
+r15            0xffffffffa1fb8f00  -1577349376
+0xffffffffa1130d28:	0xffffffff9edf9545	0x0000000000000000
+0xffffffffa1130d38:	0x0000000000000000	0x000000001e200000
+caller retaddr:
+0xffffffffa1130d28:	0xffffffff9edf9545
+Hardware read watchpoint 2: *(unsigned long long *)0xffff8e7700000000
+Hardware assisted breakpoint 3 at 0xc0007240f000ff53
+
+Breakpoint 3, 0xc0007240f000ff53 in ?? ()
+
+=== HIT A ===
+rip            0xc0007240f000ff53  0xc0007240f000ff53
+rsp            0xffffffffa1130c50  0xffffffffa1130c50
+rbp            0xffffffffa1130d20  0xffffffffa1130d20
+rax            0x1                 1
+rbx            0x8000000000000003  -9223372036854775805
+rcx            0xaa84d260b7126000  -6159567077505867776
+rdx            0x8000000000000103  -9223372036854775549
+rsi            0x8000000000000103  -9223372036854775549
+rdi            0x200000            2097152
+r8             0x0                 0
+r9             0x1e200000          505413632
+r10            0xf1e0000656        1038845216342
+r11            0x6                 6
+r12            0x1                 1
+r13            0xffffffff9e3f0000  -1640038400
+r14            0xffff8e7722253720  -124832651593952
+r15            0xffff8e7722253000  -124832651595776
+   0xc0007240f000ff47:	/tmp/ivt.gdb:17: Error in sourced command file:
+Cannot access memory at address 0xc0007240f000ff47
+[Inferior 1 (process 1) detached]

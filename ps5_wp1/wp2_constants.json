@@ -1,0 +1,114 @@
+{
+ "entry": {
+  "btext_cold_entry": "0xffffffff9e642a90",
+  "ap_entry": "0xffffffff9e642a40",
+  "wakeup_trampoline": "0xffffffff9e3f0010",
+  "resumectx": "0xffffffff9e6428f0",
+  "savectx": "0xffffffff9e6427d0",
+  "machine_init": "0xffffffff9edf8790",
+  "mi_startup": "0xffffffff9e9261f0",
+  "boot_stack_rip_rel_at": "0xffffffff9e642aa0 (lea rsp,[rip+0x2aee559])",
+  "loader_contract_phys": [
+   "0x9bf4c",
+   "0x9bf54",
+   "0x9b6f4",
+   "0x780-0x878",
+   "0x20",
+   "0x472 (written)"
+  ],
+  "loader_stack_args": {
+   "boothowto": "+4 (dword)",
+   "bootdev": "+8 (dword)"
+  }
+ },
+ "mi_startup": {
+  "skip_check": {
+   "va": "0xffffffff9e926311",
+   "bytes": "83 38 02",
+   "semantics": "skip if si_sub < 2 (unsigned)"
+  },
+  "thunk_call": {
+   "va": "0xffffffff9e926331",
+   "bytes": "ff d1"
+  },
+  "done_stamp": {
+   "va": "0xffffffff9e926337",
+   "bytes": "c7 00 01 00 00 00",
+   "semantics": "si_sub := 1 (SI_SUB_DONE)"
+  },
+  "sysinit_set": {
+   "lo": "0xffffffff9fe51fb0",
+   "hi": "0xffffffff9fe55488",
+   "slots": 1691,
+   "live_done": 1586,
+   "live_dummy": 105,
+   "dummy_slots_head": [
+    0,
+    1239
+   ]
+  },
+  "struct": {
+   "size": 24,
+   "si_sub": "+0 u32",
+   "si_order": "+4 u32",
+   "func": "+8 u64",
+   "udata": "+16 u64"
+  },
+  "globals": {
+   "being_run": "0xffffffffa19781b0",
+   "end": "0xffffffffa19781a8",
+   "aux1": "0xffffffffa19781a0",
+   "aux2": "0xffffffffa1978198"
+  },
+  "wp2_reset_recipe": [
+   "group-detect: new group when si_order decreases among DONE entries; assign synthetic si_sub=2,3,4.. ascending",
+   "104 disabled entries + slot0: si_sub := 1",
+   "reset globals being_run/end/aux to 0",
+   "kernel sort then reproduces exact array order with zero swaps"
+  ]
+ },
+ "custom_msrs": {
+  "family": [
+   "0x1dd",
+   "0x1de",
+   "0xc0000110",
+   "0xc0000111",
+   "0xc0000112",
+   "0xc0000113",
+   "0xc0000114",
+   "0xc0000115",
+   "0xc0000116",
+   "0xc0000117"
+  ],
+  "mechanism": "extended trapframe: saved by ALL 256 IDT vector stubs into frame +0x90..0xd8; restored by 3 exit paths iff frame_flags(+0x88) bit3 set; bit3 NEVER set by kernel code",
+  "qemu_policy": "rdmsr returns 0, wrmsr ignored, MUST NOT #GP (executes on every interrupt)",
+  "lbr_identification": "0x1DD=LastBranchFromIP, 0x1DE=LastBranchToIP (AMD Zen2 LBR; printed by crash-report printer)",
+  "saved_global_pcb": "0xffffffffa1e36a80 (0x1c0 bytes, all-zero in dump)",
+  "suspend_mirror": {
+   "msr_0x1dd": "0xffffffffa1e36dc0",
+   "msr_0x1de": "0xffffffffa1e36dc8"
+  }
+ },
+ "idt": {
+  "base": "0xffffffffa1fa4300",
+  "entries": 256,
+  "pseudo_descriptor": "0xffffffffa1fa8a50",
+  "gate_layout": "off_lo@+0, sel@+2(0x20), attrs@+4(0x8E00/0xEE00), off_mid@+6, off_hi@+8",
+  "thunk_islands": "0xffffffff9e65a000..0xffffffff9e65a3a8",
+  "extended_stubs": "0xffffffff9e642c00..0xffffffff9e648200",
+  "syscall_vectors_dpl3": {
+   "0x03": "0xffffffff9e642ac0",
+   "0x43": "0xffffffff9e643b40",
+   "0x44": "0xffffffff9e643ca0",
+   "0x45": "0xffffffff9e643e00",
+   "0x92": "0xffffffff9e642c20"
+  }
+ },
+ "selectors": {
+  "cs": "0x20",
+  "ds_ss_es": "0x28",
+  "fs": "0x13",
+  "gs": "0x1b",
+  "temp_gdt_wakeup": "0xffffffffa1e8dce0 (limit 0x40)"
+ }
+}

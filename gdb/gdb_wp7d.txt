@@ -1,0 +1,19 @@
+The target architecture is set to "i386:x86-64".
+warning: No executable has been specified and target does not support
+determining executable automatically.  Try using the "file" command.
+0x000000000000fff0 in ?? ()
+Breakpoint 1 at 0xffffffff9e642a90
+
+Thread 1 hit Breakpoint 1, 0xffffffff9e642a90 in ?? ()
+[+] btext
+Breakpoint 2 at 0xffffffff9edf9177
+Breakpoint 3 at 0xffffffff9e8a0790
+Breakpoint 4 at 0xffffffff9f025060
+Breakpoint 5 at 0xffffffff9f02512f
+Breakpoint 6 at 0xffffffff9e8a07d7
+Breakpoint 7 at 0xffffffff9ef7a475
+[+] AHCI-alloc crash hit - stopping
+r13            0x0                 0
+rax            0xffffffff9e642a90  -1637602672
+rip            0xffffffff9e642a90  0xffffffff9e642a90
+[Inferior 1 (process 1) killed]

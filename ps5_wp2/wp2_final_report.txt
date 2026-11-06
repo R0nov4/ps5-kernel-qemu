@@ -1,0 +1,205 @@
+====================================================================================================
+WP2 FINAL REPORT — PS5 13.60 KERNEL DUMP -> BOOTABLE ELF (RECONSTRUCTOR + LOADER CONTRACT)
+Deliverable: ./download/ps5_kernel_1360_reconstructed.elf  (62.2 MiB, ELF64)
+SHA-256: e87dbe643e285d0b59a18c926fc0eb1a20f3157ea99cde6d2e7ade5ea7b17cae
+====================================================================================================
+
+--------------------------------------------------------------------------------
+SECTION 0 — readelf -hlS OF THE RECONSTRUCTED ELF (verbatim)
+--------------------------------------------------------------------------------
+ELF Header:
+  Magic:   7f 45 4c 46 02 01 01 00 ...
+  Class: ELF64, Data: 2's complement LE, Type: EXEC (Executable file)
+  Machine: Advanced Micro Devices X86-64, Version: 0x1
+  Entry point address: 0xffffffff9e642a90            <<< btext (cold-boot entry)
+  Start of program headers: 64, section headers: 65228864
+  phnum=2  shnum=4  shstrndx=3
+
+Section Headers:
+  [Nr] Name      Type       Address            Offset     Size              Flags Align
+  [ 0]           NULL       0000000000000000   00000000   0000000000000000        0
+  [ 1] .text     PROGBITS   ffffffff9e3f0000   00001000   0000000000cc0000   AX   4096
+  [ 2] .data     PROGBITS   ffffffff9f0b0000   00cc1000   0000000003174000   WA   4096
+  [ 3] .shstrtab STRTAB     0000000000000000   03e35000   0000000000000017        1
+
+Program Headers:
+  Type  Offset            VirtAddr           PhysAddr          FileSiz            MemSiz    Flg  Align
+  LOAD  0x0000000000001000 0xffffffff9e3f0000 0x000000001e3f0000 0x0000000000cc0000 0xcc0000  R E  0x1000
+  LOAD  0x0000000000cc1000 0xffffffff9f0b0000 0x000000001f0b0000 0x0000000003174000 0x3174000 RW   0x1000
+
+ Section to Segment mapping:  00 -> .text   01 -> .data
+ (p_paddr encodes the console-accurate physical placement for the QEMU loader.)
+
+--------------------------------------------------------------------------------
+SECTION 1 — machine_init (0xffffffff9edf8790) ANATOMY (the answer to Step 1)
+--------------------------------------------------------------------------------
+  2912 bytes, 540 instructions, single ret. Called from btext as
+  machine_init(EDI=dword[loader_rsp+4], ESI=dword[loader_rsp+8]) —
+  *** CORRECTED: these are NOT boothowto/bootdev — they are page numbers:
+     dword[RSP+4] = modulep>>12  = 0x22224     (preload metadata phys page)
+     dword[RSP+8] = physfree>>12 = 0x22225      (first free page after image+meta)
+  boothowto is HARDCODED to 0x20001000 inside the cpu-init hook (0x9edf6ab1).
+
+  WHAT IT READS FROM PHYSICAL MEMORY (read-then-WIPE at 0x9bf4c/0x9bf54/0x9b6f4):
+     phys 0x9bf4c : qword, KERNBASE GB-selector ((v>>30)<<30 shifts KERNBASE);
+                    console value 0 -> KERNBASE = 0xFFFFFFFF80000000
+     phys 0x9bf54 : qword, low-mem/DMAP window base (crash printer & 0x9edfc070/90
+                    use base=[0x9bf4c]+[0x9bf54]); console value 0x1e1e0000
+     phys 0x9b6f4 : qword, kernel-phys delta (kern_phys = 0x1E3F0000 + val);
+                    console value 0
+     phys 0x472   : word, WRITTEN 0x1234 (warm-boot flag)
+  *** CORRECTED: WP1's "phys 0x780..0x878 and 0x20" were GS-RELATIVE per-CPU
+  accesses (gs:[0x780] etc.), NOT physical. The true physical contract is the
+  four addresses above + the preload metadata area.
+
+  HOW RAX (the returned kernel stack) IS COMPUTED:
+     RAX = [0xa1978c58] = 0x9ee40ac0(&thread0)
+         = thread0.td_kstack + (thread0.[+0x478] << 14) - 0x400 - 0x1C0
+     with td_kstack = virtual_avail = KERNBASE + (physfree - [0x9b6f4]) and
+     kstack_pages = [0x9fec3918] (kern.kstack_pages, live=1) -> 16KB boot kstack
+     (PAGE SIZE = 0x4000 — the PS5 kernel uses 16KB pages!)
+     live check: 0xa2225000 + 0x4000 - 0x400 - 0x1C0 = 0xffffffffa2228a40 == live
+     [0xa1978c58]. btext then does  mov rsp, rax.
+
+  HOW RAM SIZE IS COMPUTED (memory-layout builder 0x9edf9310, called with
+  (elf-kernel module handle, physfree+0x4000)):
+     - boot-svc memmap getter (thunk 0x9e6583f8 -> 0x9edf6b80) reads the memory
+       map from the PRELOAD METADATA of the 'elf kernel' module:
+         MODINFO 0x9001 = BIOS SMAP ({u32 0x9001, u32 byte_size, N x 20-byte
+                            {u64 base, u64 length, u32 type}}), or
+         MODINFO 0x9004 = UEFI map ({u64 map_size, u64 desc_size, descs @+0x20})
+     - [0xa1fdef08] = physmem (16K pages) = last map entry >> 14;
+       tunable 'hw.physmem' overrides. Live: 0x11fcc0 -> RAM top 0x47F300000.
+     - phys_avail[] @0xa1fb8b80 / dump_avail[] @0xa1fb8d80 rebuilt from the map
+       (+ static region table @0xa1fa5300, 12 regions — the console's real
+       PS5 memory map incl. [0x449600000, 0x47f200000) high regions).
+     - kernel region registered USED: [0x1E3F0000, 0x1F0B0000) (text).
+     - memory-tested (0xAA/0x55/0xFF patterns, 'Testing system memory') bootstrap
+       page stealing: [0xa1e251c0] = stolen-16K-page counter (live 0x22270).
+
+  SUBCALLS SENSITIVE TO LIVE .data: machine_init RE-INITIALIZES everything it
+  touches (GDT from static table @0xa0955ad0, IDT 256 gates, TSS, pcpu bzero+
+  template, Giant/icu/dt/wbinvd/l2idsm mutexes, proc0/thread0 lists) — its only
+  COLD-INPUT .data is listed in the Loader Contract below.
+  *** NEW: machine_init issues HYPERCALL 0x1F (no args) at 0x9edf9f44 via
+  wrapper 0x9f006a20 — it MUST return 0 or the kernel panics ('Failed...')
+  BEFORE mi_startup. The QEMU/KVM shim must be live by kernel entry.
+
+--------------------------------------------------------------------------------
+SECTION 2 — .data/.bss + SANITIZATION (the answer to Step 2)
+--------------------------------------------------------------------------------
+  IMAGE GEOMETRY (corrected): the dump's 90.2MB "kernel_data" = 49.4MB IMAGE
+  (.data+.bss, [0x9f0b0000, 0xa2224000)) + ~38.5MB RUNTIME HEAP (excluded).
+  image end = 0xa2224000 = preload-metadata start (modulep 0x22224000;
+  physfree 0x22225000 = modulep+0x1000).
+
+  .bss SEPARABILITY: not byte-exact from the dump alone — .rodata/.data dense
+  core [0x9f0b0000..0xa04b0000) (~90-100% nonzero), sparse zone
+  [0xa04b0000..0xa2224000) mixes sparse .data (mutexes, sysctl OIDs, GDT source
+  table, boot-svc table) with .bss (largest untouched zero runs: 5.2MB @
+  0xa1318000-0xa1838000, 800KB @ 0xa1fe8000-0xa20b0000...). Engineering answer:
+  single PROGBITS .data + surgical patches (no exact line needed).
+
+  IF .bss IS ZEROED — loader-built tables survive:
+     * initial page tables: NOT in the image at all (loader-built outside);
+     * GDT: live copy @0xa1fa55e0 rebuilt every boot from static source
+       @0xa0955ad0; IDT: all 256 gates rebuilt; TSS rebuilt; pcpu bzeroed +
+       template-copied. => ZEROING .bss IS SAFE for all of them.
+
+  LIVE-STATE PATCHES APPLIED TO THE ELF:
+     1. mi_startup re-entrancy globals 0xa1978198/1a0/1a8/1b0 := 0
+        (live values were post-boot RESIDUE — being_run=set-start, end=last-real-
+        entry — not a 'mid re-run window' as previously interpreted; with nonzero
+        values mi_startup would take the RESUME path and boot only a partial set!)
+     2. 11 held mutexes released (mtx_lock:=4, recurse:=0): pfs, savedata,
+        devfs dirlist, event-timer-periodic, 6x sysctl tree locks, ACPI root bus
+        (strict scan: 8616 mtx-like objects -> 7792 free(4) + 811 zero + 13 held;
+        2 of the 13 were condvar false-positives)
+     3. sysinit reconstruction (Section 3)
+     *** bootverbose counter @0xa1978858 (=thread0-8, 259 refs) is re-derived
+     from boothowto&8 at mi_startup entry — no patch needed.
+
+--------------------------------------------------------------------------------
+SECTION 3 — SYSINIT RECONSTRUCTION + ZERO-SWAP PROOF (the answer to Step 3)
+--------------------------------------------------------------------------------
+  mi_startup decoded byte-exact (0x9e9261f0):
+    prologue: if (boothowto & 8) bootverbose++ (@0xa1978858)
+    cold path: being_run==0 -> window = FULL [0x9fe51fb0, 0x9fe55488) (1691 slots)
+    mega-loop { FILTER -> SORT -> EXEC } with module-driven restart via
+    aux2/aux1 (0xa1978198/0xa19781a0) — the SYSINIT re-run mechanism.
+
+  FILTER: predicate 0x9eef6b20(0x10, entry, 0x28): mode=[0x9fcd446c]-1=0 ->
+    case0: keep iff struct in [0x9fe73ec0, 0xa0ff9670] (static linker-file range).
+  SORT: a SINGLE adjacent-sweep (0x9e9262a6..30f): swap iff
+    (prev.si_sub > cur.si_sub) or (== and prev.si_order > cur.si_order).
+    (NOTE: this is NOT stock FreeBSD's double-loop — Sony's is one pass, which
+     only works because the linker pre-sorts the set.)
+  EXEC: skip si_sub<2; func=[+8] (NULL variant: [+0x18]/udata [+0x20]);
+    stamp si_sub:=1 after each run.
+
+  DUMP FORENSICS (major corrections):
+    * 351 of the 1586 'DONE' slots are DUPLICATE pointers (compaction residue of
+      module re-runs) -> the TRUE unique stage count = 1235 (not 1586!)
+    * the 105 'Sony-disabled' dummy entries are SCATTERED (40+ micro-runs in
+      slots 1239..1690), not one block
+    * live mi_startup globals are post-completion residue, not a mid-run window
+
+  RECONSTRUCTED ARRAY (written into the ELF):
+    slots [0..104]    : 105 dummy entries, si_sub=0, sorted by si_order
+    slots [105..1339] : 1235 unique real entries in DUMP order (= original linker
+                        order — stable across compactions), si_sub := 2,3,..,40
+                        (39 synthetic groups; group boundary = si_order decrease)
+    slots [1340..1690]: 351 ZERO slots (predicate(0) filters them out safely —
+                        the filter never dereferences the slot value)
+
+  *** ZERO-SWAP PROOF (kernel-exact simulation, run on the BUILT ELF file) ***
+    filter: 1691 -> 1236 slots (1 in-range dummy kept, 1235 reals)
+    kernel sort single-sweep: SWAPS = 0            <<< PROOF A: PASS
+    exec: 1235 stages, si_sub>=2, order == dump unique-real order  <<< B,C: PASS
+
+--------------------------------------------------------------------------------
+SECTION 4 — THE COMPLETE LOADER CONTRACT (byte-exact table for the QEMU loader)
+================================================================================
+| # | Item                        | Value / Layout                                                    |
+|---|-----------------------------|-------------------------------------------------------------------|
+| 1 | Entry point (btext)         | 0xffffffff9e642a90 (long mode; kernel reloads CS/DS itself)      |
+| 2 | Loader stack dwords         | [RSP+4]=0x22224 (modulep>>12), [RSP+8]=0x22225 (physfree>>12)    |
+| 3 | Page size                   | 0x4000 (16KB kernel pages; loader tables may use 4K granularity) |
+| 4 | KERNBASE                    | 0xFFFFFFFF80000000 + ((phys[0x9bf4c]>>30)<<30)                   |
+| 5 | Kernel phys placement       | .text @ 0x1E3F0000 (0xCC0000), .data @ 0x1F0B0000 (0x3174000)    |
+| 6 | Required VA maps            | identity [0,1MB) + KERNBASE+phys for [0x1E3F0000, 0x22250000+)  |
+| 7 | phys 0x472                  | word; kernel writes 0x1234 (warm flag) — any pre-value OK        |
+| 8 | phys 0x9bf4c (qword)        | 0        (KERNBASE GB selector; console value)                    |
+| 9 | phys 0x9bf54 (qword)        | 0x1e1e0000 (low-mem/DMAP window base; console value)             |
+|10 | phys 0x9b6f4 (qword)        | 0        (kernel-phys delta; kern_phys = 0x1E3F0000 + val)       |
+|11 | Preload metadata @ phys     | 0x22224000 (4KB), FreeBSD preloaded_file chain:                  |
+|   |                             |  {u32 type,u32 len,data}, 8-aligned, {0,0} terminator:           |
+|   |                             |  (1,"kernel") (2,"elf kernel") (0x9001,SMAP) (0,0)               |
+|12 | SMAP entries (20B each)     | {u64 base, u64 length, u32 type=1}:                              |
+|   |                             |  [0x40000,0x6c000) usable (basemem must exist!)                  |
+|   |                             |  [0x22229000, RAMTOP) usable — last end>>14 = physmem            |
+|13 | physfree (post-image)       | 0x22225000; [0x22225000,0x22229000) = dpcpu+boot kstack (16KB,   |
+|   |                             |  bzeroed by machine_init)                                        |
+|14 | Hypercall 0x1F              | vmmcall, eax=0x1f, no args -> MUST return 0 (panic otherwise)    |
+|15 | MSR whitelist               | 0x1DD/0x1DE + 0xC0000110..0xC0000117: rdmsr->0, wrmsr->ignore,   |
+|   |                             |  NEVER #GP (all 256 IDT vectors run the rdmsr stubs)             |
+|16 | Console-accurate RAM top    | 0x47F300000 (physmem live 0x11fcc0 16K-pages)                    |
+|17 | boothowto                   | NOT loader-provided — hardcoded 0x20001000 by hook 0x9edf6ab1    |
+|18 | Must-be-intact .data (cold  | boot-svc table 0xa0955a28/40/48, GDT source 0xa0955ad0..bd6,    |
+|   | inputs machine_init reads)  | dpcpu template [0x9fe5a080,0x9fe5add0), symbols 0x9fe4d0b0/4d4b8,|
+|   |                             | kstack_pages@0x9fec3918=1, 0xa1f7e4f8=0x400, 0xa1d71f90=1,       |
+|   |                             | 0xa1d71f98=7, 0xa1d103e0=0x18000, filter ranges 0x9fe4d4c0..6xx  |
+|19 | Self-sanitizing (no action) | GDT/IDT/TSS/pcpu/Giant/phys_avail/thread0/boothowto — rebuilt   |
+|20 | ELF encoding                | p_paddr#1=0x1E3F0000, p_paddr#2=0x1F0B0000 (loader may use)     |
+================================================================================
+ARTIFACTS:
+  download/ps5_kernel_1360_reconstructed.elf      — the bootable image
+  download/ps5_wp2/wp2_1_machine_init_loader_contract.txt  — Step 1 full anatomy
+  download/ps5_wp2/wp2_loader_contract.json       — machine-readable contract
+  download/ps5_wp2/wp2_2_bss_sanitization.txt     — Step 2 (bss + sanitization)
+  download/ps5_wp2/wp2_2_sanitization.json        — patch list
+  download/ps5_wp2/wp2_3_sysinit_plan.json        — full sysinit patch plan
+  download/ps5_wp2/wp2_held_mutexes.json          — the 13 held locks
+  download/ps5_wp2/machine_init_disasm.txt        — 540-instruction annotated disasm
+  download/ps5_wp2/memmap_builder_disasm.txt      — memory-map builder disasm
+  scripts/wp2_*.py                                — all reproducible tooling

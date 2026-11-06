@@ -1,0 +1,68 @@
+warning: No executable has been specified and target does not support
+determining executable automatically.  Try using the "file" command.
+0x000000000000fff0 in ?? ()
+Hardware assisted breakpoint 1 at 0xffffffff9e642a90
+
+Breakpoint 1, 0xffffffff9e642a90 in ?? ()
+
+=== BTEXT — watching [0xa1f38378] ===
+Hardware watchpoint 2: *(unsigned long long *)0xffffffffa1f38378
+Hardware assisted breakpoint 3 at 0xffffffff9eccc6bf
+Hardware assisted breakpoint 4 at 0xffffffff9eccc6e3
+
+Hardware watchpoint 2: *(unsigned long long *)0xffffffffa1f38378
+
+Old value = 572809216
+New value = 12287176996203683840
+0xffffffff9eccc57f in ?? ()
+
+=== HIT 1 (writer or loop) ===
+rip            0xffffffff9eccc57f  0xffffffff9eccc57f
+rsp            0xffffffffa1130c50  0xffffffffa1130c50
+rbp            0xffffffffa1130d20  0xffffffffa1130d20
+rax            0x82                130
+rbx            0xffff8e77222536c0  -124832651594048
+rcx            0x1                 1
+rdx            0xffffffffa1f37e90  -1577877872
+rsi            0xaa84d260b7126000  -6159567077505867776
+rdi            0xffff8e7722253000  -124832651595776
+r8             0xffffffffa1f37e90  -1577877872
+   0xffffffff9eccc577:	leave
+   0xffffffff9eccc578:	mov    %rsi,0x326bdf9(%rip)        # 0xffffffffa1f38378
+=> 0xffffffff9eccc57f:	lea    0x1ff(%rax),%r12
+   0xffffffff9eccc586:	lea    (%rcx,%rcx,2),%rdx
+
+Breakpoint 3, 0xffffffff9eccc6bf in ?? ()
+
+=== HIT 2 ===
+rip            0xffffffff9eccc6bf  0xffffffff9eccc6bf
+rsp            0xffffffffa1130c50  0xffffffffa1130c50
+rax            0xffffffffa2222040  -1574821824
+rcx            0xaa84d260b71a9000  -6159567077505331200
+rdx            0xffff8e7722253000  -124832651595776
+rsi            0xffff8e7722254fe0  -124832651587616
+rdi            0xffff8e7722253000  -124832651595776
+r8             0xffffffffa1f37e90  -1577877872
+   0xffffffff9eccc6b7:	stc
+   0xffffffff9eccc6b8:	adc    (%rax),%al
+   0xffffffff9eccc6ba:	call   0xffffffff9edfc030
+=> 0xffffffff9eccc6bf:	mov    0x326bcb2(%rip),%rcx        # 0xffffffffa1f38378
+
+Breakpoint 4, 0xffffffff9eccc6e3 in ?? ()
+
+=== HIT 3 ===
+rip            0xffffffff9eccc6e3  0xffffffff9eccc6e3
+rsp            0xffffffffa1130c50  0xffffffffa1130c50
+rax            0x1                 1
+rcx            0xaa84d260b7126000  -6159567077505867776
+rdx            0x8000000000000103  -9223372036854775549
+rsi            0x8000000000000103  -9223372036854775549
+rdi            0x200000            2097152
+r8             0x0                 0
+   0xffffffff9eccc6db:	xor    %r8d,%r8d
+   0xffffffff9eccc6de:	xchg   %ax,%ax
+   0xffffffff9eccc6e0:	or     %rsi,%rdx
+=> 0xffffffff9eccc6e3:	mov    %rdx,(%rcx,%r8,8)
+Cannot execute this command while the target is running.
+Use the "interrupt" command to stop the target
+and then try again.

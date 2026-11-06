@@ -1,0 +1,1275 @@
+SeaBIOS (version 1.16.3-debian-1.16.3-2)
+BUILD: gcc: (Debian 13.2.0-7) 13.2.0 binutils: (GNU Binutils for Debian) 2.41
+No Xen hypervisor found.
+Running on QEMU (i440fx)
+physbits: signature="AuthenticAMD", pae=yes, lm=yes, phys-bits=40, valid=yes
+cpuid 0x40000000: eax 40000001, signature 'TCGTCGTCGTCG'
+Found QEMU fw_cfg
+QEMU fw_cfg DMA interface supported
+qemu/e820: addr 0x000000fd00000000 len 0x0000000300000000 [reserved]
+qemu/e820: addr 0x0000000000000000 len 0x0000000080000000 [RAM]
+Relocating init from 0x000d4020 to 0x7efeb120 (size 85568)
+Moving pm_base to 0x600
+boot order:
+1: /rom@genroms/multiboot_dma.bin
+=== PCI bus & bridge init ===
+PCI: pci_bios_init_bus_rec bus = 0x0
+=== PCI device probing ===
+Found 6 PCI devices (max PCI bus is 00)
+=== PCI new allocation pass #1 ===
+PCI: check devices
+=== PCI new allocation pass #2 ===
+PCI: IO: c000 - c04f
+PCI: 32: 0000000080000000 - 00000000fec00000
+PCI: map device bdf=00:03.0  bar 1, addr 0000c000, size 00000040 [io]
+PCI: map device bdf=00:01.1  bar 4, addr 0000c040, size 00000010 [io]
+PCI: map device bdf=00:03.0  bar 6, addr feb80000, size 00040000 [mem]
+PCI: map device bdf=00:03.0  bar 0, addr febc0000, size 00020000 [mem]
+PCI: map device bdf=00:02.0  bar 6, addr febe0000, size 00010000 [mem]
+PCI: map device bdf=00:02.0  bar 2, addr febf0000, size 00001000 [mem]
+PCI: map device bdf=00:02.0  bar 0, addr fd000000, size 01000000 [prefmem]
+PCI: init bdf=00:00.0 id=8086:1237
+PCI: init bdf=00:01.0 id=8086:7000
+PIIX3/PIIX4 init: elcr=00 0c
+PCI: init bdf=00:01.1 id=8086:7010
+PCI: init bdf=00:01.3 id=8086:7113
+Using pmtimer, ioport 0x608
+PCI: init bdf=00:02.0 id=1234:1111
+PCI: init bdf=00:03.0 id=8086:100e
+PCI: Using 00:02.0 for primary VGA
+handle_smp: apic_id=0x1
+handle_smp: apic_id=0x3
+handle_smp: apic_id=0x7
+handle_smp: apic_id=0x2
+handle_smp: apic_id=0x6
+handle_smp: apic_id=0x4
+handle_smp: apic_id=0x5
+Found 8 cpu(s) max supported 8 cpu(s)
+Copying PIR from 0x7efffbe0 to 0x000f5560
+Copying MPTABLE from 0x00006cfc/7efe1f60 to 0x000f5480
+Copying SMBIOS from 0x00006cfc to 0x000f52d0
+table(50434146)=0x7ffe2441 (via rsdt)
+ACPI: parse DSDT at 0x7ffe0040 (len 9217)
+Scan for VGA option rom
+Running option rom at c000:0003
+Start SeaVGABIOS (version 1.16.3-debian-1.16.3-2)
+VGABUILD: gcc: (Debian 13.2.0-7) 13.2.0 binutils: (GNU Binutils for Debian) 2.41
+enter vga_post:
+   a=00000010  b=0000ffff  c=00000000  d=0000ffff ds=0000 es=f000 ss=0000
+  si=00000000 di=000060c0 bp=00000000 sp=00006d16 cs=f000 ip=d00f  f=0000
+VBE DISPI: bdf 00:02.0, bar 0
+VBE DISPI: lfb_addr=fd000000, size 16 MB
+Removing mode 19a
+Removing mode 19b
+Removing mode 19c
+Removing mode 19d
+Removing mode 19e
+Attempting to allocate 512 bytes lowmem via pmm call to f000:d0c0
+pmm call arg1=0
+VGA stack allocated at e83a0
+Turning on vga text mode console
+set VGA mode 3
+SeaBIOS (version 1.16.3-debian-1.16.3-2)
+Searching bootorder for: /pci@i0cf8/isa@1/fdc@03f0/floppy@0
+ATA controller 1 at 1f0/3f4/0 (irq 14 dev 9)
+ATA controller 2 at 170/374/0 (irq 15 dev 9)
+Searching bootorder for: HALT
+Found 1 lpt ports
+Found 1 serial ports
+PS2 keyboard initialized
+DVD/CD [ata1-0: QEMU DVD-ROM ATAPI-4 DVD/CD]
+Searching bootorder for: /pci@i0cf8/*@1,1/drive@1/disk@0
+Searching bios-geometry for: /pci@i0cf8/*@1,1/drive@1/disk@0
+Device reports MEDIUM NOT PRESENT - 2 tries left
+Device reports MEDIUM NOT PRESENT - 1 tries left
+Device reports MEDIUM NOT PRESENT - 0 tries left
+All threads complete.
+Scan for option roms
+Running option rom at ca00:0003
+pmm call arg1=1
+pmm call arg1=0
+pmm call arg1=1
+pmm call arg1=0
+Running option rom at cb00:0003
+Searching bootorder for: /pci@i0cf8/*@3
+Searching bootorder for: /rom@genroms/multiboot_dma.bin
+Searching bootorder for: /rom@genroms/kvmvapic.bin
+Searching bootorder for: HALT
+Running option rom at cb80:0003
+Space available for UMB: ce000-e7800, f4de0-f51d0
+Returned 16646144 bytes of ZoneHigh
+e820 map has 7 items:
+  0: 0000000000000000 - 000000000009fc00 = 1 RAM
+  1: 000000000009fc00 - 00000000000a0000 = 2 RESERVED
+  2: 00000000000f0000 - 0000000000100000 = 2 RESERVED
+  3: 0000000000100000 - 000000007ffe0000 = 1 RAM
+  4: 000000007ffe0000 - 0000000080000000 = 2 RESERVED
+  5: 00000000fffc0000 - 0000000100000000 = 2 RESERVED
+  6: 000000fd00000000 - 0000010000000000 = 2 RESERVED
+enter handle_19:
+  NULL
+Booting from ROM...
+Booting from cb00:003c
+PS5-TRAMPOLINE: booting 13.60 kernel
+PS5-TRAMPOLINE: entering long mode -> btext 0xffffffff9e642a90
+PT-VERIFY: PML4[1FF]=00082003 PDPT_KVA[0]=00000000 PD_KVA[F3]=1E600083/00000000
+Table 'FACP' at 0x7ffe2441
+Table 'APIC' at 0x7ffe24b5
+APIC: Found table at 0x7ffe24b5
+APIC: Using the MADT enumerator.
+MADT: Found CPU APIC ID 0 ACPI ID 0: enabled
+SMP: Added CPU 0 (AP)
+MADT: Found CPU APIC ID 1 ACPI ID 1: enabled
+SMP: Added CPU 1 (AP)
+MADT: Found CPU APIC ID 2 ACPI ID 2: enabled
+SMP: Added CPU 2 (AP)
+MADT: Found CPU APIC ID 3 ACPI ID 3: enabled
+SMP: Added CPU 3 (AP)
+MADT: Found CPU APIC ID 4 ACPI ID 4: enabled
+SMP: Added CPU 4 (AP)
+MADT: Found CPU APIC ID 5 ACPI ID 5: enabled
+SMP: Added CPU 5 (AP)
+MADT: Found CPU APIC ID 6 ACPI ID 6: enabled
+SMP: Added CPU 6 (AP)
+MADT: Found CPU APIC ID 7 ACPI ID 7: enabled
+SMP: Added CPU 7 (AP)
+SIE CONFIDENTIAL
+Copyright (C) 2025 Sony Interactive Entertainment Inc.
+Copyright (c) 1992-2016 The FreeBSD Project.
+Copyright (c) 1979, 1980, 1983, 1986, 1988, 1989, 1991, 1992, 1993, 1994
+	The Regents of the University of California. All rights reserved.
+FreeBSD is a registered trademark of The FreeBSD Foundation.
+r229358/releases/13.60 Jul 17 2026 02:16:29 amd64
+FIXME!!(compiler_version)
+mDBG: Kernel Build ID = 99dd70d51abadddd
+Memory mode: 1: PPR16  (GDDR6 : 16 GiB, DDR5 : 0 GiB)
+ Application memory(Total)   : 0x0000000010000000 bytes (  256MiB) 
+     App memory (default)    : 0x0000000010000000 bytes (  256MiB) 
+     Tool memory (default)   : 0x0000000000000000 bytes (    0MiB) 
+ Application pagetable (DDR5): 0x0000000000000000 bytes (    0MiB) DDR5
+ Application FS cache memory : 0x0000000008c00000 bytes (  140MiB) 
+ Direct memory (system)      : 0x0000000004000000 bytes (   64MiB) 
+ Workspace Metadata memory   : 0x0000000000000000 bytes (    0MiB) 
+ Flexible memory (system)    : 0x00000000877cc000 bytes ( 2168MiB) 
+ NDA Text memory (system)    : 0x0000000000000000 bytes (    0MiB) 
+ Vision memory               : 0x0000000002000000 bytes (   32MiB) 
+ Remote Viewer DMEM          : 0x0000000000000000 bytes (    0MiB) 
+ Dynlib Extended PFI         : 0x0000000000000000 bytes (    0MiB) 
+ BIOS memory size            : 0x0000000380012000 bytes (14337MiB) 
+ BIOS memory size(DDR5)      : 0x0000000000000000 bytes (    0MiB) DDR5
+ Kernel static size          : 0x000000000944a000 bytes (  149MiB) 
+ Kernel static size(DDR5)    : 0x0000000000000000 bytes (    0MiB) DDR5
+ Reserved memory             : 0x0000000008200000 bytes (  130MiB) 
+ Reserved memory(DDR5)       : 0x0000000000000000 bytes (    0MiB) 
+can't re-use a leaf (swap_avail)!
+can't re-use a leaf (swap_total)!
+can't re-use a leaf (swap_reserved)!
+can't re-use a leaf (overcommit)!
+can't re-use a leaf (swzone)!
+can't re-use a leaf (swap_maxpages)!
+can't re-use a leaf (swap_async_max)!
+can't re-use a leaf (dmmax)!
+can't re-use a leaf (nswapdev)!
+can't re-use a leaf (minidump)!
+can't re-use a leaf (debug)!
+can't re-use a leaf (enable_extint)!
+can't re-use a leaf (see_other_uids)!
+can't re-use a leaf (see_other_gids)!
+can't re-use a leaf (conservative_signals)!
+can't re-use a leaf (unprivileged_proc_debug)!
+can't re-use a leaf (devctl_disable)!
+can't re-use a leaf (devctl_queue)!
+can't re-use a leaf (last_resume_type)!
+can't re-use a leaf (softevents)!
+can't re-use a leaf (mlock_avail)!
+can't re-use a leaf (mlock_total)!
+can't re-use a leaf (stack_guard_page)!
+can't re-use a leaf (clear_pcib)!
+can't re-use a leaf (retry_count)!
+can't re-use a leaf (default_timeout)!
+can't re-use a leaf (hide_special)!
+can't re-use a leaf (dircheck)!
+can't re-use a leaf (enable_io_modes)!
+can't re-use a leaf (realloc_bars)!
+can't re-use a leaf (do_power_nodriver)!
+can't re-use a leaf (enable_msi)!
+can't re-use a leaf (enable_msix)!
+can't re-use a leaf (honor_msi_blacklist)!
+can't re-use a leaf (usb_early_takeover)!
+can't re-use a leaf (clear_bars)!
+can't re-use a leaf (clear_buses)!
+can't re-use a leaf (enable_ari)!
+can't re-use a leaf (kq_calloutmax)!
+can't re-use a leaf (buildnum)!
+can't re-use a leaf (kobj_methodcount)!
+can't re-use a leaf (gettime)!
+can't re-use a leaf (proc_runtime_param)!
+can't re-use a leaf (umtx_vnode_persistent)!
+can't re-use a leaf (umtx_max_robust)!
+can't re-use a leaf (umtx_pi_allocated)!
+can't re-use a leaf (robust_faults_verbose)!
+can't re-use a leaf (ddr5_prxcfg)!
+can't re-use a leaf (idtablestats)!
+can't re-use a leaf (nvmecontrollerdata)!
+can't re-use a leaf (scf_model_number)!
+can't re-use a leaf (scf_nvmesmart)!
+can't re-use a leaf (game_budget_limit)!
+can't re-use a leaf (audit)!
+can't re-use a leaf (on_crash)!
+can't re-use a leaf (prospero)!
+can't re-use a leaf (trcmem_total)!
+can't re-use a leaf (trcmem_avail)!
+can't re-use a leaf (softupdates)!
+can't re-use a leaf (pagedep)!
+can't re-use a leaf (pagedep)!
+can't re-use a leaf (pagedep)!
+can't re-use a leaf (pagedep)!
+can't re-use a leaf (inodedep)!
+can't re-use a leaf (inodedep)!
+can't re-use a leaf (inodedep)!
+can't re-use a leaf (inodedep)!
+can't re-use a leaf (bmsafemap)!
+can't re-use a leaf (bmsafemap)!
+can't re-use a leaf (bmsafemap)!
+can't re-use a leaf (bmsafemap)!
+can't re-use a leaf (newblk)!
+can't re-use a leaf (newblk)!
+can't re-use a leaf (newblk)!
+can't re-use a leaf (newblk)!
+can't re-use a leaf (allocdirect)!
+can't re-use a leaf (allocdirect)!
+can't re-use a leaf (allocdirect)!
+can't re-use a leaf (allocdirect)!
+can't re-use a leaf (indirdep)!
+can't re-use a leaf (indirdep)!
+can't re-use a leaf (indirdep)!
+can't re-use a leaf (indirdep)!
+can't re-use a leaf (allocindir)!
+can't re-use a leaf (allocindir)!
+can't re-use a leaf (allocindir)!
+can't re-use a leaf (allocindir)!
+can't re-use a leaf (freefrag)!
+can't re-use a leaf (freefrag)!
+can't re-use a leaf (freefrag)!
+can't re-use a leaf (freefrag)!
+can't re-use a leaf (freeblks)!
+can't re-use a leaf (freeblks)!
+can't re-use a leaf (freeblks)!
+can't re-use a leaf (freeblks)!
+can't re-use a leaf (freefile)!
+can't re-use a leaf (freefile)!
+can't re-use a leaf (freefile)!
+can't re-use a leaf (freefile)!
+can't re-use a leaf (diradd)!
+can't re-use a leaf (diradd)!
+can't re-use a leaf (diradd)!
+can't re-use a leaf (diradd)!
+can't re-use a leaf (mkdir)!
+can't re-use a leaf (mkdir)!
+can't re-use a leaf (mkdir)!
+can't re-use a leaf (mkdir)!
+can't re-use a leaf (dirrem)!
+can't re-use a leaf (dirrem)!
+can't re-use a leaf (dirrem)!
+can't re-use a leaf (dirrem)!
+can't re-use a leaf (newdirblk)!
+can't re-use a leaf (newdirblk)!
+can't re-use a leaf (newdirblk)!
+can't re-use a leaf (newdirblk)!
+can't re-use a leaf (freework)!
+can't re-use a leaf (freework)!
+can't re-use a leaf (freework)!
+can't re-use a leaf (freework)!
+can't re-use a leaf (freedep)!
+can't re-use a leaf (freedep)!
+can't re-use a leaf (freedep)!
+can't re-use a leaf (freedep)!
+can't re-use a leaf (jaddref)!
+can't re-use a leaf (jaddref)!
+can't re-use a leaf (jaddref)!
+can't re-use a leaf (jaddref)!
+can't re-use a leaf (jremref)!
+can't re-use a leaf (jremref)!
+can't re-use a leaf (jremref)!
+can't re-use a leaf (jremref)!
+can't re-use a leaf (jmvref)!
+can't re-use a leaf (jmvref)!
+can't re-use a leaf (jmvref)!
+can't re-use a leaf (jmvref)!
+can't re-use a leaf (jnewblk)!
+can't re-use a leaf (jnewblk)!
+can't re-use a leaf (jnewblk)!
+can't re-use a leaf (jnewblk)!
+can't re-use a leaf (jfreeblk)!
+can't re-use a leaf (jfreeblk)!
+can't re-use a leaf (jfreeblk)!
+can't re-use a leaf (jfreeblk)!
+can't re-use a leaf (jfreefrag)!
+can't re-use a leaf (jfreefrag)!
+can't re-use a leaf (jfreefrag)!
+can't re-use a leaf (jfreefrag)!
+can't re-use a leaf (jseg)!
+can't re-use a leaf (jseg)!
+can't re-use a leaf (jseg)!
+can't re-use a leaf (jseg)!
+can't re-use a leaf (jsegdep)!
+can't re-use a leaf (jsegdep)!
+can't re-use a leaf (jsegdep)!
+can't re-use a leaf (jsegdep)!
+can't re-use a leaf (sbdep)!
+can't re-use a leaf (sbdep)!
+can't re-use a leaf (sbdep)!
+can't re-use a leaf (sbdep)!
+can't re-use a leaf (jtrunc)!
+can't re-use a leaf (jtrunc)!
+can't re-use a leaf (jtrunc)!
+can't re-use a leaf (jtrunc)!
+can't re-use a leaf (jfsync)!
+can't re-use a leaf (jfsync)!
+can't re-use a leaf (jfsync)!
+can't re-use a leaf (jfsync)!
+can't re-use a leaf (freezeino)!
+can't re-use a leaf (freezeino)!
+can't re-use a leaf (freezeino)!
+can't re-use a leaf (freezeino)!
+can't re-use a leaf (max_softdeps)!
+can't re-use a leaf (tickdelay)!
+can't re-use a leaf (flush_threads)!
+can't re-use a leaf (worklist_push)!
+can't re-use a leaf (blk_limit_push)!
+can't re-use a leaf (ino_limit_push)!
+can't re-use a leaf (blk_limit_hit)!
+can't re-use a leaf (ino_limit_hit)!
+can't re-use a leaf (sync_limit_hit)!
+can't re-use a leaf (indir_blk_ptrs)!
+can't re-use a leaf (inode_bitmap)!
+can't re-use a leaf (direct_blk_ptrs)!
+can't re-use a leaf (dir_entry)!
+can't re-use a leaf (jaddref_rollback)!
+can't re-use a leaf (jnewblk_rollback)!
+can't re-use a leaf (journal_low)!
+can't re-use a leaf (journal_min)!
+can't re-use a leaf (journal_wait)!
+can't re-use a leaf (jwait_filepage)!
+can't re-use a leaf (jwait_freeblks)!
+can't re-use a leaf (jwait_inode)!
+can't re-use a leaf (jwait_newblk)!
+can't re-use a leaf (cleanup_blkrequests)!
+can't re-use a leaf (cleanup_inorequests)!
+can't re-use a leaf (cleanup_high_delay)!
+can't re-use a leaf (cleanup_retries)!
+can't re-use a leaf (cleanup_failures)!
+can't re-use a leaf (flushcache)!
+can't re-use a leaf (emptyjblocks)!
+can't re-use a leaf (compute_summary_at_mount)!
+can't re-use a leaf (print_threads)!
+can't re-use a leaf (maxmbufmem)!
+can't re-use a leaf (nmbclusters)!
+can't re-use a leaf (nmbjumbop)!
+can't re-use a leaf (nmbjumbo9)!
+can't re-use a leaf (nmbjumbo16)!
+can't re-use a leaf (nmbufs)!
+can't re-use a leaf (enable)!
+can't re-use a leaf (mode)!
+can't re-use a leaf (id)!
+can't re-use a leaf (arch)!
+can't re-use a leaf (env)!
+can't re-use a leaf (max_threads_per_proc)!
+can't re-use a leaf (max_threads_hits)!
+can't re-use a leaf (zone_count)!
+can't re-use a leaf (zone_stats)!
+can't re-use a leaf (zone_warnings)!
+can't re-use a leaf (confxml)!
+can't re-use a leaf (confdot)!
+can't re-use a leaf (conftxt)!
+can't re-use a leaf (debugflags)!
+can't re-use a leaf (notaste)!
+can't re-use a leaf (collectstats)!
+can't re-use a leaf (g_class)!
+can't re-use a leaf (g_geom)!
+can't re-use a leaf (g_provider)!
+can't re-use a leaf (g_consumer)!
+can't re-use a leaf (g_bioq)!
+can't re-use a leaf (bigcgs)!
+can't re-use a leaf (dobkgrdwrite)!
+can't re-use a leaf (check_integrity)!
+can't re-use a leaf (old_msync)!
+can't re-use a leaf (collapses)!
+can't re-use a leaf (bypasses)!
+can't re-use a leaf (objects)!
+can't re-use a leaf (tty_inq_flush_secure)!
+can't re-use a leaf (geom_part_obsf)!
+can't re-use a leaf (v_swtch)!
+can't re-use a leaf (v_trap)!
+can't re-use a leaf (v_syscall)!
+can't re-use a leaf (v_intr)!
+can't re-use a leaf (v_soft)!
+can't re-use a leaf (v_forks)!
+can't re-use a leaf (v_vm_faults)!
+can't re-use a leaf (v_page_size)!
+can't re-use a leaf (v_vforks)!
+can't re-use a leaf (v_rforks)!
+can't re-use a leaf (v_kthreads)!
+can't re-use a leaf (v_forkpages)!
+can't re-use a leaf (v_vforkpages)!
+can't re-use a leaf (v_rforkpages)!
+can't re-use a leaf (v_kthreadpages)!
+can't re-use a leaf (dotimes)!
+can't re-use a leaf (unprivileged_idprio)!
+can't re-use a leaf (log_console_output)!
+can't re-use a leaf (log_console_add_linefeed)!
+can't re-use a leaf (always_console_output)!
+can't re-use a leaf (unprivileged_read_msgbuf)!
+can't re-use a leaf (msgbuf)!
+can't re-use a leaf (msgbuf_clear)!
+can't re-use a leaf (get_pci_aer)!
+can't re-use a leaf (delay_initial)!
+can't re-use a leaf (delay_step)!
+can't re-use a leaf (delay_min)!
+can't re-use a leaf (delay_max)!
+can't re-use a leaf (debug)!
+can't re-use a leaf (ufs_acl)!
+can't re-use a leaf (iosize_max_clamp)!
+can't re-use a leaf (devfs_iosize_max_clamp)!
+can't re-use a leaf (min_kernel_address)!
+can't re-use a leaf (max_kernel_address)!
+can't re-use a leaf (soacceptqueue)!
+can't re-use a leaf (somaxconn)!
+can't re-use a leaf (numopensockets)!
+can't re-use a leaf (maxsockets)!
+can't re-use a leaf (kposix_priority_scheduling)!
+can't re-use a leaf (boothowto)!
+can't re-use a leaf (bootverbose)!
+can't re-use a leaf (init_path)!
+can't re-use a leaf (init_shutdown_timeout)!
+can't re-use a leaf (init_safe_mode)!
+can't re-use a leaf (init_safe_mode_direct)!
+can't re-use a leaf (init_safe_mode_wait_time)!
+can't re-use a leaf (backup_restore_mode)!
+can't re-use a leaf (scbus)!
+can't re-use a leaf (wait_internal_hdd_attached)!
+can't re-use a leaf (wait_external_hdd_resume)!
+can't re-use a leaf (sort_io_queues)!
+can't re-use a leaf (bderror)!
+can't re-use a leaf (kstack_cache_size)!
+can't re-use a leaf (kstacks)!
+can't re-use a leaf (kstack_pages)!
+can't re-use a leaf (proc_vmmap_skip_resident_count)!
+can't re-use a leaf (all)!
+can't re-use a leaf (callrec)!
+can't re-use a leaf (ptc)!
+can't re-use a leaf (numvnodes)!
+can't re-use a leaf (vnodes_created)!
+can't re-use a leaf (wantfreevnodes)!
+can't re-use a leaf (freevnodes)!
+can't re-use a leaf (recycles)!
+can't re-use a leaf (reassignbufcalls)!
+can't re-use a leaf (free_owe_inact)!
+can't re-use a leaf (filedelay)!
+can't re-use a leaf (dirdelay)!
+can't re-use a leaf (metadelay)!
+can't re-use a leaf (rush_requests)!
+can't re-use a leaf (maxvnodes)!
+can't re-use a leaf (minvnodes)!
+can't re-use a leaf (vnlru_nowhere)!
+can't re-use a leaf (timestamp_precision)!
+can't re-use a leaf (max_vnlru_free)!
+can't re-use a leaf (worklist_len)!
+can't re-use a leaf (conflist)!
+can't re-use a leaf (ctl)!
+can't re-use a leaf (module_path)!
+can't re-use a leaf (broken)!
+can't re-use a leaf (freed)!
+can't re-use a leaf (fullpop)!
+can't re-use a leaf (partpopq)!
+can't re-use a leaf (reclaimed)!
+can't re-use a leaf (name2oid)!
+can't re-use a leaf (sysctl_running)!
+can't re-use a leaf (status_sysctl_running)!
+can't re-use a leaf (hwpstate_verbose)!
+can't re-use a leaf (logsigexit)!
+can't re-use a leaf (forcesigexit)!
+can't re-use a leaf (max_pending_per_proc)!
+can't re-use a leaf (preallocate)!
+can't re-use a leaf (overflow)!
+can't re-use a leaf (alloc_fail)!
+can't re-use a leaf (tentativeppid)!
+can't re-use a leaf (sugid_coredump)!
+can't re-use a leaf (capmode_coredump)!
+can't re-use a leaf (coredump)!
+can't re-use a leaf (nodump_coredump)!
+can't re-use a leaf (coredump_devctl)!
+can't re-use a leaf (ncores)!
+can't re-use a leaf (corefile)!
+can't re-use a leaf (mcfg)!
+can't re-use a leaf (x2apic_mode)!
+can't re-use a leaf (eoi_suppression)!
+can't re-use a leaf (timer_tsc_deadline)!
+can't re-use a leaf (total_bpages)!
+can't re-use a leaf (a53io_lat_stats)!
+can't re-use a leaf (usermount)!
+can't re-use a leaf (max_tasks)!
+can't re-use a leaf (tasks_hiwater)!
+can't re-use a leaf (max_threads)!
+can't re-use a leaf (stack)!
+can't re-use a leaf (mddebug)!
+can't re-use a leaf (md_malloc_wait)!
+can't re-use a leaf (lookup_shared)!
+can't re-use a leaf (cnt_prezero)!
+can't re-use a leaf (phys_free)!
+can't re-use a leaf (phys_segs)!
+can't re-use a leaf (ndomains)!
+can't re-use a leaf (default_policy)!
+can't re-use a leaf (write_behind)!
+can't re-use a leaf (read_max)!
+can't re-use a leaf (read_min)!
+can't re-use a leaf (ttys)!
+can't re-use a leaf (total_bpages)!
+can't re-use a leaf (cam_srch_hi)!
+can't re-use a leaf (major)!
+can't re-use a leaf (minor)!
+can't re-use a leaf (branch)!
+can't re-use a leaf (revision)!
+can't re-use a leaf (modify)!
+can't re-use a leaf (edition)!
+can't re-use a leaf (sec_dsc)!
+can't re-use a leaf (reserved)!
+can't re-use a leaf (major)!
+can't re-use a leaf (minor)!
+can't re-use a leaf (branch)!
+can't re-use a leaf (revision)!
+can't re-use a leaf (modify)!
+can't re-use a leaf (edition)!
+can't re-use a leaf (sec_dsc)!
+can't re-use a leaf (reserved)!
+can't re-use a leaf (typenumhash)!
+can't re-use a leaf (thermal)!
+can't re-use a leaf (universal_mode)!
+can't re-use a leaf (all)!
+can't re-use a leaf (numdevs)!
+can't re-use a leaf (generation)!
+can't re-use a leaf (version)!
+can't re-use a leaf (devstat)!
+can't re-use a leaf (unprivileged_get_quota)!
+can't re-use a leaf (geom_part_mbr)!
+can't re-use a leaf (enforce_chs)!
+can't re-use a leaf (revision)!
+can't re-use a leaf (panic_on_oom)!
+can't re-use a leaf (pageout_wakeup_thresh)!
+can't re-use a leaf (max_launder)!
+can't re-use a leaf (pageout_update_period)!
+can't re-use a leaf (lowmem_period)!
+can't re-use a leaf (swap_enabled)!
+can't re-use a leaf (swap_idle_enabled)!
+can't re-use a leaf (defer_swapspace_pageouts)!
+can't re-use a leaf (disable_swapspace_pageouts)!
+can't re-use a leaf (pageout_lock_miss)!
+can't re-use a leaf (pageout_oom_seq)!
+can't re-use a leaf (burst)!
+can't re-use a leaf (polled)!
+can't re-use a leaf (timeout)!
+can't re-use a leaf (preemption)!
+can't re-use a leaf (wtstatus)!
+can't re-use a leaf (wtstatus_for_dump)!
+can't re-use a leaf (wtconfig)!
+can't re-use a leaf (vn_io_fault_enable)!
+can't re-use a leaf (vn_io_fault_prefault)!
+can't re-use a leaf (vn_io_faults)!
+can't re-use a leaf (fill_kinfo_vnode__random_path)!
+can't re-use a leaf (status_fill_kinfo_vnode__random_path)!
+can't re-use a leaf (name)!
+can't re-use a leaf (ccpu)!
+can't re-use a leaf (schedlockmode)!
+can't re-use a leaf (cpu_unordered)!
+can't re-use a leaf (drvlist)!
+can't re-use a leaf (cslist)!
+can't re-use a leaf (add)!
+can't re-use a leaf (is_main_on_standby)!
+can't re-use a leaf (is_main_on_stanby)!
+can't re-use a leaf (base_ps4_mode)!
+can't re-use a leaf (no_sc_update)!
+can't re-use a leaf (optical_out)!
+can't re-use a leaf (bd_drive)!
+can't re-use a leaf (hddssd)!
+can't re-use a leaf (product_shape)!
+can't re-use a leaf (chassis_info)!
+can't re-use a leaf (is_ecocharge_available)!
+can't re-use a leaf (special_model_flag)!
+can't re-use a leaf (first_image_addr)!
+can't re-use a leaf (cpbox_devkit)!
+can't re-use a leaf (boot_from_smc_dram)!
+can't re-use a leaf (processor_name_id)!
+can't re-use a leaf (is_spmem_available)!
+can't re-use a leaf (hintmode)!
+can't re-use a leaf (coredump_pack_fileinfo)!
+can't re-use a leaf (coredump_pack_vmmapinfo)!
+can't re-use a leaf (ps_strings)!
+can't re-use a leaf (usrstack)!
+can't re-use a leaf (stackprot)!
+can't re-use a leaf (ps_arg_cache_limit)!
+can't re-use a leaf (disallow_high_osrel)!
+can't re-use a leaf (map_at_zero)!
+can't re-use a leaf (cpumode)!
+can't re-use a leaf (cpumode_game)!
+can't re-use a leaf (fsst_param)!
+can't re-use a leaf (sysproc_cpusetid)!
+can't re-use a leaf (cpumode_watchdog)!
+can't re-use a leaf (nullfs_bug_bypass)!
+can't re-use a leaf (hz)!
+can't re-use a leaf (nswbuf)!
+can't re-use a leaf (msgbufsize)!
+can't re-use a leaf (maxswzone)!
+can't re-use a leaf (bio_transient_maxcnt)!
+can't re-use a leaf (maxtsiz)!
+can't re-use a leaf (dfldsiz)!
+can't re-use a leaf (maxdsiz)!
+can't re-use a leaf (dflssiz)!
+can't re-use a leaf (maxssiz)!
+can't re-use a leaf (sgrowsiz)!
+can't re-use a leaf (vm_guest)!
+can't re-use a leaf (in_flight_wb)!
+can't re-use a leaf (in_flight_b)!
+can't re-use a leaf (in_flight_w)!
+can't re-use a leaf (in_flight)!
+can't re-use a leaf (done)!
+can't re-use a leaf (requests)!
+can't re-use a leaf (algorithms)!
+can't re-use a leaf (alg_count)!
+can't re-use a leaf (debug)!
+can't re-use a leaf (expire_secs)!
+can't re-use a leaf (lowest)!
+can't re-use a leaf (verbose)!
+can't re-use a leaf (chroot_allow_open_directories)!
+can't re-use a leaf (file)!
+can't re-use a leaf (maxfilesperproc)!
+can't re-use a leaf (maxfiles)!
+can't re-use a leaf (openfiles)!
+can't re-use a leaf (floatingpoint)!
+can't re-use a leaf (iov_max)!
+can't re-use a leaf (singlemul)!
+can't re-use a leaf (idletick)!
+can't re-use a leaf (timer)!
+can't re-use a leaf (periodic)!
+can't re-use a leaf (nchash)!
+can't re-use a leaf (ncnegfactor)!
+can't re-use a leaf (numneg)!
+can't re-use a leaf (numcache)!
+can't re-use a leaf (numcachehv)!
+can't re-use a leaf (ncsizefactor)!
+can't re-use a leaf (vfscache)!
+can't re-use a leaf (namecache)!
+can't re-use a leaf (numneg)!
+can't re-use a leaf (numcache)!
+can't re-use a leaf (numcalls)!
+can't re-use a leaf (dothits)!
+can't re-use a leaf (dotdothits)!
+can't re-use a leaf (numchecks)!
+can't re-use a leaf (nummiss)!
+can't re-use a leaf (nummisszap)!
+can't re-use a leaf (numposzaps)!
+can't re-use a leaf (numposhits)!
+can't re-use a leaf (numnegzaps)!
+can't re-use a leaf (numneghits)!
+can't re-use a leaf (numfullpathcalls)!
+can't re-use a leaf (numfullpathfail1)!
+can't re-use a leaf (numfullpathfail2)!
+can't re-use a leaf (numfullpathfail4)!
+can't re-use a leaf (numfullpathfound)!
+can't re-use a leaf (numupgrades)!
+can't re-use a leaf (nchstats)!
+can't re-use a leaf (disablecwd)!
+can't re-use a leaf (disablefullpath)!
+can't re-use a leaf (default_auto)!
+can't re-use a leaf (version)!
+can't re-use a leaf (default_unit_orbis)!
+can't re-use a leaf (maxautovchans)!
+can't re-use a leaf (retry)!
+can't re-use a leaf (loops)!
+can't re-use a leaf (delay_initial)!
+can't re-use a leaf (delay_step)!
+can't re-use a leaf (delay_min)!
+can't re-use a leaf (delay_max)!
+can't re-use a leaf (fallback_brand)!
+can't re-use a leaf (elf64_legacy_coredump)!
+can't re-use a leaf (nxstack)!
+can't re-use a leaf (panic_reboot_wait_time)!
+can't re-use a leaf (sync_on_panic)!
+can't re-use a leaf (show_busybufs)!
+can't re-use a leaf (suspend_blocked)!
+can't re-use a leaf (poweroff_delay)!
+can't re-use a leaf (kproc_shutdown_wait)!
+can't re-use a leaf (exec_map_entries)!
+can't re-use a leaf (dumpmode)!
+can't re-use a leaf (dumpinfo)!
+can't re-use a leaf (dumpmode_manu)!
+can't re-use a leaf (maxpipekva)!
+can't re-use a leaf (pipekva)!
+can't re-use a leaf (pipefragretry)!
+can't re-use a leaf (pipeallocfail)!
+can't re-use a leaf (piperesizefail)!
+can't re-use a leaf (piperesizeallowed)!
+can't re-use a leaf (posix_shm)!
+can't re-use a leaf (clocktime)!
+can't re-use a leaf (enable)!
+can't re-use a leaf (enable)!
+can't re-use a leaf (param)!
+can't re-use a leaf (enable)!
+can't re-use a leaf (compat_linux_mmap)!
+can't re-use a leaf (neomode)!
+can't re-use a leaf (neomode_switch)!
+can't re-use a leaf (gc_pipe0_gen)!
+can't re-use a leaf (gjevmtrb)!
+can't re-use a leaf (sfstat)!
+can't re-use a leaf (cpusetsize)!
+can't re-use a leaf (host_mem_start)!
+can't re-use a leaf (uart_poll_freq)!
+can't re-use a leaf (uart_force_poll)!
+can't re-use a leaf (enable)!
+can't re-use a leaf (poll_period)!
+can't re-use a leaf (retry_count)!
+can't re-use a leaf (timeout)!
+can't re-use a leaf (geom_part_ps)!
+can't re-use a leaf (test_trigger_fail_point)!
+can't re-use a leaf (test_fail_point)!
+can't re-use a leaf (status_test_fail_point)!
+can't re-use a leaf (ffs_snapshot)!
+can't re-use a leaf (dopersistence)!
+can't re-use a leaf (snapdebug)!
+can't re-use a leaf (collectsnapstats)!
+can't re-use a leaf (rng_pseudo)!
+can't re-use a leaf (rng_genuine)!
+can't re-use a leaf (has_dump)!
+can't re-use a leaf (retrieve_dump)!
+can't re-use a leaf (retrieve_dump)!
+can't re-use a leaf (retrieve_dump)!
+can't re-use a leaf (geom_part_ox)!
+can't re-use a leaf (bank)!
+can't re-use a leaf (disks)!
+can't re-use a leaf (resume_beep)!
+can't re-use a leaf (pat_works)!
+can't re-use a leaf (pg_ps_enabled)!
+can't re-use a leaf (pcid_enabled)!
+can't re-use a leaf (invpcid_works)!
+can't re-use a leaf (pt_total)!
+can't re-use a leaf (pt_total)!
+can't re-use a leaf (pt_available)!
+can't re-use a leaf (pt_available)!
+can't re-use a leaf (pcid_save_cnt)!
+can't re-use a leaf (demotions)!
+can't re-use a leaf (mappings)!
+can't re-use a leaf (p_failures)!
+can't re-use a leaf (promotions)!
+can't re-use a leaf (demotions)!
+can't re-use a leaf (kvm_size)!
+can't re-use a leaf (kvm_free)!
+can't re-use a leaf (hardlink_check_uid)!
+can't re-use a leaf (hardlink_check_gid)!
+can't re-use a leaf (generation)!
+can't re-use a leaf (rule_depth)!
+can't re-use a leaf (devname)!
+can't re-use a leaf (cdev)!
+can't re-use a leaf (cdev_priv)!
+can't re-use a leaf (enable)!
+can't re-use a leaf (enable)!
+can't re-use a leaf (poll_period)!
+can't re-use a leaf (retry_count)!
+can't re-use a leaf (default_timeout)!
+can't re-use a leaf (send_ordered)!
+can't re-use a leaf (default_softtimeout)!
+can't re-use a leaf (dummy)!
+can't re-use a leaf (maxsockbuf)!
+can't re-use a leaf (sockbuf_waste_factor)!
+can't re-use a leaf (inet6)!
+can't re-use a leaf (machine)!
+can't re-use a leaf (model)!
+can't re-use a leaf (one_pass)!
+can't re-use a leaf (autoinc_step)!
+can't re-use a leaf (verbose)!
+can't re-use a leaf (verbose_limit)!
+can't re-use a leaf (default_rule)!
+can't re-use a leaf (tables_max)!
+can't re-use a leaf (tables_sets)!
+can't re-use a leaf (default_to_accept)!
+can't re-use a leaf (static_count)!
+can't re-use a leaf (deny_unknown_exthdrs)!
+can't re-use a leaf (permit_single_frag6)!
+can't re-use a leaf (ipfw_ctl3)!
+can't re-use a leaf (retry_count)!
+can't re-use a leaf (default_timeout)!
+can't re-use a leaf (send_ordered)!
+can't re-use a leaf (spindown_shutdown)!
+can't re-use a leaf (spindown_suspend)!
+can't re-use a leaf (read_ahead)!
+can't re-use a leaf (write_cache)!
+can't re-use a leaf (get_erate_in_game)!
+can't re-use a leaf (get_erate_memtest)!
+can't re-use a leaf (sendspace)!
+can't re-use a leaf (recvspace)!
+can't re-use a leaf (maxdgram)!
+can't re-use a leaf (recvspace)!
+can't re-use a leaf (maxseqpacket)!
+can't re-use a leaf (recvspace)!
+can't re-use a leaf (inflight)!
+can't re-use a leaf (deferred)!
+can't re-use a leaf (recycled)!
+can't re-use a leaf (taskcount)!
+can't re-use a leaf (kdtrace_hooks)!
+can't re-use a leaf (geom_part_bsd)!
+can't re-use a leaf (acl_nfs4_old_semantics)!
+can't re-use a leaf (boot_delay)!
+can't re-use a leaf (xpt_generation)!
+can't re-use a leaf (num_doneqs)!
+can't re-use a leaf (dflags)!
+can't re-use a leaf (debug_delay)!
+can't re-use a leaf (geom_part_ebr)!
+can't re-use a leaf (geom_part_ebr_compat)!
+can't re-use a leaf (m2nvmectrlrdata)!
+can't re-use a leaf (m2nvmesmart)!
+can't re-use a leaf (m2nvmensid1data)!
+can't re-use a leaf (m2nvmelinkspeed)!
+can't re-use a leaf (m2nvmeregisters)!
+can't re-use a leaf (pt_total)!
+can't re-use a leaf (pt_total)!
+can't re-use a leaf (pt_available)!
+can't re-use a leaf (pt_available)!
+can't re-use a leaf (memconf)!
+can't re-use a leaf (max_ext_dmem_size)!
+can't re-use a leaf (ext_dmem_size)!
+can't re-use a leaf (default_size)!
+can't re-use a leaf (max_linkhdr)!
+can't re-use a leaf (max_protohdr)!
+can't re-use a leaf (max_hdr)!
+can't re-use a leaf (max_datalen)!
+can't re-use a leaf (vpc_mixer_bypass)!
+can't re-use a leaf (transient_maps)!
+can't re-use a leaf (transient_map_retries)!
+can't re-use a leaf (transient_map_hard_failures)!
+can't re-use a leaf (transient_map_soft_failures)!
+can't re-use a leaf (inflight_transient_maps)!
+can't re-use a leaf (forwarding)!
+can't re-use a leaf (ident)!
+can't re-use a leaf (osrevision)!
+can't re-use a leaf (version)!
+can't re-use a leaf (compiler_version)!
+can't re-use a leaf (ostype)!
+can't re-use a leaf (ps4_sdk_version)!
+can't re-use a leaf (sdk_version)!
+can't re-use a leaf (sdk_ver_ext)!
+can't re-use a leaf (maxproc)!
+can't re-use a leaf (maxprocperuid)!
+can't re-use a leaf (maxusers)!
+can't re-use a leaf (argmax)!
+can't re-use a leaf (posix1version)!
+can't re-use a leaf (ngroups)!
+can't re-use a leaf (job_control)!
+can't re-use a leaf (saved_ids)!
+can't re-use a leaf (bootfile)!
+can't re-use a leaf (ncpu)!
+can't re-use a leaf (byteorder)!
+can't re-use a leaf (pagesize)!
+can't re-use a leaf (arandom)!
+can't re-use a leaf (physmem)!
+can't re-use a leaf (realmem)!
+can't re-use a leaf (adaptive_machine_arch)!
+can't re-use a leaf (machine_arch)!
+can't re-use a leaf (supported_archs)!
+can't re-use a leaf (hostname)!
+can't re-use a leaf (domainname)!
+can't re-use a leaf (hostuuid)!
+can't re-use a leaf (securelevel)!
+can't re-use a leaf (conftxt)!
+can't re-use a leaf (hostid)!
+can't re-use a leaf (osrelease)!
+can't re-use a leaf (osreldate)!
+can't re-use a leaf (cs_path)!
+can't re-use a leaf (bc_base_max)!
+can't re-use a leaf (bc_dim_max)!
+can't re-use a leaf (bc_scale_max)!
+can't re-use a leaf (bc_string_max)!
+can't re-use a leaf (coll_weights_max)!
+can't re-use a leaf (expr_nest_max)!
+can't re-use a leaf (line_max)!
+can't re-use a leaf (re_dup_max)!
+can't re-use a leaf (posix2_version)!
+can't re-use a leaf (posix2_c_bind)!
+can't re-use a leaf (posix2_c_dev)!
+can't re-use a leaf (posix2_char_term)!
+can't re-use a leaf (posix2_fort_dev)!
+can't re-use a leaf (posix2_fort_run)!
+can't re-use a leaf (posix2_localedef)!
+can't re-use a leaf (posix2_sw_dev)!
+can't re-use a leaf (posix2_upe)!
+can't re-use a leaf (stream_max)!
+can't re-use a leaf (tzname_max)!
+can't re-use a leaf (vnode)!
+can't re-use a leaf (proc)!
+can't re-use a leaf (pid_max)!
+can't re-use a leaf (bio)!
+can't re-use a leaf (buf)!
+can't re-use a leaf (kinfo_proc)!
+can't re-use a leaf (pcb)!
+can't re-use a leaf (fallback_elf_brand)!
+can't re-use a leaf (memory_reserved)!
+can't re-use a leaf (vmiodirenable)!
+can't re-use a leaf (unmapped_buf_allowed)!
+can't re-use a leaf (buf_pressure)!
+can't re-use a leaf (status_buf_pressure)!
+can't re-use a leaf (old_mlock)!
+can't re-use a leaf (enable)!
+can't re-use a leaf (boottime)!
+can't re-use a leaf (stepwarnings)!
+can't re-use a leaf (alloweddeviation)!
+can't re-use a leaf (hardware)!
+can't re-use a leaf (choice)!
+can't re-use a leaf (tick)!
+can't re-use a leaf (fast_gettime)!
+can't re-use a leaf (delete_max_sectors)!
+can't re-use a leaf (suser_enabled)!
+can't re-use a leaf (unprivileged_mlock)!
+can't re-use a leaf (doasyncfree)!
+can't re-use a leaf (doreallocblks)!
+can't re-use a leaf (maxclustersearch)!
+can't re-use a leaf (adjrefcnt)!
+can't re-use a leaf (fsckcmds)!
+can't re-use a leaf (preallocfile)!
+can't re-use a leaf (inthdd)!
+can't re-use a leaf (exthdd)!
+can't re-use a leaf (maxid)!
+can't re-use a leaf (maxcpus)!
+can't re-use a leaf (active)!
+can't re-use a leaf (disabled)!
+can't re-use a leaf (cpus)!
+can't re-use a leaf (topology)!
+can't re-use a leaf (forward_signal_enabled)!
+can't re-use a leaf (unloadable)!
+can't re-use a leaf (kern_type)!
+can't re-use a leaf (geom_part_gpt)!
+can't re-use a leaf (updtfmt)!
+can't re-use a leaf (console)!
+can't re-use a leaf (consmute)!
+can't re-use a leaf (consmsgbuf_size)!
+can't re-use a leaf (constty_wakeups_per_second)!
+can't re-use a leaf (vty)!
+can't re-use a leaf (rename_restarts)!
+can't re-use a leaf (rman_debug)!
+can't re-use a leaf (proc_dynlibackeyreg)!
+can't re-use a leaf (rename_restarts)!
+can't re-use a leaf (batt_sleep_ms)!
+can't re-use a leaf (tty_nin)!
+can't re-use a leaf (tty_nout)!
+can't re-use a leaf (aio)!
+can't re-use a leaf (enable_unsafe)!
+can't re-use a leaf (unsafe_warningcnt)!
+can't re-use a leaf (max_aio_procs)!
+can't re-use a leaf (num_aio_procs)!
+can't re-use a leaf (target_aio_procs)!
+can't re-use a leaf (max_aio_queue)!
+can't re-use a leaf (num_queue_count)!
+can't re-use a leaf (num_buf_aio)!
+can't re-use a leaf (aiod_lifetime)!
+can't re-use a leaf (max_aio_per_proc)!
+can't re-use a leaf (max_aio_queue_per_proc)!
+can't re-use a leaf (max_buf_aio)!
+can't re-use a leaf (boot_pages)!
+can't re-use a leaf (tryrelock_restart)!
+can't re-use a leaf (page_blacklist)!
+can't re-use a leaf (kern_heap_size)!
+can't re-use a leaf (kern_page_count_in_cnt)!
+can't re-use a leaf (systemfmem)!
+can't re-use a leaf (asynchronous_io)!
+can't re-use a leaf (mapped_files)!
+can't re-use a leaf (memlock)!
+can't re-use a leaf (memlock_range)!
+can't re-use a leaf (memory_protection)!
+can't re-use a leaf (message_passing)!
+can't re-use a leaf (prioritized_io)!
+can't re-use a leaf (priority_scheduling)!
+can't re-use a leaf (realtime_signals)!
+can't re-use a leaf (semaphores)!
+can't re-use a leaf (fsync)!
+can't re-use a leaf (shared_memory_objects)!
+can't re-use a leaf (synchronized_io)!
+can't re-use a leaf (timers)!
+can't re-use a leaf (aio_listio_max)!
+can't re-use a leaf (aio_max)!
+can't re-use a leaf (aio_prio_delta_max)!
+can't re-use a leaf (delaytimer_max)!
+can't re-use a leaf (mq_open_max)!
+can't re-use a leaf (pagesize)!
+can't re-use a leaf (rtsig_max)!
+can't re-use a leaf (sem_nsems_max)!
+can't re-use a leaf (sem_value_max)!
+can't re-use a leaf (sigqueue_max)!
+can't re-use a leaf (timer_max)!
+can't re-use a leaf (ncallout)!
+can't re-use a leaf (pin_default_swi)!
+can't re-use a leaf (pin_pcpu_swi)!
+can't re-use a leaf (callout_stat)!
+can't re-use a leaf (get_write_prio)!
+can't re-use a leaf (set_write_prio)!
+can't re-use a leaf (enable)!
+can't re-use a leaf (osd)!
+can't re-use a leaf (ata_dma_check_80pin)!
+can't re-use a leaf (ata_cam)!
+can't re-use a leaf (list)!
+can't re-use a leaf (jailed)!
+can't re-use a leaf (vnet)!
+can't re-use a leaf (jail_max_af_ips)!
+can't re-use a leaf (set_hostname_allowed)!
+can't re-use a leaf (socket_unixiproute_only)!
+can't re-use a leaf (sysvipc_allowed)!
+can't re-use a leaf (allow_raw_sockets)!
+can't re-use a leaf (chflags_allowed)!
+can't re-use a leaf (mount_allowed)!
+can't re-use a leaf (mount_devfs_allowed)!
+can't re-use a leaf (mount_fdescfs_allowed)!
+can't re-use a leaf (mount_nullfs_allowed)!
+can't re-use a leaf (mount_procfs_allowed)!
+can't re-use a leaf (mount_linprocfs_allowed)!
+can't re-use a leaf (mount_linsysfs_allowed)!
+can't re-use a leaf (mount_tmpfs_allowed)!
+can't re-use a leaf (mount_zfs_allowed)!
+can't re-use a leaf (enforce_statfs)!
+can't re-use a leaf (devfs_ruleset)!
+can't re-use a leaf (jid)!
+can't re-use a leaf (parent)!
+can't re-use a leaf (name)!
+can't re-use a leaf (path)!
+can't re-use a leaf (securelevel)!
+can't re-use a leaf (osreldate)!
+can't re-use a leaf (osrelease)!
+can't re-use a leaf (enforce_statfs)!
+can't re-use a leaf (devfs_ruleset)!
+can't re-use a leaf (persist)!
+can't re-use a leaf (dying)!
+can't re-use a leaf (cur)!
+can't re-use a leaf (max)!
+can't re-use a leaf ()!
+can't re-use a leaf (hostname)!
+can't re-use a leaf (domainname)!
+can't re-use a leaf (hostuuid)!
+can't re-use a leaf (hostid)!
+can't re-use a leaf (id)!
+can't re-use a leaf ()!
+can't re-use a leaf (addr)!
+can't re-use a leaf (saddrsel)!
+can't re-use a leaf ()!
+can't re-use a leaf (addr)!
+can't re-use a leaf (saddrsel)!
+can't re-use a leaf (set_hostname)!
+can't re-use a leaf (sysvipc)!
+can't re-use a leaf (raw_sockets)!
+can't re-use a leaf (chflags)!
+can't re-use a leaf (quotas)!
+can't re-use a leaf (socket_af)!
+can't re-use a leaf ()!
+can't re-use a leaf (devfs)!
+can't re-use a leaf (fdescfs)!
+can't re-use a leaf (nullfs)!
+can't re-use a leaf (procfs)!
+can't re-use a leaf (linprocfs)!
+can't re-use a leaf (linsysfs)!
+can't re-use a leaf (tmpfs)!
+can't re-use a leaf (zfs)!
+can't re-use a leaf (inet)!
+can't re-use a leaf (acpi_ca_version)!
+can't re-use a leaf (enable_debug_objects)!
+can't re-use a leaf (interpreter_slack)!
+can't re-use a leaf (default_register_width)!
+can't re-use a leaf (reset_clock)!
+can't re-use a leaf (suspend_bounce)!
+can't re-use a leaf (layer)!
+can't re-use a leaf (level)!
+can't re-use a leaf (ktr)!
+can't re-use a leaf (version)!
+can't re-use a leaf (compile)!
+can't re-use a leaf (cpumask)!
+can't re-use a leaf (clear)!
+can't re-use a leaf (mask)!
+can't re-use a leaf (entries)!
+can't re-use a leaf (acct_suspend)!
+can't re-use a leaf (acct_resume)!
+can't re-use a leaf (acct_chkfreq)!
+can't re-use a leaf (acct_configured)!
+can't re-use a leaf (acct_suspended)!
+can't re-use a leaf (geom_label)!
+can't re-use a leaf (debug)!
+can't re-use a leaf (fscale)!
+can't re-use a leaf (kmem_size)!
+can't re-use a leaf (kmem_zmax)!
+can't re-use a leaf (kmem_size_min)!
+can't re-use a leaf (kmem_size_max)!
+can't re-use a leaf (kmem_size_scale)!
+can't re-use a leaf (kmem_map_size)!
+can't re-use a leaf (kmem_map_free)!
+can't re-use a leaf (malloc_stats)!
+can't re-use a leaf (malloc_count)!
+can't re-use a leaf (kernheapcount)!
+can't re-use a leaf (kernheapstats)!
+can't re-use a leaf (log_wakeups_per_second)!
+can't re-use a leaf (invariant_tsc)!
+can't re-use a leaf (smp_tsc)!
+can't re-use a leaf (tsc_shift)!
+can't re-use a leaf (log_level)!
+can't re-use a leaf (init_timer)!
+can't re-use a leaf (up_timer)!
+can't re-use a leaf (shutdown_timer)!
+can't re-use a leaf (holddown_timer)!
+can't re-use a leaf (hashtable_size)!
+can't re-use a leaf (error_on_ootb)!
+can't re-use a leaf (accept_global_ootb_addip)!
+can't re-use a leaf (initialising_chunk_proc_limit)!
+can't re-use a leaf (chunk_proc_limit)!
+can't re-use a leaf (param_proc_limit)!
+can't re-use a leaf (track_global_addresses)!
+can't re-use a leaf (mp4_wac_index)!
+can't re-use a leaf (process_descriptors)!
+can't re-use a leaf (msgbuf_show_timestamp)!
+can't re-use a leaf (enable)!
+can't re-use a leaf (enable)!
+can't re-use a leaf (choice)!
+can't re-use a leaf (p1003_1b_semaphores)!
+can't re-use a leaf (nsems)!
+can't re-use a leaf (posix_sem)!
+can't re-use a leaf (delay_initial)!
+can't re-use a leaf (delay_step)!
+can't re-use a leaf (delay_min)!
+can't re-use a leaf (delay_max)!
+can't re-use a leaf (cp_time)!
+can't re-use a leaf (cp_times)!
+can't re-use a leaf (clockrate)!
+can't re-use a leaf (eap_layout)!
+can't re-use a leaf (root_mount_hold)!
+can't re-use a leaf (dyn_count)!
+can't re-use a leaf (dyn_parent_count)!
+can't re-use a leaf (curr_dyn_buckets)!
+can't re-use a leaf (curr_max_length)!
+can't re-use a leaf (dyn_buckets)!
+can't re-use a leaf (dyn_max)!
+can't re-use a leaf (dyn_parent_max)!
+can't re-use a leaf (dyn_ack_lifetime)!
+can't re-use a leaf (dyn_syn_lifetime)!
+can't re-use a leaf (dyn_fin_lifetime)!
+can't re-use a leaf (dyn_rst_lifetime)!
+can't re-use a leaf (dyn_udp_lifetime)!
+can't re-use a leaf (dyn_short_lifetime)!
+can't re-use a leaf (dyn_keepalive)!
+can't re-use a leaf (dyn_keep_states)!
+can't re-use a leaf (enable)!
+can't re-use a leaf (enable)!
+can't re-use a leaf (scsi_delay)!
+can't re-use a leaf (lastpid)!
+can't re-use a leaf (randompid)!
+Preloaded elf kernel "kernel" at 0xffffffffa2224000.
+CPU: AMD EPYC Processor (0 MHz K8-class CPU)
+  Origin="AuthenticAMD"  Id=0x800f12  Family=0x17  Model=0x1  Stepping=2
+  Features=0x1783fbfd<FPU,DE,PSE,TSC,MSR,PAE,MCE,CX8,APIC,SEP,MTRR,PGE,MCA,CMOV,PAT,PSE36,MMX,FXSR,SSE,SSE2,HTT>
+  Features2=0xfed8320b<SSE3,PCLMULQDQ,MON,SSSE3,FMA,CX16,SSE4.1,SSE4.2,MOVBE,POPCNT,AESNI,XSAVE,OSXSAVE,AVX,F16C,RDRAND,HV>
+  AMD Features=0x2c500800<SYSCALL,NX,MMX+,Page1GB,RDTSCP,LM>
+  AMD Features2=0x177<LAHF,CMP,SVM,CR8,ABM,SSE4A,Prefetch>
+  Structured Extended Features=0x201c0128<BMI1,AVX2,BMI2,RDSEED,ADX,SMAP,SHA>
+  XSAVE Features=0x5<XSAVEOPT,XINUSE>
+  SVM: NAsids=16,Features=0x1<NP>
+Revision=1, ASIDs=16
+  TSC: P-state invariant, performance statistics
+L1 2MB data TLB: 255 entries, 1-way associative
+L1 2MB instruction TLB: 255 entries, 1-way associative
+L1 4KB data TLB: 255 entries, 1-way associative
+L1 4KB instruction TLB: 255 entries, 1-way associative
+L1 data cache: 32 kbytes, 64 bytes/line, 1 lines/tag, 8-way associative
+L1 instruction cache: 64 kbytes, 64 bytes/line, 1 lines/tag, 4-way associative
+L2 2MB unified TLB: 0 entries, disabled/not present
+L2 4KB data TLB: 512 entries, 4-way associative
+L2 4KB instruction TLB: 512 entries, 4-way associative
+L2 unified cache: 512 kbytes, 64 bytes/line, 1 lines/tag, 8-way associative
+Hypervisor: Origin = "TCGTCGTCGTCG"
+CPU Features: SMAP Enabled, UMIP Disabled
+Event timer "LAPIC" quality 400
+LAPIC: ipi_wait() us multiplier 1 (r 133753470 tsc 1600000000)
+ACPI APIC Table: <BOCHS  BXPC    >
+FreeBSD/SMP: Multiprocessor System Detected: 0 CPUs
+FreeBSD/SMP: 0 package(s)
+APIC: CPU 0 has ACPI ID 0
+MADT: Found IO APIC ID 0, Interrupt 0 at 0xfec00000
+ioapic0: ver 0x20 maxredir 0x17
+ioapic0: Routing external 8259A's -> intpin 0
+MADT: Interrupt override: source 0, irq 2
+ioapic0: Routing IRQ 0 -> intpin 2
+MADT: Interrupt override: source 5, irq 5
+ioapic0: intpin 5 trigger: level
+MADT: Interrupt override: source 9, irq 9
+ioapic0: intpin 9 trigger: level
+MADT: Interrupt override: source 10, irq 10
+ioapic0: intpin 10 trigger: level
+MADT: Interrupt override: source 11, irq 11
+ioapic0: intpin 11 trigger: level
+lapic: Routing NMI -> LINT1
+lapic: LINT1 trigger: edge
+lapic: LINT1 polarity: high
+ioapic0 <Version 2.0> irqs 0-23 on motherboard
+cpu0 BSP:
+     ID: 0x00000000   VER: 0x00050014 LDR: 0x00000000 DFR: 0xffffffff
+  lint0: 0x00010700 lint1: 0x00000400 TPR: 0x00000000 SVR: 0x000001ff
+  timer: 0x000000ef therm: 0x00010000 err: 0x000000f0 pmc: 0x000000f4
+netisr_init: forcing maxthreads from 1 to 0
+_taskqueue_start_threads: kthread_add(aiod_kick taskq): error 12_taskqueue_start_threads: kthread_add(thread taskq): error 12_taskqueue_start_threads: kthread_add(kqueue_ctx taskq): error 12_taskqueue_start_threads: kthread_add(dbgev taskq): error 12_taskqueue_start_threads: kthread_add(gc_suspend_resume t): error 12_taskqueue_start_threads: kthread_add(firmware taskq): error 12random: entropy device external interface
+mem: <memory>
+_taskqueue_start_threads: kthread_add(pslinkTaskqueueThre): error 12[RM] (16024/137720138263933): E00800 @555555555@@0@ ...
+[RM] (16220/137720138263933): E00800 @1234567890@@0@ ...
+null: <full device, null device, zero device>
+module_register_init: MOD_LOAD (hdmi, 0xffffffff9e658b18, 0) error 12
+[CM] (355/kernel): Critical: 0x28021968, 0x00000000
+[CM] (412/kernel): Critical: 0x09081967, 0x00000000
+GEOM_SCHED: Modevent 0.
+GEOM_SCHED: A scheduler named is alreadyexists.
+GEOM_SCHED: Loaded module is error 17.
+GEOM_SCHED: Modevent 1.
+GEOM_SCHED: Unloaded module is error 0.
+module_register_init: MOD_LOAD (is, 0xffffffff9e658850, 0xffffffffa0913700) error 17
+contigmalloc failed.
+module_register_init: MOD_LOAD (pfsmgr, 0xffffffff9e658540, 0) error 12
+module_register_init: MOD_LOAD (SceIpmiMgr, 0xffffffff9e6588d0, 0) error 12
+The ACPI driver cannot be loaded after boot.
+hmd2_imu:kproc_create error 12
+_hmd2Init() contigmalloc error
+hmd2_log:kproc_create error 12
+io: <I/O>
+_hmdInit() contigmalloc error
+HID LOG: myThreadCreate.432 :myThreadCreate: kproc_create -> 12
+HID LOG: myThreadCreate.432 :myThreadCreate: kproc_create -> 12
+GEOM_PART: scheme GPT is already registered!
+da: Failed to attach master async callback due to status 0x7!
+GEOM_PART: scheme PS is already registered!
+GEOM_PART: scheme MBR is already registered!
+GEOM_PART: scheme OX is already registered!
+ada: Failed to attach master async callback due to status 0x7!
+GEOM_PART: scheme EBR is already registered!
+GEOM_PART: scheme OBSF is already registered!
+pmp: Failed to attach master async callback due to status 0x7!
+GEOM_PART: scheme BSD is already registered!
+pass: Failed to attach master async callback due to status 0x7!
+mp3_enable -> true
+Recursive (396), DMAP (284, 476)
+cam_periph_alloc: invalid periph name 'xpt'
+xpt_init: Cannot init completion queues - failing attach
+module_register_init: MOD_LOAD (cam, 0xffffffff9e658a20, 0) error 12
+_taskqueue_start_threads: kthread_add(acpi_task): error 12_taskqueue_start_threads: kthread_add(acpi_task): error 12_taskqueue_start_threads: kthread_add(acpi_task): error 12gc_allocate_system_memory_for_dir kmem_alloc_contig error
+ring allocation failed -12
+failed to init TEE Ring
+[MP3] failed to init message thread
+hdcp packet is set to 1
+module_register_init: MOD_LOAD (dce, 0xffffffff9e6587b8, 0) error 12
+[MP1ERROR] : init_cpupstate: 0 unexpected did: 0
+[MP1ERROR] : init_cpupstate: 1 unexpected did: 0
+[MP1ERROR] : init_cpupstate: 2 unexpected did: 0
+[MP1ERROR] : init_cpupstate: 3 unexpected did: 0
+[MP1ERROR] : init_cpupstate: 4 unexpected did: 0
+[MP1ERROR] : init_cpupstate: 5 unexpected did: 0
+[MP1ERROR] : init_cpupstate: 6 unexpected did: 0
+[MP1ERROR] : init_cpupstate: 7 unexpected did: 0
+panic: Couldn't find an APIC vector for IRQ 0
+cpuid = 0
+mDBG: System error. Performing systemdump.
+mDBG: Mute audio.
+mDBG: Mute audio done.
+mDBG: Power down...

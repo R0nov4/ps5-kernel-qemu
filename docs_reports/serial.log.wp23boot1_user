@@ -1,0 +1,18 @@
+Device configuration finished.
+_taskqueue_start_threads: kthread_add(mca taskq): error 12
+camera: utilThreadCreate: kproc_create -> 12
+!!
+acm: <Audio 02:16:21 17 2026 Compute Jul Manager built on>
+acm: Failed to initialize module.
+
+Fatal trap 12: page fault while in kernel mode
+cpuid = 0; apic id = 00
+fault virtual address   = 0xffffff809a00effe
+fault code              = supervisor read data, page not present
+instruction pointer     = 0x20:0xffffffff9eb6e9e7, va in ELF = 0xffffffff8098e9e7
+stack pointer           = 0x28:0xffffffffa2228920
+frame pointer           = 0x28:0xffffffffa2228930
+processor eflags        = interrupt enabled, resume, IOPL = 0
+current process         = 0 (SceSwapper)
+trap number             = 12
+panic: page fault

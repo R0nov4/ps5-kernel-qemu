@@ -1,0 +1,88 @@
+WP28 — sysinit tail: stages #1295..#1339 (45 final entries; walk order)
+=====================================================================
+Root cause of the 45s silence (user G47-only boot + GDB @12s):
+  #1296 canvasmap handler 0x9edf4130 -> malloc 0x9eff8b50(...,0x102=M_WAITOK|M_ZERO)
+  @ 0x9edf41d9 -> M_WAITOK sleep-check 0x9f00a3e0 (GDB rip 0x9f00a425)
+  -> ENOMEM-era wait/retry livelock -> walk never reaches the G41 park.
+  Fixed by G49 (M_WAITOK->M_NOWAIT downgrade, see wp28_report.txt).
+
+Handler table (h = sysinit entry (thunk), resolved = real fn):
+
+valid roots: 45
+  #1295: h=0x9e6521e0 -> 0x9e8df410 arg=0x0 sz=702i loops=19 calls=26 ports=
+      strs: ['ETHERNET', 'IFATTACH', 'ether_ifattach_event', 'select mtxpool', 'selfd']
+  #1296: h=0x9e654378 -> 0x9edf4130 arg=0x0 sz=82i loops=2 calls=6 ports=
+      strs: ['canvasmap']
+  #1297: h=0x0 -> 0x0 arg=0x0 sz=0i loops=0 calls=0 ports=
+  #1298: h=0x0 -> 0x0 arg=0x0 sz=0i loops=0 calls=0 ports=
+  #1299: h=0x9e652580 -> 0x9e92b250 arg=0x0 sz=483i loops=4 calls=32 ports=
+      WAIT-STRINGS: ['Ignoring installation of %4.4s at %8.8X%8.8X']
+      strs: ['%4.4s 0x%8.8X%8.8X %s table override, new table: 0x%8.8X%8.8X', '????', 'Could not acquire table length at %8.8X%8.8X', 'Ignoring installation of %4.4s at %8.8X%8.8X', 'Logical', 'Null physical address for ACPI table [%s]']
+  #1300: h=0x9e654c40 -> 0x9ef497b0 arg=0x0 sz=11i loops=1 calls=0 ports=
+      strs: ['SceSsdHealthKeeper']
+  #1301: h=0x9e652e58 -> 0x9ea82960 arg=0x0 sz=49i loops=0 calls=0 ports=
+  #1302: h=0x0 -> 0x0 arg=0x0 sz=0i loops=0 calls=0 ports=
+  #1303: h=0x9e64e308 -> 0x9e8e2430 arg=0x0 sz=945i loops=22 calls=44 ports=
+      strs: ['SceSwapDev', 'SceSwapDevGc', 'shutdown_post_sync', 'swapdev', 'swapdev: bio_cmd %d is not implemented.', 'swapdev: not initialized']
+  #1304: h=0x0 -> 0x0 arg=0x0 sz=0i loops=0 calls=0 ports=
+  #1305: h=0x9e65d720 -> 0x9ed15530 arg=0x9fe862c8 sz=36i loops=1 calls=3 ports=
+      strs: ['kproc_start: %s: error %d']
+  #1306: h=0x9e654648 -> 0x9ee91770 arg=0xa0c76040 sz=190i loops=9 calls=11 ports=
+      strs: ['%s%d', 'SceBufSpacedaemon', 'SceBufdaemon', 'bufspace', 'system_resume_phase4', 'system_suspend_phase2_sync']
+  #1307: h=0x9e654658 -> 0x9ee91eb0 arg=0xa0c76040 sz=267i loops=4 calls=13 ports=
+      WAIT-STRINGS: ['qsleep', 'psleep']
+      strs: ['%s%d', 'SceBufdaemon', 'buf_daemon_switch_end_handler', 'buf_daemon_switch_start_handler', 'kproc_shutdown', 'psleep']
+  #1308: h=0x0 -> 0x0 arg=0x0 sz=0i loops=0 calls=0 ports=
+  #1309: h=0x0 -> 0x0 arg=0x0 sz=0i loops=0 calls=0 ports=
+  #1310: h=0x9e653ac0 -> 0x9ec54340 arg=0x0 sz=240i loops=0 calls=14 ports=
+      strs: [' Object]', 'ACAD']
+  #1311: h=0x0 -> 0x0 arg=0x0 sz=0i loops=0 calls=0 ports=
+  #1312: h=0x0 -> 0x0 arg=0x0 sz=0i loops=0 calls=0 ports=
+  #1313: h=0x9e651e98 -> 0x9e88ab00 arg=0x0 sz=149i loops=7 calls=9 ports=
+  #1314: h=0x9e654128 -> 0x9ed9cc60 arg=0x0 sz=19i loops=0 calls=2 ports=
+  #1315: h=0x9e653900 -> 0x9ec0eeb0 arg=0x0 sz=145i loops=5 calls=6 ports=
+      strs: ['W:/Build/J03950001/sys/mp4/x86/kernel/modules/a53mm/a53mm.c', 'W:/Build/J03950001/sys/mp4/x86/kernel/modules/a53mm/a53mm.c(%d) ', 'W:/Build/J03950001/sys/mp4/x86/kernel/modules/a53mm/a53mm.c:110', 'W:/Build/J03950001/sys/mp4/x86/kernel/modules/a53mm/a53mm.c:78', 'a53mm_find_sc invalid state', 'mtx_owned(&a53mm_context.mtx) && (a53mm_context.state != A53MM_S']
+  #1316: h=0x9e652318 -> 0x9e8f50b0 arg=0x0 sz=410i loops=9 calls=19 ports=
+      strs: [' i %u', ' o %ju', 'g_slice_config(%s, %d, %d)', 'g_slice_spoiled(%p/%s)']
+  #1317: h=0x9e6550e0 -> 0x9f022ee0 arg=0x0 sz=28i loops=1 calls=1 ports=
+      strs: ['mp4_shutdown_post_sync_last', 'mp4_suspend_phase1', 'shutdown_post_sync', 'system_suspend_phase1']
+  #1318: h=0x9e6513c8 -> 0x9e6e8bd0 arg=0x0 sz=29i loops=2 calls=1 ports=
+  #1319: h=0x9e6551e8 -> 0x9f0873a0 arg=0x0 sz=59i loops=1 calls=5 ports=
+      strs: ['SceTmr', 'tmr_viol', 'tmr_viol_spin']
+  #1320: h=0x9e653978 -> 0x9ec2e6f0 arg=0x0 sz=34i loops=1 calls=4 ports=
+  #1321: h=0x9e654b00 -> 0x9ef1cd10 arg=0x0 sz=542i loops=6 calls=36 ports=
+      strs: ['/libSceGpuCapture.sprx', '/libSceGpuCapture_override.prx', '/libSceMat.sprx', 'ERROR', 'do_load_object', 'rtld debug lock']
+  #1322: h=0x9e654e28 -> 0x9ef8bc30 arg=0x0 sz=488i loops=19 calls=10 ports=
+      strs: ['died while binding standard software ithreads']
+  #1323: h=0x9e653230 -> 0x9eaeaf20 arg=0x0 sz=65i loops=0 calls=6 ports=
+      strs: ['W:/Build/J03950001/sys/freebsd/sys/kern/orbis_cpumode.c', 'cpumode_task', 'cpumode_taskq']
+  #1324: h=0x9e653ff0 -> 0x9ed670e0 arg=0x0 sz=19i loops=0 calls=1 ports=
+  #1325: h=0x9e651e70 -> 0x9e887770 arg=0x0 sz=231i loops=2 calls=18 ports=
+      WAIT-STRINGS: ['swdsleep']
+      strs: ['SceSwd', 'swd mtx', 'swdsleep', 'system_resume_phase2', 'system_suspend_phase2_pre_sync']
+  #1326: h=0x9e652618 -> 0x9e937120 arg=0x0 sz=50i loops=0 calls=3 ports=
+      strs: ['SceSvmd', 'app_post_suspend', 'app_pre_delete', 'app_pre_resume', 'process_exec_end', 'svmd mtx']
+  #1327: h=0x9e651748 -> 0x9e78d770 arg=0x0 sz=51i loops=1 calls=7 ports=
+      strs: ['failed to register event (VERI)', 'ivmStart']
+  #1328: h=0x9e654ff8 -> 0x9effdd40 arg=0x0 sz=338i loops=2 calls=5 ports=
+      strs: ['TSC-low', 'fail', 'pass']
+  #1329: h=0x9e654828 -> 0x9eeaeac0 arg=0x0 sz=123i loops=4 calls=8 ports=
+      strs: ['bvmop']
+  #1330: h=0x0 -> 0x0 arg=0x0 sz=0i loops=0 calls=0 ports=
+  #1331: h=0x9e652d20 -> 0x9ea43bf0 arg=0x0 sz=80i loops=1 calls=2 ports=
+      strs: ['apr update lock', 'apr_handle_cpumode_game_change', 'apr_handle_process_exec_end', 'apr_handle_process_exit', 'apr_handle_process_resume', 'apr_handle_process_suspend']
+  #1332: h=0x9e652568 -> 0x9e9281f0 arg=0x0 sz=22i loops=1 calls=2 ports=
+  #1333: h=0x9e652538 -> 0x9e926590 arg=0x0 sz=733i loops=19 calls=43 ports=
+      strs: ['SceSwapper', 'default', 'device_last_attach', 'kernel', 'process group', 'process_ctor']
+  #1334: h=0x9e651550 -> 0x9e721420 arg=0x0 sz=29i loops=0 calls=3 ports=
+      strs: ['shutdown_pre_sync', 'shutdown_resettodr']
+  #1335: h=0x9e653238 -> 0x9eaeb690 arg=0x0 sz=34i loops=1 calls=4 ports=
+      strs: ['cpumode_wd']
+  #1336: h=0x0 -> 0x0 arg=0x0 sz=0i loops=0 calls=0 ports=
+  #1337: h=0x9e653db0 -> 0x9ecc4af0 arg=0x0 sz=798i loops=21 calls=29 ports=
+      strs: ['"%s"', '"%s",', '%lu,', '%s:%s', '%s:%s,', 'VirtualFileSystemStatistics']
+  #1338: h=0x9e64fb38 -> 0x9ece4e00 arg=0x0 sz=71i loops=1 calls=3 ports=
+      strs: ['%s: failed to init playgo_device', 'init_playgo_emu_device', 'playgo_emu_param%d']
+  #1339: h=0x9e654f10 -> 0x9efdd1c0 arg=0x0 sz=49i loops=1 calls=6 ports=
+      strs: ['ampr_event_handle_process_exit', 'amprevmtx', 'amprsevmtx', 'init ampr event', 'init ampr system_event', 'process_exit_fd_closed']
+

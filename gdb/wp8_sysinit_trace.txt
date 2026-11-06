@@ -1,0 +1,35 @@
+The target architecture is set to "i386:x86-64".
+determining executable automatically.  Try using the "file" command.
+0x000000000000fff0 in ?? ()
+Breakpoint 1 at 0xffffffff9e926331
+Breakpoint 2 at 0xffffffff9e96b1cf
+Breakpoint 3 at 0xffffffff9ef7a475
+
+Thread 1 hit Breakpoint 1, 0xffffffff9e926331 in ?? ()
+SYSINIT[1] slot=0xffffffff9fe51fb8 struct=0xffffffffa0fe3240 sub=2 order=0 func=0xffffffff9e654e60 udata=0
+
+Thread 1 hit Breakpoint 1, 0xffffffff9e926331 in ?? ()
+SYSINIT[2] slot=0xffffffff9fe51fc0 struct=0xffffffff9fec8e20 sub=2 order=1 func=0xffffffff9e652900 udata=0
+
+Thread 1 hit Breakpoint 2, 0xffffffff9e96b1cf in ?? ()
+  METHOD[1] node=0xffffffffa0fe32b0 thunk=0xffffffff9e65c478
+
+Thread 1 hit Breakpoint 3, 0xffffffff9ef7a475 in ?? ()
+
+=== CRASH STATE at 0x9ef7a475 ===
+rax            0x1                 1
+rbx            0xffffffffa1925ebc  -1584243012
+rcx            0xffffffffa197a3d0  -1583897648
+rdx            0xffffffffa1add9a0  -1582442080
+rsi            0xffffffffa222871c  -1574795492
+rdi            0x0                 0
+r13            0x0                 0
+r14            0x0                 0
+r15            0x120               288
+
+=== being_run / end ===
+0xffffffffa19781b0:	0xffffffff9fe51fb0
+0xffffffffa19781a8:	0xffffffff9fe54650
+
+=== TOTALS: stages executed before crash ===
+stages=2 methods=1

@@ -1,0 +1,30 @@
+warning: No executable has been specified and target does not support
+determining executable automatically.  Try using the "file" command.
+0xffffffff9e78b372 in ?? ()
+=== VERIFY HOOK BYTES @0xffffffff9ecce330 ===
+0xffffffff9ecce330:	0xe9	0xcb	0x5c	0x73	0xff	0x03
+=== STUB DISASM @0xffffffff9e404000 ===
+   0xffffffff9e404000:	movabs $0xffffffffa1f39294,%r11
+   0xffffffff9e40400a:	mov    (%r11),%esi
+   0xffffffff9e40400d:	movabs $0xffffffffa1f39298,%r11
+   0xffffffff9e404017:	mov    (%r11),%ecx
+   0xffffffff9e40401a:	mov    %cr3,%rax
+   0xffffffff9e40401d:	movabs $0xffffffffff000,%r10
+   0xffffffff9e404027:	and    %r10,%rax
+   0xffffffff9e40402a:	mov    %rsi,%r8
+   0xffffffff9e40402d:	shl    $0x27,%r8
+   0xffffffff9e404031:	movabs $0xffff800000000000,%r10
+   0xffffffff9e40403b:	or     %r10,%r8
+   0xffffffff9e40403e:	mov    %rcx,%r10
+   0xffffffff9e404041:	shl    $0x1e,%r10
+   0xffffffff9e404045:	or     %r10,%r8
+=== RUNTIME STATE ===
+slot[0xa1f37e4c]=0x18c pml4g[0xa1f37e60]=0x22253000 cr3=0x22253000
+pml4(cr3)=0x22253000  entry[0x18c]=0x8000000022253023
+Breakpoint 1 at 0xffffffff9e40406f
+Breakpoint 2 at 0xffffffff9ecce3a0
+FAULT-SITE: rsi=0xffffc66300000000 rdx=0 cr3=0x22253000
+  entry=0x8000000022253023 -> MANUAL HEAL NOW
+Cannot execute this command while the target is running.
+Use the "interrupt" command to stop the target
+and then try again.

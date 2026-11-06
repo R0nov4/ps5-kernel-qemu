@@ -1,0 +1,74 @@
+WP29 — G51: the domains 4-CYCLE fix (stage #1266 rt_tables_init livelock)
+=========================================================================
+base: a7f800301bb9571039aff7ab61ce23b8 (WP28, user-verified boot7:
+       zero crashes, 45s silence) -> WP29 e9cccbeb03f468c4708d53361fbde1f6
+
+THE USER'S TWO SUSPECTS — BOTH DISSECTED, BOTH EXONERATED:
+  (a) 0x9e823290 (in_inithead) / 0x9e9e27f0: NO retry. On NULL from
+      0x9e7e0650 both do 'test rax,rax; je <xor eax,eax; ret>' — one-shot
+      NULL-tolerant, no backward branch.
+  (b) malloc tail / cave50 (0x9e401200): NO loop. cave50 is a plain bump
+      arena (base 0xffff8e773f1a0830, end 0x3f740000, ~5.9MB): aligned
+      size check -> bump+return-old-top, or exhausted -> r14=0. Both
+      branches 'jmp 0x9eff8d39'. There, 'je 0x9eff8d21' only routes
+      NOWAIT-NULL through a stats counter (0x9eff8d26 -> ret NULL);
+      WAITOK-NULL exits directly 0x9eff8d3b -> 0x9eff8d92 (mov rax,r14;
+      epilogue; ret). malloc NEVER loops; no patch needed there.
+
+THE REAL ROOT CAUSE (GDB frame chain decoded 1:1):
+  rip=0x9ee30b80, r12=0x102 -> INSIDE malloc(0x1a0, type 0xa0cbdaf0,
+  M_WAITOK|M_ZERO) called at 0x9e7e066b (rib_head_create 0x9e7e0650,
+  the G47 site) <- in_inithead 0x9e823290 (saved r14 = 0x9e658db8 =
+  the 'internet' dom_rtattach THUNK; saved rbx = 0xffff8e773f71eda0 =
+  &rt_tables[2], an ARENA pointer) <- rt_tables_init 0x9e7e37c0 <-
+  the walk. Stage #1266 (sub 0x1d order 3, alt-handler thunk
+  0x9e65d738) = rt_tables_init.
+
+  The image statically PRE-LINKS the domains list: head [0xa1f0eea0] =
+  'local'(0xa094b410) -> internet6(0xa09439d0) -> internet(0xa0fe76a0)
+  -> route(0xa0cbd790) -> NULL. SYSINIT #1255..#1258 (sub 0x1d order 0)
+  call domain_add(0x9ec6b0d0: dom->next = head; head = dom) for route,
+  internet, internet6, local — with the head NON-NULL at the first add
+  the chain CLOSES INTO A 4-CYCLE:
+      local -> internet6 -> internet -> route -> local -> ...
+  #1266 rt_tables_init then iterates the cyclic list FOREVER, calling
+  dom_rtattach (internet6 0x9e9e27f0 / internet 0x9e823290) each lap ->
+  rib_head_create -> malloc(0x102): ~250 arena bumps consume the last
+  ~135KB, then every lap is a fast NULL — 45s of TOTAL silence with
+  zero crashes (each NULL-lap: witness check + cave50 + early return,
+  ~tens of us; rip cycles through 0x9ee30b80 — exactly where GDB
+  caught it at t=12s).
+
+G51 (THE FIX — 8 bytes of .data, no code caves):
+  [0xa1f0eea0] (static domains head) 0xffffffffa094b410 -> 0.
+  The four domain_adds then build the canonical FreeBSD list
+  local -> internet6 -> internet -> route -> NULL (terminates);
+  #1266 finishes in 4 domain steps (2 rib_head allocations — arena
+  has ~135KB); the walk marches on through the tail stages (G49's 25
+  M_WAITOK downgrades + G47 guard + G46's 448 panic diversions all
+  active) and reaches the G41/G50 park, which emits
+  'WP23: sysinit walk complete; parking.\n' DIRECTLY to port 0x402.
+
+VERIFICATION (ZERO QEMU / ZERO GDB):
+  - full chain rebuilt from the WP20 golden, every intermediate gate
+    byte-exact (2f821627/f1cedeee/697f2632/5d438a93/a822c626/
+    175a002c/a7f80030/e9cccbeb); idempotent re-runs.
+  - static domain links left untouched (the runtime rebuild path is
+    exactly FreeBSD's domain_add sequence).
+  - report-only retry-on-NULL scan over the #1266..#1339 closure
+    (7278 fns): 863 raw 'call;test rax;je backward' patterns — mostly
+    bounded loops with counters; the list is in wp29_retry_scan.txt
+    as the pre-triage shortlist for the NEXT boot log (no speculative
+    patches — the WP27-G48 lesson).
+
+NEXT-ITERATION RISKS (accepted):
+  - arena is nearly exhausted (~135KB minus 2 rib_heads + canvasmap's
+    bitmap): later NULL-returns may hit ENOMEM-era derefs (the
+    interior-LEA family) -> if the next boot traps, send rip+serial.
+  - M_WAITOK in SHARED fns (kproc_create paths of #1300/#1305-#1307)
+    with zone-backed types could still wait — rip would sit in the
+    uma zone code, not malloc's small path.
+  - if it blocks again inside malloc's small path with r12=0x102,
+    check ANOTHER cyclic list first (this patch's methodology:
+    decode the saved-r14/saved-rbx of the malloc frame — they carry
+    the dispatcher's identity).

@@ -1,0 +1,28 @@
+warning: No executable has been specified and target does not support
+determining executable automatically.  Try using the "file" command.
+0x000000000000fff0 in ?? ()
+Hardware assisted breakpoint 1 at 0xffffffff9e642a90
+
+Breakpoint 1, 0xffffffff9e642a90 in ?? ()
+Breakpoint 2 at 0xffffffff9edfe6bf
+
+Breakpoint 2, 0xffffffff9edfe6bf in ?? ()
+
+=== AT PANIC BRANCH ===
+rbx            0x20000000          536870912
+r13            0x20000000          536870912
+r14            0xffffffff9f280d30  -1624765136
+rsi            0xffffffffa1978860  -1583904672
+rax            0xffffffffa1978860  -1583904672
+
+=== descriptor [r14] ===
+0xffffffff9f280d30:	0xffffffff9f6f2c7f	0x0000000400000000
+0xffffffff9f280d40:	0x0000000020000000	0x0000000004000000
+0xffffffff9f280d50:	0x0000000000000000
+
+=== the OTHER descriptor (rsi) ===
+0xffffffffa1978860:	0xffffffffa21dd578	0xffffffffa1978ef8
+0xffffffffa1978870:	0x0000000000000000	0xffffffffa1978f08
+0xffffffffa1978880:	0x0000000000000000
+Kill the program being debugged? (y or n) [answered Y; input not from terminal]
+[Inferior 1 (process 1) killed]

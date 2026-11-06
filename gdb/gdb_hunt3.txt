@@ -1,0 +1,119 @@
+warning: No executable has been specified and target does not support
+determining executable automatically.  Try using the "file" command.
+0x000000000000fff0 in ?? ()
+Hardware assisted breakpoint 1 at 0xffffffff9e642a90
+
+Breakpoint 1, 0xffffffff9e642a90 in ?? ()
+
+=== AT BTEXT (kernel loaded+mapped) ===
+rip            0xffffffff9e642a90  0xffffffff9e642a90
+rsp            0x97000             0x97000
+Breakpoint 2 at 0xffffffff9e64d410
+Breakpoint 3 at 0xffffffff9e89d890
+Breakpoint 4 at 0xffffffff9e739bc0
+Breakpoint 5 at 0xffffffff9e7df4a0
+Breakpoint 6 at 0xffffffff9e7df4b0
+Breakpoint 7 at 0xffffffff9ebe0dca
+Breakpoint 8 at 0xffffffff9e85e2f0
+Breakpoint 9 at 0xffffffff9e85e420
+
+Breakpoint 9, 0xffffffff9e85e420 in ?? ()
+
+=== STOP A ===
+rip            0xffffffff9e85e420  0xffffffff9e85e420
+rdi            0xffffffffa0fec680  -1593915776
+rsi            0x0                 0
+rbx            0xffffffff9e659c08  -1637508088
+rax            0x2e                46
+0xffffffffa0fec680:	"P\235e\236\377\377\377\377"
+
+Breakpoint 8, 0xffffffff9e85e2f0 in ?? ()
+
+=== STOP B ===
+rip            0xffffffff9e85e2f0  0xffffffff9e85e2f0
+rdi            0xffffffffa0fec680  -1593915776
+rsi            0x0                 0
+rbx            0xffffffff9e659c08  -1637508088
+rax            0xffffffff          4294967295
+0xffffffffa0fec680:	"P\235e\236\377\377\377\377"
+
+Breakpoint 9, 0xffffffff9e85e420 in ?? ()
+
+=== STOP C ===
+rip            0xffffffff9e85e420  0xffffffff9e85e420
+rdi            0xffffffffa0fec680  -1593915776
+rsi            0x0                 0
+rbx            0xffffffff9e659c08  -1637508088
+rax            0xffffffff          4294967295
+0xffffffffa0fec680:	"P\235e\236\377\377\377\377"
+
+Breakpoint 9, 0xffffffff9e85e420 in ?? ()
+
+=== STOP D ===
+rip            0xffffffff9e85e420  0xffffffff9e85e420
+rdi            0xffffffffa0fec680  -1593915776
+rsi            0x0                 0
+rbx            0xffffffff9e659c08  -1637508088
+rax            0x2e                46
+0xffffffffa0fec680:	"P\235e\236\377\377\377\377"
+
+Breakpoint 8, 0xffffffff9e85e2f0 in ?? ()
+
+=== STOP E (delay loop?) ===
+rip            0xffffffff9e85e2f0  0xffffffff9e85e2f0
+rdi            0xffffffffa0fec680  -1593915776
+rsi            0x0                 0
+rbx            0xffffffff9e659c08  -1637508088
+rax            0xffffffff          4294967295
+
+=== LOOP LOCALS ===
+0xffffffffa1130c18:	0x000000000000002e	0x000000000000063c
+0xffffffffa1130c28:	0x00000000ffffffff	0xa1978801000008c1
+r15            0x0                 0
+r12            0xb4bf8570          3032450416
+rax            0xffffffff          4294967295
+rcx            0x1                 1
+
+=== GATE GLOBALS ===
+0xffffffffa1e382e0:	0x0000000000000000
+0xffffffffa1e36dc8:	0x0000000000000000
+0xffffffffa1e36dc0:	0x0000000000000000
+0xffffffffa1e36dd8:	0x0000000000000000
+
+=== TSC DYNAMIC TEST (5s apart) ===
+Breakpoint 10 at 0xffffffff9e85e2f0
+
+Breakpoint 10, 0xffffffff9e85e2f0 in ?? ()
+r15            0x0                 0
+r12            0xb4da91cc          3034223052
+rax            0xffffffff          4294967295
+
+Breakpoint 10, 0xffffffff9e85e2f0 in ?? ()
+r15            0x0                 0
+r12            0xb4f25a44          3035781700
+rax            0xffffffff          4294967295
+Breakpoint 11 at 0xffffffff9e85e420
+
+Breakpoint 11, 0xffffffff9e85e420 in ?? ()
+rip            0xffffffff9e85e420  0xffffffff9e85e420
+rdx            0x2                 2
+rax            0xffffffff          4294967295
+=> 0xffffffff9e85e420:	push   %rbp
+   0xffffffff9e85e421:	mov    %rsp,%rbp
+0xffffffff9e85e421 in ?? ()
+0xffffffff9e85e424 in ?? ()
+
+--- after rdtsc #1 ---
+rdx            0x2                 2
+rax            0xffffffff          4294967295
+Breakpoint 12 at 0xffffffff9e85e420
+
+Breakpoint 12, 0xffffffff9e85e420 in ?? ()
+0xffffffff9e85e421 in ?? ()
+0xffffffff9e85e424 in ?? ()
+
+--- after rdtsc #2 (should differ) ---
+rdx            0x5f259bb9          1596300217
+rax            0x2e                46
+Kill the program being debugged? (y or n) [answered Y; input not from terminal]
+[Inferior 1 (process 1) killed]
